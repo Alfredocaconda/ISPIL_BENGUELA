@@ -7,6 +7,29 @@
     <title>Usuário</title>
 </head>
 <body>
- <h1>Ola Eng.{{$user->name}}</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>NOME</th>
+                <th>EMAIL</th>
+                <th>AÇÕES</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse ( $user as $usuario )
+            <tr>
+                <td>{{$usuario->name}}</td>
+                <td>{{$usuario->email}}</td>
+                <td>--></td>
+            </tr>
+            @empty
+            <tr>
+                <td colspan="100">Nenhum usuario no Banco</td>
+            </tr>
+
+            @endforelse
+        </tbody>
+    </table>
+    {{$user->links()}}
 </body>
 </html>

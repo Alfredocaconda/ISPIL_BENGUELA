@@ -14,8 +14,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
-        $user=User::first();
+        //para poder mostrar todos os usuarios de acordo com a paginação
+        $user=User::paginate(15);
+        //para poder mostrar todos os usuario
+        //$user=User::all();
         return view('Admin.users.index', compact('user'));
     }
 
