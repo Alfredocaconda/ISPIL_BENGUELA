@@ -1,14 +1,14 @@
 <?php
 
-use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\InscricaoController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user',[UserController::class,'index'])->name('user.index');
-
 Route::get('/', function () {
-    return view('welcome'); 
+    return view('index'); 
 });
+Route::resource('inscricao',InscricaoController::class);
+Route::get('apagar/{id}/inscricao',[InscricaoController::class,'apagar'])->name('inscricao.apagar');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

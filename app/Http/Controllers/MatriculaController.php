@@ -1,24 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\c;
-use App\Models\User;
+use App\Models\matricula;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class MatriculaController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //para poder mostrar todos os usuarios de acordo com a paginação
-        $user=User::paginate(15);
-        //para poder mostrar todos os usuario
-        //$user=User::all();
-        return view('Admin.users.index', compact('user'));
+        //
     }
 
     /**
@@ -40,7 +34,7 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(c $c)
+    public function show(matricula $matricula)
     {
         //
     }
@@ -48,7 +42,7 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(c $c)
+    public function edit(matricula $matricula)
     {
         //
     }
@@ -56,7 +50,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, c $c)
+    public function update(Request $request, matricula $matricula)
     {
         //
     }
@@ -64,7 +58,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(c $c)
+    public function destroy(matricula $matricula)
     {
         //
     }
