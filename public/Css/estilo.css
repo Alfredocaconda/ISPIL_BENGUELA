@@ -1,0 +1,170 @@
+
+@charset "UTF-8";
+/*!
+*
+* Template: POSDash - Responsive Bootstrap 4 Admin Dashboard Template
+* Author: iqonic.design
+* Design and Developed by: iqonic.design
+* NOTE: This file contains the styling for responsive Template.
+*
+*/
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
+:root {
+  --iq-primary: #32BDEA;
+  --iq-secondary: #FF7E41;
+  --iq-success: #78C091;
+  --iq-info: #7EE2FF;
+  --iq-warning: #FF9770;
+  --iq-danger: #E08DB4;
+  --iq-light: #c7cbd3;
+  --iq-dark: #01041b;
+  --iq-orange: #FF7E41;
+  --iq-purple: #4731b6;
+  --iq-skyblue: #158df7;
+  --iq-light-gray: #f4f5fa;
+  --iq-primary: #32BDEA;
+  --iq-secondary: #FF7E41;
+  --iq-success: #78C091;
+  --iq-info: #7EE2FF;
+  --iq-warning: #FF9770;
+  --iq-danger: #E08DB4;
+  --iq-light: #c7cbd3;
+  --iq-dark: #01041b;
+  --iq-orange: #FF7E41;
+  --iq-purple: #4731b6;
+  --iq-skyblue: #158df7;
+  --iq-light-gray: #f4f5fa; }
+
+:root {
+  --blue: #32BDEA;
+  --indigo: #6610f2;
+  --purple: #4731b6;
+  --pink: #e83e8c;
+  --red: #E08DB4;
+  --orange: #FF7E41;
+  --yellow: #FF9770;
+  --green: #78C091;
+  --teal: #20c997;
+  --cyan: #7EE2FF;
+  --white: #fff;
+  --gray: #6c757d;
+  --gray-dark: #01041b;
+  --skyblue: #158df7;
+  --primary: #32BDEA;
+  --secondary: #FF7E41;
+  --success: #78C091;
+  --info: #7EE2FF;
+  --warning: #FF9770;
+  --danger: #E08DB4;
+  --light: #c7cbd3;
+  --dark: #01041b;
+  --orange: #FF7E41;
+  --purple: #4731b6;
+  --skyblue: #158df7;
+  --light-gray: #f4f5fa;
+  --breakpoint-xs: 0;
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box; }
+*{
+    padding: 0;
+    margin: 0;
+}
+body{
+    font-family: var(--font-family-sans-serif);
+}
+header{
+display: flex;
+background-color: white;
+position: fixed;
+width: 100%;
+height: 10%;
+justify-content: space-between;
+}
+.esquerdo{
+    margin-left: 100px;
+}
+.esquerdo img{
+    width: 62px;
+    height: 62px;
+    justify-content: center;
+}
+.direito ul{
+    display: flex;
+    justify-content: space-between;
+}
+.nav li{
+    display: flex;
+    padding: 15px;
+    font-size: 13pt;
+    margin-bottom: 15px;
+}
+.nav li a{
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+}
+.direito a:hover{
+    border-bottom: 2px solid var(--iq-dark);
+}
+.fundo{
+    top: 50px;
+    position: relative;
+    width: 100%; 
+    height: 400px;
+    background-image: url('../imagem/banner/2.jpg');
+    background-size: cover; 
+    background-position: center;
+}
+.info {
+    position: absolute;
+    top: 50%; 
+    left: 30%; 
+    transform: translate(-50%, -50%); 
+    color: white; 
+    background-color: var(--iq-dark); 
+    padding: 10px; 
+    border-radius: 5px; 
+    font-size: 16px; 
+    text-align: center; 
+    height: 60%;
+    justify-content: center;
+    align-items: center;
+  }
+  .info img{
+    width: 30px;
+    height: 30px;
+  }
+.botao{
+    background-color: var(--info);
+    width: 115px;
+    height: 25px;
+    border-radius:2px;
+}
+.info button{
+    background-color: var(--iq-info);
+    border: none;
+    padding: 9px;
+    width: 20%;
+    border-radius: 10px; 
+    cursor: pointer; 
+}
+#actividade{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5%;
+}
+#actividade img{
+    width: 99%;
+    height: 99%;
+}
+
+
