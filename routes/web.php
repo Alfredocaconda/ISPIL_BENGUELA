@@ -1,14 +1,22 @@
 <?php
 
 use App\Http\Controllers\InscricaoController;
+use App\Http\Controllers\CadastroController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('index'); 
 });
-Route::resource('inscricao',InscricaoController::class);
-Route::get('apagar/{id}/inscricao',[InscricaoController::class,'apagar'])->name('inscricao.apagar');
+Route::resource('cadastro',CadastroController::class);
+#Route::get('apagar/{id}/cadastro',[CadastroController,'apagar'])->name('cadastro.apagar');
+
+Route::post('auth',[CadastroController::class,'auth'])->name('user.auth');
+Route::get('entrar',function(){
+    return view('auth.login');
+})->name('auth.login');
+
+Auth::routes();
 
 Route::get('/dashboard', function () {
     return view('dashboard');
