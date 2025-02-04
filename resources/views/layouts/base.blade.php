@@ -57,7 +57,8 @@
                 </div>
                 <a href="contact.html" class="nav-item nav-link">Sobre nós</a>
             </div>
-            <a href="{{ url('cadastro') }}" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Cadastrar-se<i class="fa fa-arrow-right ms-3"></i></a>
+            <a href="{{ route('login') }}" class="btn  py-4 px-lg-5 d-none d-lg-block">Login</a>
+            <a href="{{ route('register') }}" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Cadastrar-se<i class="fa fa-arrow-right ms-3"></i></a>
         </div>
     </nav>
     <!-- Navbar End -->
@@ -443,7 +444,7 @@
                 <div class="row">
                     <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
                         &copy; <a class="border-bottom" href="#">Your Site Name</a>, All Right Reserved.
-
+    
                         <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
                         Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a>
                     </div>
@@ -459,6 +460,7 @@
             </div>
         </div>
     </div>
+
     <!-- Footer End -->
 
 
