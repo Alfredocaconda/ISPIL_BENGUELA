@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\usuario;
+use App\Models\User;
+use App\Models\Candidato;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
+use User as GlobalUser;
 
 class UsuarioController extends Controller
 {
@@ -11,22 +16,24 @@ class UsuarioController extends Controller
      * Display a listing of the resource.
      */
     public function auth(Request $request){
-        $user = usuario::where('email', $request->email)->first();
+        $user = user::where('email', $request->email)->first();
         if (! $user || ! Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
                 'email' => ['AS CREDENÇIAS INSERIDAS ESTÃO ERRADAS.'],
             ]);
         }
        Auth::login($user,$remember = true);
-       if(Auth::usuario()->tipo != 'estudante'){
-           return redirect('/');
+       if(Auth::user()->tipo != 'candidato'){
+           return redirect('login');
        }else{
-            return redirect()->route('estudante.index');
+            return redirect()->route('candidato.index');
        }
     }
     public function index()
     {
         //
+        //$usuario=user::all();
+        //return view("pages.estudante.index",compact("usuario"));
         
     }
     
@@ -39,20 +46,18 @@ class UsuarioController extends Controller
         $valor=null;
         if (isset($request->id)) {
             # code...
-            $valor= usuario::find($request->id);
+            $valor= user::find($request->id);
         } else {
             # code...
-            $valor= new usuario();
+            $valor= new user();
         }
-        $valor->nome=$request->nome;
-        $valor->nbi=$request->nbi;
-        $valor->telefone=$request->telefone;
+        
+        $valor->name=$request->nome;
         $valor->email=$request->email;
-        $valor->data_nascimento=$request->data_nascimento;
-        $valor->password=$request->password;
-        $valor->tipo='estudante';
+        $valor->password=bcryp($request->password);
+        $valor->tipo=$request->tipo;
         $valor->save();
-        return redirect()->back()->with("Sucesso");
+        return redirect()->back()->with("Sucesso","Usuario cadastrado com sucesso");
     }
 
     /**
@@ -61,17 +66,29 @@ class UsuarioController extends Controller
     public function show($id)
     {
         //
-        $valor=usuario::find($id);
-        return view("pages.estudante",compact("valor"));
+        $valor=user::find($id);
+        return redirect()->route('user.index');
     }
     /**
      * Remove the specified resource from storage.
      */
     public function apagar($id)
     {
-        usuario::find($id)->delete();
+        user::find($id)->delete();
         $sms = "ESTUDANTE Eliminado com sucesso";
         return redirect()->back()->with("Sucesso",$sms);
+    }
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function cadastrar(Request $request){
+      
+            $user = User::cadastrarCandidato($request);
+            if(User::entrar($request)){
+                return redirect()->route('candidato.index');
+            }else{
+                return redirect()->route('auth.login');
+            }
     }
     public function perfil(){
        # return view('pages.perfil.perfil');

@@ -9,7 +9,7 @@
                <div class="row align-items-center">
                   <div class="col-lg-6">
                      <h2 class="mb-2">Cadastrar-se</h2>
-                     <form method="POST" action="{{ route('register') }}">
+                     <form method="POST" action="{{ route('user.register') }}">
                         @csrf
                         <div class="row">
                            <div class="col-lg-6">

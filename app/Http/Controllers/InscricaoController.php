@@ -15,7 +15,7 @@ class InscricaoController extends Controller
     {
         //
         $valor=inscricao::all();
-        return view('pages.inscricao',compact('valor'));
+        return view('pages.estudante.inscricao',compact('valor'));
     }
 
     /**
