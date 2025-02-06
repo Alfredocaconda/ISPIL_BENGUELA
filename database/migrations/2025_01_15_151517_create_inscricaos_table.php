@@ -13,21 +13,29 @@ return new class extends Migration
     {
         Schema::create('inscricaos', function (Blueprint $table) {
             $table->id();
-            $table->string('nome_completo');
-            $table->string('genero');
-            $table->date('dt_nascimento');
-            $table->string('nome_escola');
+            $table->string('name');
+            $table->string('email');
+            $table->String('genero');
             $table->string('provincia');
+            $table->string('municipio');
             $table->string('naturalidade');
-            $table->string('numero_bilhete');
-            $table->string('pdf_certificado');
-            $table->string('pdf_bilhete');
-            $table->string('foto');
+            $table->date('data_nasc');
+            $table->string('n_bilhete');
+            $table->string('afiliacao');
             $table->string('telefone')->unique();
+            $table->string('nome_escola');
             $table->string('curso_medio');
+            $table->date('date_inicio');
+            $table->date('date_termino');
+            $table->dateTime('data_inscricao');
             $table->string('curso_superior');
-            $table->string('periodo');
-            $table->string('data_inscricao');
+            $table->string('atestado');
+            $table->string('certificado');
+            $table->string('bilhete');
+            $table->string('recenciamento');
+            $table->string('foto');
+            $table->string('status')->nullable();
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\inscricao;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Plank\Mediable\Facades\MediaUploader;
 
 class InscricaoController extends Controller
 {
@@ -24,49 +25,7 @@ class InscricaoController extends Controller
     public function create(Request $request)
     {
         //
-        $valor=null;
-        if (isset($request->id)) {
-            # code...
-            $valor=inscricao::find($request->id);
-        } else {
-            # code...
-            $valor=new inscricao();
-        }
-        if(request()->hasFile('pdf_certificado')){
-            $doc=MediaUploader::fromSource(request()->file('pdf_certificado'))
-            ->toDirectory('DocInscricao')->onDuplicateIncrement()
-            ->userHashForfilename()
-            ->setAllowedExtensions(['pdf','jpg','png','jpeg'])->upload();
-            $valor->pdf_certificado=$doc->basename;
-        }
-        if(request()->hasFile('pdf_bilhete')){
-            $doc=MediaUploader::fronSource(request()->file('pdf_bilhete'))
-            ->toDiretory('DocInscricao')->onDuplicateIncrement()
-            ->userHashForfilename()
-            ->setAllwedExtensions(['pdf','jpg','png','jpeg'])->upload();
-            $valor->pdf_bilhete=$doc->basename;
-        }
-        if (request()->hasFile('foto')) {
-            $doc = MediaUploader::fromSource(request()->file('foto'))
-            ->toDirectory('DocInscricao')->onDuplicateIncrement()
-            ->useHashForFilename()
-            ->setAllowedAggregateTypes(['image'])->upload();
-            $valor->foto=$doc->basename;
-        }
-        $valor->nome_completo=$request->nome;
-        $valor->genero=$request->genero;
-        $valor->numero_bilhete=$request->numero_bilhete;
-        $valor->telefone=$request->telefone;
-        $valor->nome_escola=$request->nome_escola;
-        $valor->provincia=$request->provincia;
-        $valor->naturalidade=$request->naturalidade;
-        $valor->dt_nascimento=$request->dt_nascimento;
-        $valor->curso_medio=$request->curso_medio;
-        $valor->curso_superior=$request->curso_superior;
-        $valor->data_inscricao=date('Y-m-d-h-i-s');
-        $valor->user= Auth::user()->user->id;
-        $valor->save();
-        return redirect()->back()->with('INSCRIÇÃO FEITA COM SUCESSO');
+       
         
     }
 
@@ -74,9 +33,84 @@ class InscricaoController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        //
+{
+    // Inicializa ou encontra a inscrição
+    $valor = null;
+    if (isset($request->id)) {
+        $valor = inscricao::find($request->id);
+    } else {
+        $valor = new inscricao();
     }
+
+    // Definindo o nome ou ID do candidato para criar a pasta
+    $candidatoNome = $request->name; // Ou você pode usar o ID do candidato, por exemplo, $request->id
+
+    // Função para realizar o upload de arquivos
+    $uploadFile = function ($file, $campo) use ($candidatoNome) {
+        $directory = 'DocInscricao/' . $candidatoNome; // Definir o diretório do candidato
+        return MediaUploader::fromSource($file)
+            ->toDirectory($directory) // Usando o diretório específico do candidato
+            ->onDuplicateIncrement()
+            ->useFilename(md5($file->getClientOriginalName() . time())) // Gerando nome único
+            ->setAllowedExtensions(['pdf', 'jpg', 'png', 'jpeg'])
+            ->upload();
+    };
+
+    // Verificar e fazer o upload dos documentos
+    if (request()->hasFile('certificado')) {
+        $file = request()->file('certificado');
+        $doc = $uploadFile($file, 'certificado');
+        $valor->certificado = $doc->basename;
+    }
+
+    if (request()->hasFile('recenciamento')) {
+        $file = request()->file('recenciamento');
+        $doc = $uploadFile($file, 'recenciamento');
+        $valor->recenciamento = $doc->basename;
+    }
+
+    if (request()->hasFile('atestado')) {
+        $file = request()->file('atestado');
+        $doc = $uploadFile($file, 'atestado');
+        $valor->atestado = $doc->basename;
+    }
+
+    if (request()->hasFile('bilhete')) {
+        $file = request()->file('bilhete');
+        $doc = $uploadFile($file, 'bilhete');
+        $valor->bilhete = $doc->basename;
+    }
+
+    if (request()->hasFile('foto')) {
+        $file = request()->file('foto');
+        $doc = $uploadFile($file, 'foto');
+        $valor->foto = $doc->basename;
+    }
+
+    // Preenchendo os dados do formulário
+    $valor->name = $request->name;
+    $valor->email = $request->email;
+    $valor->genero = $request->genero;
+    $valor->provincia = $request->provincia;
+    $valor->municipio = $request->municipio;
+    $valor->naturalidade = $request->naturalidade;
+    $valor->data_nasc = $request->data_nasc;
+    $valor->n_bilhete = $request->n_bilhete;
+    $valor->afiliacao = $request->afiliacao;
+    $valor->telefone = $request->telefone;
+    $valor->nome_escola = $request->nome_escola;
+    $valor->curso_medio = $request->curso_medio;
+    $valor->date_inicio = $request->date_inicio;
+    $valor->date_termino = $request->date_termino;
+    $valor->curso_superior = $request->curso;
+    $valor->data_inscricao = now(); // Usando o helper now() do Laravel
+    $valor->status = "Enviado";
+    $valor->user_id = Auth::user()->Candidato->id;
+    $valor->save();
+
+    return redirect()->back()->with('INSCRIÇÃO FEITA COM SUCESSO');
+}
+
 
     /**
      * Display the specified resource.

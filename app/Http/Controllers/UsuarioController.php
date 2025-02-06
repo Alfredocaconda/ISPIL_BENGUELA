@@ -13,13 +13,13 @@ use User as GlobalUser;
 class UsuarioController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource.password
      */
     public function auth(Request $request){
-        $user = user::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->first();
         if (! $user || ! Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
-                'email' => ['AS CREDENÇIAS INSERIDAS ESTÃO ERRADAS.'],
+                'email' => ['As Credencias inseridas estão erradas'],
             ]);
         }
        Auth::login($user,$remember = true);
@@ -32,8 +32,8 @@ class UsuarioController extends Controller
     public function index()
     {
         //
-        //$usuario=user::all();
-        //return view("pages.estudante.index",compact("usuario"));
+        $user=User::where('tipo','<>','Secretaria')->get();
+        return view("pages.secretaria.index",compact("user"));
         
     }
     
@@ -46,16 +46,15 @@ class UsuarioController extends Controller
         $valor=null;
         if (isset($request->id)) {
             # code...
-            $valor= user::find($request->id);
+            $valor= User::find($request->id);
         } else {
             # code...
-            $valor= new user();
+            $valor= new User();
         }
-        
-        $valor->name=$request->nome;
+        $valor->name=$request->name;
         $valor->email=$request->email;
-        $valor->password=bcryp($request->password);
         $valor->tipo=$request->tipo;
+        $valor->password=bcrypt($request->password);
         $valor->save();
         return redirect()->back()->with("Sucesso","Usuario cadastrado com sucesso");
     }
@@ -82,14 +81,27 @@ class UsuarioController extends Controller
      * Remove the specified resource from storage.
      */
     public function cadastrar(Request $request){
-      
-            $user = User::cadastrarCandidato($request);
+         $valor=null;
+         $user = null;
+            if (isset($request->id)) {
+                # code...
+                $valor= Candidato::find($request->id);
+            } else {
+                $user = User::cadastrarCandidato($request);
+                $valor=new Candidato();
+                $valor->user_id = $user->id;
+            }
+                $valor->name=$request->name;
+                $valor->email=$request->email;
+                $valor->password=bcrypt($request->password);
+                $valor->save();
             if(User::entrar($request)){
                 return redirect()->route('candidato.index');
             }else{
                 return redirect()->route('auth.login');
             }
     }
+
     public function perfil(){
        # return view('pages.perfil.perfil');
    }

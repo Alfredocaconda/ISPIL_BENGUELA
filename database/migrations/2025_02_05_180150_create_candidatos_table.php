@@ -12,18 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('candidatos', function (Blueprint $table) {
+            $table->id();
             $table->string('name');
-            $table->string('genero');
-            $table->string('provincia');
-            $table->string('naturalidade');
-            $table->string('afiliacao');
-            $table->string('foto');
-            $table->string('n_bilhete')->nullable();
-            $table->string('telefone')->unique();
-            $table->string('bilhete')->nullable();
-            $table->string('certificado')->nullable();
-            $table->string('data');
-            $table->string('status')->nullable();
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });

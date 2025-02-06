@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Candidato;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class CandidatoController extends Controller
@@ -31,6 +32,25 @@ class CandidatoController extends Controller
     public function store(Request $request)
     {
         //
+        $valor=null;
+        $user = null;
+        if (isset($request->id)) {
+            # code...
+            $valor= Candidato::find($request->id);
+        } else {
+            # code...
+            
+            $user  = User::cadastrarCandidato($request);
+            $valor= new Candidato();
+            $valor->user_id=$user->id;
+        }
+        
+        $valor->name=$request->name;
+        $valor->email=$request->email;
+        $valor->password=bcryp($request->password);
+        $valor->tipo=$request->name;
+        $valor->save();
+        return redirect()->back()->with("Sucesso","Usuario cadastrado com sucesso");
     
     }
 
