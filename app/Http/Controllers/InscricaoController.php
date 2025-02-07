@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\inscricao;
+use App\Models\Candidato;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Plank\Mediable\Facades\MediaUploader;
+use Barryvdh\DomPDF\PDF;
+use Exception;
+
 
 class InscricaoController extends Controller
 {
@@ -107,6 +111,13 @@ class InscricaoController extends Controller
     $valor->status = "Enviado";
     $valor->user_id = Auth::user()->Candidato->id;
     $valor->save();
+
+    $data=[
+        'valor' => $valor
+     ];
+
+    $pdf = app(PDF::class)->loadView('pages.estudante.comprovativo', $data);
+    return $pdf->download('Comprovativo.pdf');
 
     return redirect()->back()->with('INSCRIÇÃO FEITA COM SUCESSO');
 }
