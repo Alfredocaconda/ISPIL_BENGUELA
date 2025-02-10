@@ -1,0 +1,23 @@
+.agenda{
+    padding: 10px;
+    border: 1px solid dimgray;
+    border-radius: 8px;
+    .agenda-title{
+        text-align: center;
+        h4{
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 15px;
+        }
+        h5{
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 15px;
+            font-weight: bold;
+        }
+    }
+}

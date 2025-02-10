@@ -38,6 +38,7 @@ class InscricaoController extends Controller
      */
     public function store(Request $request)
 {
+    
     // Inicializa ou encontra a inscrição
     $valor = null;
     if (isset($request->id)) {
@@ -106,7 +107,7 @@ class InscricaoController extends Controller
     $valor->curso_medio = $request->curso_medio;
     $valor->date_inicio = $request->date_inicio;
     $valor->date_termino = $request->date_termino;
-    $valor->curso_superior = $request->curso;
+    $valor->curso_superior = $request->curso_superior;
     $valor->data_inscricao = now(); // Usando o helper now() do Laravel
     $valor->status = "Enviado";
     $valor->user_id = Auth::user()->Candidato->id;
@@ -115,11 +116,10 @@ class InscricaoController extends Controller
     $data=[
         'valor' => $valor
      ];
-
     $pdf = app(PDF::class)->loadView('pages.estudante.comprovativo', $data);
     return $pdf->download('Comprovativo.pdf');
+    return view("pages.estudante.inscricao",compact("valor"));
 
-    return redirect()->back()->with('INSCRIÇÃO FEITA COM SUCESSO');
 }
 
 

@@ -13,6 +13,8 @@ class MatriculaController extends Controller
     public function index()
     {
         //
+        $valor=matricula::all();
+        return view('pages.estudante.matricula',compact('valor'));
     }
 
     /**

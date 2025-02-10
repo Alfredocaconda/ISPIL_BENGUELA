@@ -48,13 +48,6 @@
                 <a href="index.html" class="nav-item nav-link active">Home</a>
                 <a href="about.html" class="nav-item nav-link">Cursos</a>
                 <a href="courses.html" class="nav-item nav-link">Vida Academica</a>
-                <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Ensino e Investigação</a>
-                    <div class="dropdown-menu fade-down m-0">
-                        <a href="team.html" class="dropdown-item">Our Team</a>
-                        <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                    </div>
-                </div>
                 <a href="contact.html" class="nav-item nav-link">Sobre nós</a>
             </div>
             <a href="{{ route('login') }}" class="btn  py-4 px-lg-5 d-none d-lg-block">Login</a>

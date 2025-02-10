@@ -2,9 +2,14 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UsuarioController;
-use App\Http\Controllers\CandidatoController;
-use App\Http\Controllers\InscricaoController;
+use App\Http\Controllers\{
+    UsuarioController,
+    CandidatoController,
+    InscricaoController,
+    MatriculaController,
+    ReconfirmacaoController,
+    CursoController,
+};
 use Plank\Mediable\Media;
 
 
@@ -30,6 +35,15 @@ Route::post('user/cadastro',[UsuarioController::class,'cadastrar'])->name('user.
 
 Route::resource('inscricao',InscricaoController::class);
 Route::post('inscricao/cadastro',[InscricaoController::class,'store'])->name('inscricao.cadastro');
+
+Route::resource('matricula',MatriculaController::class);
+Route::post('matricula/cadastro',[MatriculaController::class,'store'])->name('matricula.cadastro');
+
+Route::resource('reconfirmacao',ReconfirmacaoController::class);
+Route::post('reconfirmacao/cadastro',[ReconfirmacaoController::class,'store'])->name('reconfirmacao.cadastro');
+
+Route::resource('cursos',CursoController::class);
+Route::post('cursos/cadastro',[CursoController::class,'store'])->name('cursos.cadastro');
 
 
 Route::group(['middleware'=>'auth'],function(){

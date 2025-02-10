@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>ISPM</title>
+    <title>Comprovativo de Candidatura</title>
     {{-- <link rel="stylesheet" href="{{asset('css/bilhete.css')}}"> --}}
     <style>
         .base{
@@ -82,12 +82,17 @@
                                 <i class="fa fa-bus"></i><h5 style="text-align: center;" >Bilhete Macon</h5><i class="fa fa-bus"></i>
                             </div>
                              <div class="corpo">
-                               <p>Nome: <b>{{Auth::user()->candidato->name}}</b></p>
+                                <h1>INSTITUTO SUPERIOR POLITECNICO DOS NAVEGATES</h1>
+                                <h1>COMPROVATIVO DE SUBMISÃO DE CANDIDATURA</h1>
+                                <p>A candidatura para <b>{{$valor->curso_superior}}</b> foi
+                                    submetido com sucesso</p>
+                                <h2>inscricao</h2>
+                               <p>Nome: <b>{{$valor->name}}</b></p>
+                               <p>BI: <b>{{$valor->n_bilhete}}</b></p>
+                               <p>Data Nascimento: <b>{{$valor->data_nasc}}</b></p>
+                               <p>status: <b>{{$valor->status}}</b></p>
                                
-                                <p>Caro Cliente a sua reserva tem duração de 24h.</p>
-                                <p>Para efeito de pagamento dirija-se a uma agência mas próxima.</p>
-                                <h2>Bilhete Reservado</h2>
-
+                                <p>Caro Candidato a sua inscrição foi feito com sucesso.</p>
                             </div>
                         </div>
                     </div>

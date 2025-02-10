@@ -1,8 +1,8 @@
 @extends('layouts.app2')
 
 @section('inscricao')
-   <div class="container mt-4">
-   <h2 class="mb-2">Candidato</h2>
+    <div class="container mt-4">
+         <h2 class="mb-2">Candidato</h2>
         <form action="{{route('inscricao.cadastro')}}" method="post" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="name" value="{{ Auth::user()->name }}" >
@@ -107,9 +107,9 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <label for="curso">Cursos <span style="color: red;">*</span></label>
+                    <label for="curso_superior">Cursos <span style="color: red;">*</span></label>
                     <div class="form-input">
-                        <select name="curso" id="curso" class="form-control">
+                        <select name="curso_superior" id="curso_superior" class="form-control">
                             <option value="">Selecionar o Curso</option>
                             <option value="informatica">Eng. Informática</option>
                             <option value="biologia">Ensino de Biologia</option>
@@ -163,7 +163,7 @@
                 campo.style.borderColor = "gray"; // Volta ao padrão se estiver entre 5 e 6 caracteres
             }
         }
-        </script>
+    </script>
 @endsection
 
 {{-----------------------------------------------------------------------------------}}
