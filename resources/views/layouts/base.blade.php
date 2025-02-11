@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>ISPM-BENGUELA</title>
+    <title>ISPIL-BENGUELA</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -37,7 +37,7 @@
     <!-- Navbar Start -->
     <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
         <div class="esquerdo">
-            <a href="{{ url('/') }}"><img src="{{ asset('imagem/1.jpg') }}" alt="">
+            <a href="{{ url('/') }}"><img src="{{ asset('imagem/logotipo.jpeg') }}" alt="">
             </a>
         </div>
         <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
@@ -62,14 +62,14 @@
         <div class="owl-carousel header-carousel position-relative">
            
             <div class="owl-carousel-item position-relative" style="height: 500px">
-                <img class="img-fluid"  src="{{ asset('imagem/banner/2.jpg') }}" alt="">
+                <img class="img-fluid"  src="{{ asset('imagem/banner/banner.jpeg') }}" alt="">
                 <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center" style="background: rgba(24, 29, 56, .7);">
                     <div class="container">
                         <div class="row justify-content-start">
                             <div class="col-sm-10 col-lg-8">
                                 <h5 class="text-primary text-uppercase mb-3 animated slideInDown">LEMA: INOVAR, CONSOLIDAR O ENSINO</h5>
-                                <h1 class="display-3 text-white animated slideInDown">ISPM-BENGUELA</h1>
-                                <p class="fs-5 text-white mb-4 pb-2">CHEGOU A HORA DE FAZER PARTE DA FAMÍLIA ISPM-BENGUELA. MATRICULAS E INSCRIÇÕES ABERTAS PARA
+                                <h1 class="display-3 text-white animated slideInDown">ISPIL-BENGUELA</h1>
+                                <p class="fs-5 text-white mb-4 pb-2">CHEGOU A HORA DE FAZER PARTE DA FAMÍLIA ISPIL-BENGUELA. MATRICULAS E INSCRIÇÕES ABERTAS PARA
                                     EXAMES DE ACESSO E CURSO PREPARATÓRIO.</p>
                                     <p class="fs-5 text-white mb-4 pb-2">24 DE JULHO DE 2025</p>
                                 <a href="{{url('/inscricao')}}" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">CANDIDATAR-SE</a>

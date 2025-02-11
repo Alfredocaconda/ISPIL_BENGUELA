@@ -37,7 +37,7 @@
     <!-- Navbar Start -->
     <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
         <div class="esquerdo">
-            <a href="{{ url('/home') }}"><img src="{{ asset('imagem/1.jpg') }}" alt="">
+            <a href="{{ url('/home') }}"><img src="{{ asset('imagem/logotipo.jpeg') }}" alt="">
             </a>
         </div>
         <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
@@ -45,8 +45,8 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
-                <a href="index.html" class="nav-item nav-link active">Home</a>
-                <a href="{{ url('cursos', []) }}" class="nav-item nav-link">Cursos</a>
+                <a href="{{ url('/') }}" class="nav-item nav-link active">Home</a>
+                <a href="{{ url('cursos') }}" class="nav-item nav-link">Cursos</a>
                 <a href="courses.html" class="nav-item nav-link">Vida Academica</a>
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Matricular-se</a>
