@@ -111,7 +111,7 @@
                     <div class="form-input">
                         <select name="curso_superior" id="curso_superior" class="form-control">
                             <option value="">Selecionar o Curso</option>
-                            <option value="informatica">Eng. Informática</option>
+                            <option value="Eng. Informática">Eng. Informática</option>
                             <option value="biologia">Ensino de Biologia</option>
                         </select>
                     </div>

@@ -112,7 +112,7 @@
                       <i class="ri-menu-line wrapper-menu"></i>
                       <a href="" class="header-logo">
                           <img src="{{asset('images/logo.png')}}" class="img-fluid rounded-normal" alt="logo">
-                          <h5 class="logo-title ml-3">ISAAC NEWTON</h5>
+                          <h5 class="logo-title ml-3">ISPIL</h5>
 
                       </a>
                   </div>
