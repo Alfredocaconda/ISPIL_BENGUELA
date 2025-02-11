@@ -36,6 +36,12 @@ return new class extends Migration
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
+        App\Models\User::create([
+            'name' => 'Administrador',
+            'email' => 'geral@gmail.com',
+            'tipo'  => 'Admin',
+            'password' => bCrypt('ispil')
+        ]);
     }
 
     /**

@@ -9,6 +9,7 @@ use App\Http\Controllers\{
     MatriculaController,
     ReconfirmacaoController,
     CursoController,
+    HomeController,
 };
 use Plank\Mediable\Media;
 
@@ -28,6 +29,8 @@ Route::get('cadastrar',function(){
     return view('auth.cadastrar');
 })->name('form');
 
+Route::get('perfil',[UsuarioController::class,'perfil'])->name('perfil');
+
 Route::post('auth',[UsuarioController::class,'auth'])->name('user.auth');
 
 Route::resource('candidato',CandidatoController::class);
@@ -42,8 +45,10 @@ Route::post('matricula/cadastro',[MatriculaController::class,'store'])->name('ma
 Route::resource('reconfirmacao',ReconfirmacaoController::class);
 Route::post('reconfirmacao/cadastro',[ReconfirmacaoController::class,'store'])->name('reconfirmacao.cadastro');
 
-Route::resource('cursos',CursoController::class);
-Route::post('cursos/cadastro',[CursoController::class,'store'])->name('cursos.cadastro');
+Route::resource('secretaria',SecretariaController::class);
+Route::post('funcionario/cadastro',[SecretariaController::class,'store'])->name('funcionario.cadastro');
+
+Route::get('secretaria',[HomeController::class,'secretaria'])->name('secretaria.index');
 
 
 Route::group(['middleware'=>'auth'],function(){

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      <title>ISAAC NEWTON</title>
+      <title>ISPIL-BENGUELA</title>
 
       <!-- Favicon -->
       <link rel="shortcut icon" href="{{asset('images/favicon.ico')}}" />
@@ -24,7 +24,7 @@
       <div class="iq-sidebar  sidebar-default ">
           <div class="iq-sidebar-logo d-flex align-items-center justify-content-between">
               <a href="" class="header-logo">
-                  <img src="{{asset('imagem/logotipo.jpeg')}}" class="img-fluid rounded-normal light-logo" alt="logo"><h5 class="logo-title light-logo ml-3">ISAAC NEWTON</h5>
+                  <img src="{{asset('imagem/logotipo.jpeg')}}" class="img-fluid rounded-normal light-logo" alt="logo"><h5 class="logo-title light-logo ml-3">ISPIL-BENGUELA</h5>
               </a>
               <div class="iq-menu-bt-sidebar ml-0">
                   <i class="las la-bars wrapper-menu"></i>
@@ -78,7 +78,7 @@
                       <li class=" ">
                         <a href="" class="svg-icon">
                             <i class="fa fa-briefcase"></i>
-                              <span class="ml-4">Confirmação de Matriculas</span>
+                              <span class="ml-4">Confir. Matrículas</span>
                           </a>
                       </li>
                       
@@ -112,7 +112,7 @@
                       <i class="ri-menu-line wrapper-menu"></i>
                       <a href="" class="header-logo">
                           <img src="{{asset('images/logo.png')}}" class="img-fluid rounded-normal" alt="logo">
-                          <h5 class="logo-title ml-3">ISPIL</h5>
+                          <h5 class="logo-title ml-3">ISPIL-BENGUELA</h5>
 
                       </a>
                   </div>
@@ -160,9 +160,14 @@
                                                       class="rounded profile-img img-fluid avatar-70">
                                               </div>
                                               <div class="p-3">
-                                                 
+                                                <h5 class="mb-1">{{Auth::user()->name}}</h5>
+                                                @if(Auth::user()->tipo == "Admin")
+                                                  <p class="mb-0">{{Auth::user()->tipo}}</p>
+                                                @else
+                                                  <p class="mb-0">{{Auth::user()->funcionario->cargo}}</p>
+                                                @endif
                                                   <div class="d-flex align-items-center justify-content-center mt-3">
-                                                      <a href="app/user-profile.html" class="btn border mr-2">Perfil</a>
+                                                      <a href="{{route('perfil')}}" class="btn border mr-2">Perfil</a>
                                                       <a class="btn border" href="{{ route('logout') }}"
                                                       onclick="event.preventDefault();
                                                                     document.getElementById('logout-form').submit();">
@@ -206,9 +211,15 @@
               </div>
           </div>
       </div>
-     <div class="content-page">
-        @yield('cursos')
-      </div>
+      <div class="content-page">
+        @yield('perfil')
+       </div>
+      <div class="content-page">
+         @yield('secretaria')
+       </div>
+      
+      @yield('cursos')
+
     </div>
     <!-- Wrapper End-->
     <footer class="iq-footer">
@@ -223,7 +234,7 @@
                             </ul>
                         </div>
                         <div class="col-lg-6 text-right">
-                            <span class="mr-1"><script>document.write(new Date().getFullYear())</script>©</span> <a href="#" class="">POS Dash</a>.
+                            <span class="mr-1"><script>document.write(new Date().getFullYear())</script>©</span> <a href="#" class="">ISPIL-BENGUELA</a>.
                         </div>
                     </div>
                 </div>

@@ -23,18 +23,25 @@ class UsuarioController extends Controller
             ]);
         }
        Auth::login($user,$remember = true);
-       if(Auth::user()->tipo != 'candidato'){
-           return redirect('login');
-       }else{
+       if(Auth::user()->tipo == 'Candidato'){
             return redirect()->route('candidato.index');
-       }
+        } else {
+            # code...
+            if (Auth::user()->tipo == 'Admin') {
+                # code...
+                return redirect()->route('secretaria');
+            }  else{
+                return redirect('login');
+            }           
+        }
+        
     }
+
     public function index()
     {
         //
-        $user=User::where('tipo','<>','Secretaria')->get();
+        $user=User::where('tipo','<>','Admin')->get();
         return view("pages.secretaria.index",compact("user"));
-        
     }
     
     /**
@@ -103,6 +110,6 @@ class UsuarioController extends Controller
     }
 
     public function perfil(){
-       # return view('pages.perfil.perfil');
+       return view('pages.perfil.perfil');
    }
 }
