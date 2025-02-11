@@ -17,9 +17,16 @@ class UsuarioController extends Controller
      */
     public function auth(Request $request){
         $user = User::where('email', $request->email)->first();
-        if (! $user || ! Hash::check($request->password, $user->password)) {
+
+        if (!$user) {
             throw ValidationException::withMessages([
-                'email' => ['As Credencias inseridas estão erradas'],
+                'email' => ['Este e-mail não está cadastrado.'],
+            ]);
+        }
+    
+        if (!Hash::check($request->password, $user->password)) {
+            throw ValidationException::withMessages([
+                'password' => ['A senha está incorreta.'],
             ]);
         }
        Auth::login($user,$remember = true);

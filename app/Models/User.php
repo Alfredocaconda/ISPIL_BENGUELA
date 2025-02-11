@@ -54,6 +54,22 @@ class User extends Authenticatable
 
     public static function cadastrarCandidato(Request $request)
     {
+        
+        $request->validate([
+            'name' => ['required', 'string', 'min:10', 'max:255', 'regex:/^[a-zA-ZÀ-ÿ\s]+$/'],
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6|confirmed',
+        ], [
+            'name.required' => 'O nome é obrigatório.',
+            'name.min' => 'O nome deve ter pelo menos 10 letras.',
+            'name.regex' => 'O nome deve conter apenas letras e espaços.',
+            'email.required' => 'O e-mail é obrigatório.',
+            'email.unique' => 'Este e-mail já está cadastrado.',
+            'password.required' => 'A senha é obrigatória.',
+            'password.min' => 'A senha deve ter pelo menos 6 caracteres.',
+            'password.confirmed' => 'As senhas não coincidem.',
+        ]);
+
         $user = new User();
         $user->name=$request->name;
         $user->email = $request->email;
