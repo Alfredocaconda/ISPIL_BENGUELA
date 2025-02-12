@@ -10,6 +10,7 @@ use App\Http\Controllers\{
     ReconfirmacaoController,
     CursoController,
     HomeController,
+    FuncionarioController,
 };
 use Plank\Mediable\Media;
 
@@ -45,11 +46,10 @@ Route::post('matricula/cadastro',[MatriculaController::class,'store'])->name('ma
 Route::resource('reconfirmacao',ReconfirmacaoController::class);
 Route::post('reconfirmacao/cadastro',[ReconfirmacaoController::class,'store'])->name('reconfirmacao.cadastro');
 
-Route::resource('secretaria',SecretariaController::class);
-Route::post('funcionario/cadastro',[SecretariaController::class,'store'])->name('funcionario.cadastro');
+Route::get('Dashboard',[HomeController::class,'secretaria'])->name('secretaria.index');
 
-Route::get('secretaria',[HomeController::class,'secretaria'])->name('secretaria.index');
-
+Route::resource('funcio',FuncionarioController::class);
+Route::get('apager/{id}/funcio',[FuncionarioController::class,'apagar'])->name('funcio.apagar');
 
 Route::group(['middleware'=>'auth'],function(){
 

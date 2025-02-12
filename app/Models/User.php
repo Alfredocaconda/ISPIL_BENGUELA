@@ -35,6 +35,22 @@ class User extends Authenticatable
         ];
     }
 
+    public static function cadastrarFuncionario(Request $request)
+    {
+        $nomes = explode(' ',$request->name);
+        $tamanho = sizeof($nomes);
+        $user = new User();
+        $user->name = $request->name;
+        if($tamanho == 1){
+            $user->email = $nomes[0]."@ispil.ao";
+        }else{
+            $user->email = $nomes[$tamanho-1].$nomes[0]."@ispil.ao";
+        }
+        $user->tipo = "Funcionario";
+        $user->password = bcrypt($nomes[0]."ispil");
+        $user->save();
+        return $user;
+    }
     public static function cadastrar(Request $request)
     {
         $nomes = explode(' ',$request->name);
@@ -42,12 +58,12 @@ class User extends Authenticatable
         $user = new User();
         $user->name = $request->name;
         if($tamanho == 1){
-            $user->email = $nomes[0]."@ispm.ao";
+            $user->email = $nomes[0]."@ispil.ao";
         }else{
-            $user->email = $nomes[$tamanho-1].$nomes[0]."@ispm.ao";
+            $user->email = $nomes[$tamanho-1].$nomes[0]."@ispil.ao";
         }
         $user->tipo = "estudante";
-        $user->password = bcrypt($nomes[0]."ispm");
+        $user->password = bcrypt($nomes[0]."ispil");
         $user->save();
         return $user;
     }

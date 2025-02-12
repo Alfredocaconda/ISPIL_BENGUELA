@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\funcionario;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FuncionarioController extends Controller
 {
@@ -13,53 +15,50 @@ class FuncionarioController extends Controller
     public function index()
     {
         //
+        $valor=Funcionario::orderBy('name','asc')->get();
+        return view("pages.secretaria.funcionario",compact("valor"));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
         //
+        $valor=null;
+        if(isset($request->id)){
+            $valor= Funcionario::find($request->id);
+        }else{
+
+            $valor= new Funcionario();
+            $user  = User::cadastrarFuncionario($request);
+            $valor->user_id=$user->id;
+        }
+        $valor->nome=$request->nome;
+        $valor->cargo=$request->cargo;
+        $valor->telefone=$request->telefone;
+        $valor->email=$request->email;
+        $valor->data_contratacao=$request->data_contratacao;
+        $valor->save();
+        return redirect()->back()->with("SUCESSO","FUNCIONARIO CADASTRADO");
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(funcionario $funcionario)
+    public function show( $id)
     {
         //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(funcionario $funcionario)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, funcionario $funcionario)
-    {
-        //
+        $valor=Funcionario::find($id);
+        return view("pages.Funcionario",compact("valor"));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(funcionario $funcionario)
+    public function apagar( $id)
     {
         //
+        Funcionario::find($id)->delete();
+        return redirect()->back()->with("SUCESSO","FUNCIONARIO ELIMINADO");
     }
 }

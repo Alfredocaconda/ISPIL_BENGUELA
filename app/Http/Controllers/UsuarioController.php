@@ -36,7 +36,7 @@ class UsuarioController extends Controller
             # code...
             if (Auth::user()->tipo == 'Admin') {
                 # code...
-                return redirect()->route('secretaria');
+                return redirect()->route('secretaria.index');
             }  else{
                 return redirect('login');
             }           

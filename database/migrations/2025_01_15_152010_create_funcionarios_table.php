@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('funcionarios', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('cargo');
+            $table->string('telefone');
+            $table->string('email');
+            $table->date('data_contratacao');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
