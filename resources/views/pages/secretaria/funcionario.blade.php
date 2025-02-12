@@ -1,4 +1,4 @@
-@extends('layouts.base')
+@extends('layouts.app')
 
 @section('secretaria')
 <div class="container-fluid">
@@ -7,7 +7,7 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between">
                 <div class="header-title" style="display: flex; justify-content: space-between; width: 100%">
-                    <h4 class="card-title">Funcionarios da Escola</h4>
+                    <h4 class="card-title">Funcionarios do ISPIL</h4>
                     <a href="#Cadastrar" data-toggle="modal" style="font-size: 20pt"><i class="fa fa-plus-circle"></i></a>
                 </div>
             </div>
@@ -27,8 +27,8 @@
                     <thead>
                         <tr class="ligth">
                             <th>Nome</th>
+                            <th>Número BI</th>
                             <th>Cargo</th>
-                            <th>Departamento</th>
                             <th>Telefone</th>
                             <th>E-mail</th>
                             <th></th>
@@ -38,12 +38,13 @@
                         @foreach ($valor as $func)
                             <tr>
                                 <td>{{$func->name}}</td>
+                                <td>{{$func->n_bi}}</td>
                                 <td>{{$func->cargo}}</td>
                                 <td>{{$func->telefone}}</td>
                                 <td>{{$func->email}}</td>
                                 <td>
-                                    <a href="#Cadastrar" data-toggle="modal" class="text-primary" onclick="editar({{$valor}})" ><i class="fa fa-edit"></i></a>
-                                    <a href="" class="text-danger"><i class="fa fa-trash"></i></a>
+                                    <a href="#Cadastrar" data-toggle="modal" class="text-primary" onclick="editar({{ json_encode($func) }})"><i class="fa fa-edit"></i></a>
+                                    <a href="{{route('funcio.apagar',$func->id)}}" class="text-danger"><i class="fa fa-trash"></i></a>
                                 </td>
                             </tr>
                         @endforeach
@@ -60,37 +61,109 @@
 <div class="modal fade" id="Cadastrar" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-                <div class="modal-header">
-                        <h5 class="modal-title">Cadastrar Funcionários</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                    </div>
+            <div class="modal-header">
+                <h5 class="modal-title">Cadastrar Funcionários</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
             <div class="modal-body">
                 <div class="container-fluid">
-                   <form action="" method="post">
-                    @csrf
-                    <input type="hidden" name="id" id="id">
+                    
+                    <!-- EXIBIR ERROS DE VALIDAÇÃO AQUI -->
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form action="{{ route('funcio.store') }}" method="post">
+                        @csrf
+                        <input type="hidden" name="id" id="id">
                         <div class="row">
                             <x-input-normal id="name" name="name" type="text" titulo="Nome Completo" alert="" />
                             <x-input-normal id="email" name="email" type="email" titulo="E-mail" alert="" />
-                            <x-input-normal id="telefone" name="telefone" type="text" titulo="Telefone"  alert="Máximo de 9 caracteres." />
-                            <x-select>
+                            <x-input-normal id="telefone" name="telefone" type="number" titulo="Telefone" 
+                            maxlength="9" pattern="[0-9]{9}" oninput="this.value = this.value.replace(/[^0-9]/g, '')" 
+                            alert="Máximo de 9 números." />
+                            <div class="form-group col-12 col-md-6 col-lg-6">
+                                <label for="n_bi">Número do BI</label>
+                                <div class="form-input">
+                                    <input type="text" 
+                                           class="form-control" 
+                                           name="n_bi" 
+                                           id="n_bi" 
+                                           maxlength="14" 
+                                           oninput="formatBI(this)" 
+                                           placeholder="123456789AB123">
+                                    
+                                    <!-- Mostra quantos caracteres ainda faltam -->
+                                    <small id="char_count" class="form-text text-muted">Faltam 14 caracteres</small>
+                                </div>
+                            </div>
+                            
+                            <script>
+                                function formatBI(input) {
+                                    let value = input.value.toUpperCase(); // Converte letras para maiúsculas
+                                    let formattedValue = "";
+                                    
+                                    for (let i = 0; i < value.length; i++) {
+                                        if (i < 9) { 
+                                            // Primeiros 9 caracteres devem ser números
+                                            if (/[0-9]/.test(value[i])) {
+                                                formattedValue += value[i];
+                                            }
+                                        } else if (i < 11) { 
+                                            // Os próximos 2 caracteres devem ser letras
+                                            if (/[A-Z]/.test(value[i])) {
+                                                formattedValue += value[i];
+                                            }
+                                        } else { 
+                                            // Os últimos 3 caracteres devem ser números
+                                            if (/[0-9]/.test(value[i])) {
+                                                formattedValue += value[i];
+                                            }
+                                        }
+                                    }
+                            
+                                    // Atualiza o valor do input com a formatação correta
+                                    input.value = formattedValue;
+                            
+                                    // Atualiza a contagem de caracteres restantes
+                                    let maxLength = 14;
+                                    let currentLength = input.value.length;
+                                    let remaining = maxLength - currentLength;
+                            
+                                    let counterElement = document.getElementById("char_count");
+                                    counterElement.textContent = remaining > 0 ? `Faltam ${remaining} caracteres` : "Formato completo!";
+                                }
+                            </script>
+                        
+                            <x-select name="cargo">
                                 <option value="Diretor">Diretor</option>
                                 <option value="Secretario">Secretario</option>
-                                <option value="Secretario">Professor</option>
+                                <option value="Professor">Professor</option>
                             </x-select>    
                             <x-input-normal id="data_contratacao" name="data_contratacao" type="date" titulo="Data de Contrato" alert="" />
                         </div>
+
+                        <div class="modal-footer">
+                            <x-botao-form />
+                        </div>
+                    </form>
+
                 </div>
             </div>
-            <div class="modal-footer">
-                <x-botao-form />
-            </form>
-            </div>
+
         </div>
     </div>
 </div>
+
 
 <script>
     const nomeInput = document.getElementById('telefone');
@@ -101,22 +174,39 @@
         const currentLength = nomeInput.value.length;
         nomeHelp.textContent = `Máximo de ${maxLength} caracteres. (${currentLength}/${maxLength})`;
     });
+
     function editar(valor) {
-        document.getElementById('id').value = valor.id;
-        document.getElementById('nome').value = valor.nome;
-        document.getElementById('cargo').value = valor.cargo;
-        document.getElementById('email').value = valor.email;
-        document.getElementById('telefone').value = valor.telefone;
-        document.getElementById('departamento').value = valor.departamento;
-        document.getElementById('data_contratacao').value = valor.data_contratacao;
+    if (!valor) {
+        console.error("Erro: Dados do funcionário não encontrados.");
+        return;
     }
+
+    document.getElementById('id').value = valor.id || '';
+    document.getElementById('name').value = valor.name || '';
+    document.getElementById('cargo').value = valor.cargo || '';
+    document.getElementById('email').value = valor.email || '';
+    document.getElementById('n_bi').value = valor.n_bi || '';
+    document.getElementById('telefone').value = valor.telefone || '';
+    document.getElementById('data_contratacao').value = valor.data_contratacao || '';
+
+    // Modificar a URL do formulário para apontar para update se for edição
+    let form = document.getElementById('formFuncionario');
+    if (valor.id) {
+        form.action = `/funcio/${valor.id}`;  // Ajuste conforme sua rota de atualização
+        form.method = "POST"; // Laravel aceita PUT/PATCH com _method
+        form.innerHTML += '<input type="hidden" name="_method" value="PUT">';
+    } else {
+        form.action = "{{ route('funcio.store') }}"; // Criar novo
+    }
+}
+
     function limpar() {
         document.getElementById('id').value = "";
         document.getElementById('name').value = "";
         document.getElementById('cargo').value = "";
         document.getElementById('telefone').value = "";
         document.getElementById('email').value = "";
-        document.getElementById('departamento').value = "";
+        document.getElementById('n_bi').value = "";
         document.getElementById('data_contratacao').value = "";
     }
 </script>

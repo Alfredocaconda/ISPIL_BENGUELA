@@ -32,7 +32,7 @@
                                 </div>
                                 <div>
                                     <p class="mb-2">Total de Candidatos</p>
-                                    <h4></h4>
+                                    <h4>{{App\Models\Candidato::count()}}</h4>
                                 </div>
                             </div>
                             <div class="iq-progress-bar mt-2">
@@ -51,7 +51,7 @@
                                 </div>
                                 <div>
                                     <p class="mb-2">Total de Estudantes Matrículados</p>
-                                    <h4></h4>
+                                    <h4>{{App\Models\Matricula::count()}}</h4>
                                 </div>
                             </div>
                             <div class="iq-progress-bar mt-2">
@@ -70,7 +70,7 @@
                                 </div>
                                 <div>
                                     <p class="mb-2">Total de Cursos</p>
-                                    <h4></h4>
+                                    <h4>{{App\Models\Curso::count()}}</h4>
                                 </div>
                             </div>
                             <div class="iq-progress-bar mt-2">

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('cargo');
             $table->string('telefone');
+            $table->string('n_bi')->unique();;
             $table->string('email');
             $table->date('data_contratacao');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
