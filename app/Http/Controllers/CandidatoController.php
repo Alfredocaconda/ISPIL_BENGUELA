@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Candidato;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\Curso;
+use App\Models\Candidato;
 
 class CandidatoController extends Controller
 {
@@ -14,8 +15,10 @@ class CandidatoController extends Controller
     public function index()
     {
         //
-        $usuario=Candidato::all();
-        return view("pages.estudante.index",compact("usuario"));
+        $usuario = Candidato::all();
+        $cursos = Curso::all();
+        
+        return view("pages.estudante.index", compact('usuario', 'cursos'));
     }
 
     /**

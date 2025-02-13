@@ -1,4 +1,4 @@
-@extends('layouts.app2')
+@extends('layouts.base')
 
 @section('inscricao')
     <div class="container mt-4">

@@ -15,9 +15,10 @@ class UsuarioController extends Controller
     /**
      * Display a listing of the resource.password
      */
-    public function auth(Request $request){
+    public function auth(Request $request)
+    {
         $user = User::where('email', $request->email)->first();
-
+    
         if (!$user) {
             throw ValidationException::withMessages([
                 'email' => ['Este e-mail não está cadastrado.'],
@@ -29,20 +30,24 @@ class UsuarioController extends Controller
                 'password' => ['A senha está incorreta.'],
             ]);
         }
-       Auth::login($user,$remember = true);
-       if(Auth::user()->tipo == 'Candidato'){
-            return redirect()->route('candidato.index');
-        } else {
-            # code...
-            if (Auth::user()->tipo == 'Admin') {
-                # code...
-                return redirect()->route('secretaria.index');
-            }  else{
-                return redirect('login');
-            }           
-        }
-        
+    
+        Auth::login($user, true);
+    
+        return $this->redirectUserByType($user->tipo);
     }
+    
+    /**
+     * Redireciona o usuário com base no tipo.
+     */
+    private function redirectUserByType(string $tipo)
+    {
+        return match ($tipo) {
+            'Candidato' => redirect()->route('candidato.index'),
+            'Admin' => redirect()->route('secretaria.index'),
+            default => redirect('login'),
+        };
+    }
+    
 
     public function index()
     {

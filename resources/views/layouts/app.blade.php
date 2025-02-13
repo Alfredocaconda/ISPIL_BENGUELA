@@ -81,7 +81,7 @@
                           </a>
                       </li>
                       <li class=" ">
-                        <a href="" class="svg-icon">
+                        <a href="{{route('Curso.index')}}" class="svg-icon">
                             <i class="fa fa-list-alt"></i>
                               <span class="ml-4">Cursos</span>
                           </a>
@@ -204,10 +204,11 @@
           </div>
       </div>
       <div class="content-page">
-         @yield('secretaria')
-       </div>
-       @yield('perfil')
-      @yield('cursos')
+        @yield('secretaria')
+        @yield('perfil')
+        @yield('cursos')
+    </div>
+    
 
     </div>
     <!-- Wrapper End-->

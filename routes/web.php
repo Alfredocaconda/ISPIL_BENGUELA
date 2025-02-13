@@ -20,10 +20,28 @@ use Plank\Mediable\Media;
 Route::get('password/reset', [PasswordResetController::class, 'showLinkRequestForm'])->name('password.request');
 Route::post('password/email', [PasswordResetController::class, 'sendResetLinkEmail'])->name('password.email');
 
+/*use App\Models\Curso;
+use App\Models\Professor;
+use App\Models\Aluno;
+use App\Models\Disciplina;
 
 Route::get('/', function () {
-    return view('index'); 
+    $cursos = Curso::all();
+    $professores = Professor::all();
+    $alunos = Aluno::all();
+    $disciplinas = Disciplina::all();
+    
+    return view('index', compact('cursos', 'professores', 'alunos', 'disciplinas'));
 });
+*/
+
+use App\Models\Curso;
+
+Route::get('/', function () {
+    $cursos = Curso::all(); // Buscar todos os cursos
+    return view('index', compact('cursos')); // Enviar para a view
+});
+
 
 
 Route::get('cadastrar',function(){
@@ -37,7 +55,7 @@ Route::post('auth',[UsuarioController::class,'auth'])->name('user.auth');
 Route::resource('candidato',CandidatoController::class);
 Route::post('user/cadastro',[UsuarioController::class,'cadastrar'])->name('user.register');
 
-Route::resource('inscricao',InscricaoController::class);
+Route::get('/inscricao', [InscricaoController::class, 'index'])->name('inscricao.index')->middleware('auth');
 Route::post('inscricao/cadastro',[InscricaoController::class,'store'])->name('inscricao.cadastro');
 
 Route::resource('matricula',MatriculaController::class);
@@ -49,7 +67,12 @@ Route::post('reconfirmacao/cadastro',[ReconfirmacaoController::class,'store'])->
 Route::get('Dashboard',[HomeController::class,'secretaria'])->name('secretaria.index');
 
 Route::resource('funcio',FuncionarioController::class);
-Route::get('apager/{id}/funcio',[FuncionarioController::class,'apagar'])->name('funcio.apagar');
+Route::get('apagar/{id}/funcio',[FuncionarioController::class,'apagar'])->name('funcio.apagar');
+
+Route::resource('Curso',CursoController::class);
+Route::get('apagar/{id}/Curso', [CursoController::class, 'apagar'])->name('Curso.apagar');
+
+
 
 Route::group(['middleware'=>'auth'],function(){
 
