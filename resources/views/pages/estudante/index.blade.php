@@ -16,11 +16,12 @@
                         <img class="img-fluid curso-img" src="{{ asset('storage/DocCurso/' . $curso->foto) }}" alt="{{ $curso->name }}">
                         <div class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
                             <a href="#" class="flex-shrink-0 btn btn-sm btn-primary px-3 border-end" style="border-radius: 30px 0 0 30px;">Saiba Mais</a>
-                            <a href="{{ auth()->check() ? route('inscricao.index') : route('login') }}" 
+                            <a href="{{ auth()->check() ? route('inscricao.index', ['curso_id' => $curso->id]) : route('login') }}" 
                                 class="flex-shrink-0 btn btn-sm btn-primary px-3" 
                                 style="border-radius: 0 30px 30px 0;">
                                  Candidatar-se
-                             </a>
+                            </a>
+                            
                              
                         </div>
                     </div>

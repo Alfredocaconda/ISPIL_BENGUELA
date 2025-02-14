@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title', 'ISPIL-BENGUELA')
 @section('cursos')
 <div class="container-fluid">
     <div class="row">

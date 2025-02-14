@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Curso;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,7 +23,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('pages.estudante.index');
+        $cursos = Curso::all();
+        return view('pages.estudante.index',compact('cursos'));
     }
 
     public function secretaria()

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('municipio');
             $table->string('naturalidade');
             $table->date('data_nasc');
-            $table->string('n_bilhete');
+            $table->string('n_bilhete')->unique();
             $table->string('afiliacao');
             $table->string('telefone');
             $table->string('nome_escola');
@@ -28,13 +28,12 @@ return new class extends Migration
             $table->date('date_inicio');
             $table->date('date_termino');
             $table->dateTime('data_inscricao');
-            $table->string('curso_superior');
-            $table->string('atestado');
             $table->string('certificado');
             $table->string('bilhete');
-            $table->string('recenciamento');
+            $table->string('recenciamento')->nullable();;
             $table->string('foto');
             $table->string('status')->nullable();
+            $table->foreignId('curso_id')->constrained('cursos')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });

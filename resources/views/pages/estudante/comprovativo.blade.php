@@ -1,104 +1,83 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Comprovativo de Candidatura</title>
-    {{-- <link rel="stylesheet" href="{{asset('css/bilhete.css')}}"> --}}
+    <title>Comprovativo de Inscrição</title>
     <style>
-        .base{
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            padding-top: 30px;
-            padding-bottom: 30px;
-            .bilhete{
-                width: 40%;
-                border: 1px solid dimgray;
-                border-radius: 8px;
-                .baseTop{
-                    background: rgb(0, 17, 255);
-                    color: rgb(228, 18, 18);
-                    border-top-left-radius: 8px;
-                    border-top-right-radius: 8px;
-                    padding: 5px;
-                    text-align: center
-                    margin-bottom: 20px;
-                    h5{
-                        color: white;
-                        margin-left: 10px;
-                        margin-right: 10px;
-                        font-size: 25px;
-                        font-family: Arial, Helvetica, sans-serif;
-                    }
-                }
-                .corpo{
-                    width: 100%;
-                    padding-left: 20px;
-                    padding-right: 20px;
-                    font-size: 16px;
-                    font-weight: 400;
-                    color: dimgray;
-                    p{
-                        font-size: 20px;
-                    }
-                    table{
-                        width: 100%;
-                        thead{
-                            tr{
-                                th{
-                                    text-align: center;
-                                }
-                            }
-                        }
-                        tbody{
-                            tr{
-                                td{
-                                    text-align: center;
-                                }
-                            }
-                        }
-                    }
-                }
-                .musaico{
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    padding: 20px;
-                    font-size: 40px;
-                }
-            }
-        }
+        body { font-family: Arial, sans-serif; font-size: 14px; }
+        .container { width: 100%; text-align: center; }
+        .logo { width: 100px; height: auto; }
+        .titulo { font-size: 18px; font-weight: bold; margin-top: 10px; }
+        .dados { margin-top: 20px; text-align: left; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+        .assinatura { margin-top: 40px; text-align: center; }
     </style>
 </head>
 <body>
-    <div class="baseTo">
-        <div class="container-fluid">
-                <div class="head-body">
-                    <div class="container-fluid base">
-                        <div class="bilhete">
-                            <div class="baseTop">
-                                <i class="fa fa-bus"></i><h5 style="text-align: center;" >Bilhete Macon</h5><i class="fa fa-bus"></i>
-                            </div>
-                             <div class="corpo">
-                                <h1>INSTITUTO SUPERIOR POLITECNICO DOS NAVEGATES</h1>
-                                <h1>COMPROVATIVO DE SUBMISÃO DE CANDIDATURA</h1>
-                                <p>A candidatura para <b>{{$valor->curso_superior}}</b> foi
-                                    submetido com sucesso</p>
-                                <h2>inscricao</h2>
-                               <p>Nome: <b>{{$valor->name}}</b></p>
-                               <p>BI: <b>{{$valor->n_bilhete}}</b></p>
-                               <p>Data Nascimento: <b>{{$valor->data_nasc}}</b></p>
-                               <p>status: <b>{{$valor->status}}</b></p>
-                               
-                                <p>Caro Candidato a sua inscrição foi feito com sucesso.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
+    <div class="container">
+        <!-- Logotipo -->
+        <img src="{{ public_path('images/logo.png') }}" class="logo" alt="Logotipo da Escola">
+        <p class="titulo">Comprovativo de Inscrição</p>
     </div>
+
+    <!-- Dados do Inscrito -->
+    <div class="dados">
+        <table>
+            <tr>
+                <th>Nome Completo:</th>
+                <td>{{ $valor->name }}</td>
+            </tr>
+            <tr>
+                <th>Email:</th>
+                <td>{{ $valor->email }}</td>
+            </tr>
+            <tr>
+                <th>Gênero:</th>
+                <td>{{ $valor->genero }}</td>
+            </tr>
+            <tr>
+                <th>Data de Nascimento:</th>
+                <td>{{ date('d/m/Y', strtotime($valor->data_nasc)) }}</td>
+            </tr>
+            <tr>
+                <th>Naturalidade:</th>
+                <td>{{ $valor->naturalidade }}</td>
+            </tr>
+            <tr>
+                <th>Província:</th>
+                <td>{{ $valor->provincia }}</td>
+            </tr>
+            <tr>
+                <th>Município:</th>
+                <td>{{ $valor->municipio }}</td>
+            </tr>
+            <tr>
+                <th>Telefone:</th>
+                <td>{{ $valor->telefone }}</td>
+            </tr>
+            <tr>
+                <th>Curso Inscrito:</th>
+                <td>{{ $valor->curso->nome }}</td>
+            </tr>
+            <tr>
+                <th>Data de Inscrição:</th>
+                <td>{{ date('d/m/Y H:i', strtotime($valor->data_inscricao)) }}</td>
+            </tr>
+            <tr>
+                <th>Status:</th>
+                <td>{{ $valor->status ?? 'Pendente' }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Assinatura -->
+    <div class="assinatura">
+        <p>_________________________</p>
+        <p>Assinatura do Responsável</p>
+    </div>
+
 </body>
 </html>

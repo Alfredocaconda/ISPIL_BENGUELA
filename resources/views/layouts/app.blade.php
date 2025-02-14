@@ -3,16 +3,18 @@
   <head>
     <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      <title>ISPIL-BENGUELA</title>
-
-      <!-- Favicon -->
-      <link rel="shortcut icon" href="{{asset('images/favicon.ico')}}" />
-      <link rel="stylesheet" href="{{asset('css/backend-plugin.min.css')}}">
-      <link rel="stylesheet" href="{{asset('css/backend.css')}}?v=1.0.0">
-      <link rel="stylesheet" href="{{asset('css/master.css')}}">
-      <link rel="stylesheet" href="{{asset('vendor/@fortawesome/fontawesome-free/css/all.min.css')}}">
-      <link rel="stylesheet" href="{{asset('vendor/line-awesome/dist/line-awesome/css/line-awesome.min.css')}}">
-      <link rel="stylesheet" href="{{asset('vendor/remixicon/fonts/remixicon.css')}}">  </head>
+      <title>@yield('title')</title>
+        <!-- Favicon -->
+        <link rel="shortcut icon" href="{{asset('images/favicon.ico')}}" />
+        <link rel="stylesheet" href="{{asset('css/backend-plugin.min.css')}}">
+        <link rel="stylesheet" href="{{asset('css/backend.css')}}?v=1.0.0">
+        <link rel="stylesheet" href="{{asset('css/master.css')}}">
+        <link rel="stylesheet" href="{{asset('vendor/@fortawesome/fontawesome-free/css/all.min.css')}}">
+        <link rel="stylesheet" href="{{asset('vendor/line-awesome/dist/line-awesome/css/line-awesome.min.css')}}">
+        <link rel="stylesheet" href="{{asset('vendor/remixicon/fonts/remixicon.css')}}"> 
+        <!-- Favicon -->
+        <link href="img/favicon.ico" rel="icon">
+  </head>
   <body class="  ">
     <!-- loader Start -->
    
@@ -231,24 +233,8 @@
             </div>
         </div>
     </footer>
-    <!-- Backend Bundle JavaScript -->
-    <script src="{{asset('js/backend-bundle.min.js')}}"></script>
-
-    <!-- Table Treeview JavaScript -->
-    <script src="{{asset('js/table-treeview.js')}}"></script>
-
-    <!-- Chart Custom JavaScript -->
-    <script src="{{asset('js/customizer.js')}}"></script>
-
-    <!-- Chart Custom JavaScript -->
-    <script async src="{{asset('js/chart-custom.js')}}"></script>
-
-    <!-- app JavaScript -->
-    <script src="{{asset('js/app.js')}}"></script>
-    <script>
-        $(function(){
-          $('.alert').fadeOut(5000)
-        })
-      </script>
+  <!-- Footer Start -->
+  @include('layouts.script') {{-- Aqui o rodapé será incluído --}}
+  <!-- Footer End -->
   </body>
 </html>

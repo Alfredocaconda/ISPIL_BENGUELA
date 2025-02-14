@@ -1,5 +1,5 @@
-@extends('layouts.base')
-
+@extends('layouts.app')
+@section('title', 'ISPIL-BENGUELA')
 @section('secretaria')
 <div class="container-fluid">
     <div class="row">
