@@ -3,6 +3,16 @@
 @section('inscricao')
     <div class="container mt-4">
          <h2 class="mb-2">Candidato</h2>
+          <!-- EXIBIR ERROS DE VALIDAÇÃO AQUI -->
+          @if ($errors->any())
+          <div class="alert alert-danger">
+              <ul>
+                  @foreach ($errors->all() as $error)
+                      <li>{{ $error }}</li>
+                  @endforeach
+              </ul>
+          </div>
+      @endif
         <form action="{{route('inscricao.cadastro')}}" method="post" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="name" value="{{ Auth::user()->name }}" >
@@ -53,12 +63,21 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <label for="n_bilhete">Nº do Bilhete <span style="color: red;">*</span></label>
-                    <div class="form-input">
-                        <input type="text" name="n_bilhete" id="n_bilhete" class="form-control" />
-                    </div>
+                        <label for="n_bilhete">Nº do Bilhete <span style="color: red;">*</span></label>
+                        <div class="form-input">
+                            <input type="text" 
+                                   class="form-control" 
+                                   name="n_bilhete" 
+                                   id="n_bilhete" 
+                                   maxlength="14" 
+                                   oninput="formatBI(this)" 
+                                   placeholder="123456789AB123">
+                            
+                            <!-- Mostra quantos caracteres ainda faltam -->
+                            <small id="char_count" class="form-text text-muted">Faltam 14 caracteres</small>
+                        </div>
                 </div>
-                
+               
                 <div class="col-md-4">
                     <label for="afiliacao">Nome do Pai e Mãe <span style="color: red;">*</span></label>
                     <div class="form-input">
@@ -69,8 +88,16 @@
                 <div class="col-md-4">
                     <label for="telefone">Nº do Telefone <span style="color: red;">*</span></label>
                     <div class="form-input">
-                        <input type="number" name="telefone" id="telefone"
-                         class="form-control" oninput="validarInput(this)" style=" padding: 5px;" />
+                        <input type="text" 
+                               class="form-control" 
+                               name="telefone" 
+                               id="telefone" 
+                               maxlength="9" 
+                               oninput="formatTelefone(this)" 
+                               placeholder="9XX-XXX-XXX">
+                        
+                        <!-- Mostra quantos caracteres ainda faltam -->
+                        <small id="char_count_telefone" class="form-text text-muted">Faltam 9 caracteres</small>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -141,7 +168,7 @@
                     <label for="recenciamento">Recenciamento Militar ( pdf, jpg, png, jpeg ) <span style="color: red;">*</span></label>
                     <div class="form-input">
                         <input type="file" accept=".txt,.pdf,.docx" name="recenciamento" id="recenciamento" 
-                        class="form-control" />
+                        class="form-control"/>
                     </div>
                 </div>
                 <h3>Pagamento via Multicaixa Express</h3>
@@ -194,15 +221,73 @@
             }
         }
 
-        @if(session('comprovativo'))
-            <a id="download-comprovativo" href="{{ session('comprovativo') }}" download hidden></a>
-            <script>
-                document.addEventListener("DOMContentLoaded", function() {
-                    document.getElementById("download-comprovativo").click();
-                });
-            </script>
-        @endif
+            function formatBI(input) {
+                let value = input.value.toUpperCase(); // Converte letras para maiúsculas
+                let formattedValue = "";
+                
+                for (let i = 0; i < value.length; i++) {
+                    if (i < 9) { 
+                        // Primeiros 9 caracteres devem ser números
+                        if (/[0-9]/.test(value[i])) {
+                            formattedValue += value[i];
+                        }
+                    } else if (i < 11) { 
+                        // Os próximos 2 caracteres devem ser letras
+                        if (/[A-Z]/.test(value[i])) {
+                            formattedValue += value[i];
+                        }
+                    } else { 
+                        // Os últimos 3 caracteres devem ser números
+                        if (/[0-9]/.test(value[i])) {
+                            formattedValue += value[i];
+                        }
+                    }
+                }
 
+                // Atualiza o valor do input com a formatação correta
+                input.value = formattedValue;
 
+                // Atualiza a contagem de caracteres restantes
+                let maxLength = 14;
+                let currentLength = input.value.length;
+                let remaining = maxLength - currentLength;
+
+                let counterElement = document.getElementById("char_count");
+                counterElement.textContent = remaining > 0 ? `Faltam ${remaining} caracteres` : "Formato completo!";
+            }
+            function formatTelefone(input) {
+                let value = input.value.toUpperCase(); // Converte letras para maiúsculas
+                let formattedValue = "";
+                
+                for (let i = 0; i < value.length; i++) {
+                    if (i < 9) { 
+                        // Primeiros 9 caracteres devem ser números
+                        if (/[0-9]/.test(value[i])) {
+                            formattedValue += value[i];
+                        }
+                    } else if (i < 11) { 
+                        // Os próximos 2 caracteres devem ser letras
+                        if (/[A-Z]/.test(value[i])) {
+                            formattedValue += value[i];
+                        }
+                    } else { 
+                        // Os últimos 3 caracteres devem ser números
+                        if (/[0-9]/.test(value[i])) {
+                            formattedValue += value[i];
+                        }
+                    }
+                }
+
+                // Atualiza o valor do input com a formatação correta
+                input.value = formattedValue;
+
+                // Atualiza a contagem de caracteres restantes
+                let maxLength = 9;
+                let currentLength = input.value.length;
+                let remaining = maxLength - currentLength;
+
+                let counterElement = document.getElementById("char_count_telefone");
+                counterElement.textContent = remaining > 0 ? `Faltam ${remaining} caracteres` : "Formato completo!";
+            }
     </script>
 @endsection

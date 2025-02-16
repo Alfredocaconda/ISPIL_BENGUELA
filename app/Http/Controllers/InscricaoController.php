@@ -9,9 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use Plank\Mediable\Facades\MediaUploader;
-use Barryvdh\DomPDF\PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
-
 
 class InscricaoController extends Controller
 {
@@ -116,13 +115,12 @@ class InscricaoController extends Controller
         $valor->user_id = Auth::user()->Candidato->id;
         $valor->save();
 
-        $data=[
-            'valor' => $valor
+           $data=[
+           'valor' => $valor
         ];
-        $pdf = app(PDF::class)->loadView('pages.estudante.comprovativo', $data);
-        return $pdf->download('Comprovativo.pdf');
-            // Redireciona o usuário para a página de inscrição
-    return redirect()->route('pages.estudante.inscricao')->with('success', 'Inscrição realizada com sucesso!');
+         
+        $pdf = Pdf::loadView('pages.estudante.comprovativo', $data);
+        return $pdf->download('comprovativo.pdf');
         
     }
 
