@@ -3,7 +3,7 @@
     <div class="form-input">
         <select name="cargo" id="cargo" class="form-control">
             <option value="Diretor">Diretor</option>
-            <option value="Secretario">Secretario</option>
+            <option value="Secretaria">Secretaria</option>
             <option value="Professor">Professor</option> 
         </select>
     </div>

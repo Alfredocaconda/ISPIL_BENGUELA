@@ -152,7 +152,7 @@
                                                 @if(Auth::user()->tipo == "Admin")
                                                   <p class="mb-0">{{Auth::user()->tipo}}</p>
                                                 @else
-                                                  <p class="mb-0">{{Auth::user()->funcionario->cargo}}</p>
+                                                <p class="mb-0">{{Auth::user()->funcionario->cargo}}</p>
                                                 @endif
                                                   <div class="d-flex align-items-center justify-content-center mt-3">
                                                       <a href="{{route('perfil')}}" class="btn border mr-2">Perfil</a>

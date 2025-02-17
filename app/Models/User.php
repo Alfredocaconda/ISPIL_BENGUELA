@@ -47,7 +47,7 @@ class User extends Authenticatable
             $user->email = $nomes[$tamanho-1].$nomes[0]."@ispil.ao";
         }
         $user->tipo = "secretaria";
-        $user->password = bcrypt($nomes[0]."ispil");
+        $user->password = bcrypt("ispil@2025");
         $user->save();
         return $user;
     }
@@ -116,5 +116,8 @@ class User extends Authenticatable
     public function Candidato()
     {
         return $this->hasOne(Candidato::class);
+    }
+    public function funcionario(){
+        return $this->hasOne(Funcionario::class,'user_id');
     }
 }

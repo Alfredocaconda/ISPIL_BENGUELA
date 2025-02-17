@@ -44,7 +44,7 @@ class UsuarioController extends Controller
         return match ($tipo) {
             'Candidato' => redirect()->route('candidato.index'),
             'Admin' => redirect()->route('admin.index'),
-            'secretaria' => redirect()->route('secretaria.index'),
+            'secretaria' => redirect()->route('admin.index'),
             default => redirect('login'),
         };
     }

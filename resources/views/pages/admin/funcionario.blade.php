@@ -120,7 +120,7 @@
                             </div>                        
                             <x-select name="cargo">
                                 <option value="Diretor">Diretor</option>
-                                <option value="Secretaria">Secretaria</option>
+                                <option value="Secretaria">Secretario</option>
                                 <option value="Professor">Professor</option>
                             </x-select>    
                             <x-input-normal id="data_contratacao" name="data_contratacao" type="date" titulo="Data de Contrato" alert="" />
