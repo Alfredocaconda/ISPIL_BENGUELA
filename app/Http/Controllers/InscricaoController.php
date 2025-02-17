@@ -22,7 +22,7 @@ class InscricaoController extends Controller
         //
         $cursos = Curso::find($request->curso_id); // Pega o curso da URL
         $valor=inscricao::all();
-        return view('pages.estudante.inscricao',compact('valor','cursos'));
+        return view('pages.candidato.inscricao',compact('valor','cursos'));
     }
 
     /**
@@ -119,7 +119,7 @@ class InscricaoController extends Controller
            'valor' => $valor
         ];
          
-        $pdf = Pdf::loadView('pages.estudante.comprovativo', $data);
+        $pdf = Pdf::loadView('pages.candidato.comprovativo', $data);
         return $pdf->download('comprovativo.pdf');
         
     }

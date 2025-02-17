@@ -43,7 +43,8 @@ class UsuarioController extends Controller
     {
         return match ($tipo) {
             'Candidato' => redirect()->route('candidato.index'),
-            'Admin' => redirect()->route('secretaria.index'),
+            'Admin' => redirect()->route('admin.index'),
+            'secretaria' => redirect()->route('secretaria.index'),
             default => redirect('login'),
         };
     }
@@ -53,7 +54,7 @@ class UsuarioController extends Controller
     {
         //
         $user=User::where('tipo','<>','Admin')->get();
-        return view("pages.secretaria.index",compact("user"));
+        return view("pages.admin.index",compact("user"));
     }
     
     /**

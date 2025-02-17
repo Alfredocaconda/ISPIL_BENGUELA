@@ -15,7 +15,7 @@ class CursoController extends Controller
     {
         //
         $valor=curso::all();
-        return view('pages.secretaria.cursos',compact('valor'));
+        return view('pages.admin.cursos',compact('valor'));
     }
 
     /**
@@ -81,7 +81,7 @@ class CursoController extends Controller
         if (!$valor) {
             return redirect()->back()->with("Error", "Curso não encontrado.");
         }
-        return view("pages.secretaria.Curso", compact("valor"));
+        return view("pages.admin.Curso", compact("valor"));
     }
 
     /**

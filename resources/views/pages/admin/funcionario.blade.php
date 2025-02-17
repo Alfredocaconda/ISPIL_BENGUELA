@@ -88,9 +88,21 @@
                         <div class="row">
                             <x-input-normal id="name" name="name" type="text" titulo="Nome Completo" alert="" />
                             <x-input-normal id="email" name="email" type="email" titulo="E-mail" alert="" />
-                            <x-input-normal id="telefone" name="telefone" type="number" titulo="Telefone" 
-                            maxlength="9" pattern="[0-9]{9}" oninput="this.value = this.value.replace(/[^0-9]/g, '')" 
-                            alert="Máximo de 9 números." />
+                            <div class="form-group col-12 col-md-6 col-lg-6">
+                                <label for="telefone">Nº do Telefone <span style="color: red;">*</span></label>
+                                <div class="form-input">
+                                    <input type="text" 
+                                           class="form-control" 
+                                           name="telefone" 
+                                           id="telefone" 
+                                           maxlength="9" 
+                                           oninput="formatTelefone(this)" 
+                                           placeholder="9XX-XXX-XXX">
+                                    
+                                    <!-- Mostra quantos caracteres ainda faltam -->
+                                    <small id="char_count_telefone" class="form-text text-muted">Faltam 9 caracteres</small>
+                                </div>
+                            </div>
                             <div class="form-group col-12 col-md-6 col-lg-6">
                                 <label for="n_bi">Número do BI</label>
                                 <div class="form-input">
@@ -105,48 +117,10 @@
                                     <!-- Mostra quantos caracteres ainda faltam -->
                                     <small id="char_count" class="form-text text-muted">Faltam 14 caracteres</small>
                                 </div>
-                            </div>
-                            
-                            <script>
-                                function formatBI(input) {
-                                    let value = input.value.toUpperCase(); // Converte letras para maiúsculas
-                                    let formattedValue = "";
-                                    
-                                    for (let i = 0; i < value.length; i++) {
-                                        if (i < 9) { 
-                                            // Primeiros 9 caracteres devem ser números
-                                            if (/[0-9]/.test(value[i])) {
-                                                formattedValue += value[i];
-                                            }
-                                        } else if (i < 11) { 
-                                            // Os próximos 2 caracteres devem ser letras
-                                            if (/[A-Z]/.test(value[i])) {
-                                                formattedValue += value[i];
-                                            }
-                                        } else { 
-                                            // Os últimos 3 caracteres devem ser números
-                                            if (/[0-9]/.test(value[i])) {
-                                                formattedValue += value[i];
-                                            }
-                                        }
-                                    }
-                            
-                                    // Atualiza o valor do input com a formatação correta
-                                    input.value = formattedValue;
-                            
-                                    // Atualiza a contagem de caracteres restantes
-                                    let maxLength = 14;
-                                    let currentLength = input.value.length;
-                                    let remaining = maxLength - currentLength;
-                            
-                                    let counterElement = document.getElementById("char_count");
-                                    counterElement.textContent = remaining > 0 ? `Faltam ${remaining} caracteres` : "Formato completo!";
-                                }
-                            </script>
-                        
+                            </div>                        
                             <x-select name="cargo">
                                 <option value="Diretor">Diretor</option>
-                                <option value="Secretario">Secretario</option>
+                                <option value="Secretaria">Secretaria</option>
                                 <option value="Professor">Professor</option>
                             </x-select>    
                             <x-input-normal id="data_contratacao" name="data_contratacao" type="date" titulo="Data de Contrato" alert="" />
@@ -163,42 +137,32 @@
         </div>
     </div>
 </div>
-
-
 <script>
-    const nomeInput = document.getElementById('telefone');
-    const nomeHelp = document.getElementById('nomeHelp');
-    const maxLength = 9;
-
-    nomeInput.addEventListener('input', () => {
-        const currentLength = nomeInput.value.length;
-        nomeHelp.textContent = `Máximo de ${maxLength} caracteres. (${currentLength}/${maxLength})`;
-    });
 
     function editar(valor) {
-    if (!valor) {
-        console.error("Erro: Dados do funcionário não encontrados.");
-        return;
-    }
+        if (!valor) {
+            console.error("Erro: Dados do funcionário não encontrados.");
+            return;
+        }
 
-    document.getElementById('id').value = valor.id || '';
-    document.getElementById('name').value = valor.name || '';
-    document.getElementById('cargo').value = valor.cargo || '';
-    document.getElementById('email').value = valor.email || '';
-    document.getElementById('n_bi').value = valor.n_bi || '';
-    document.getElementById('telefone').value = valor.telefone || '';
-    document.getElementById('data_contratacao').value = valor.data_contratacao || '';
+        document.getElementById('id').value = valor.id || '';
+        document.getElementById('name').value = valor.name || '';
+        document.getElementById('cargo').value = valor.cargo || '';
+        document.getElementById('email').value = valor.email || '';
+        document.getElementById('n_bi').value = valor.n_bi || '';
+        document.getElementById('telefone').value = valor.telefone || '';
+        document.getElementById('data_contratacao').value = valor.data_contratacao || '';
 
-    // Modificar a URL do formulário para apontar para update se for edição
-    let form = document.getElementById('formFuncionario');
-    if (valor.id) {
-        form.action = `/funcio/${valor.id}`;  // Ajuste conforme sua rota de atualização
-        form.method = "POST"; // Laravel aceita PUT/PATCH com _method
-        form.innerHTML += '<input type="hidden" name="_method" value="PUT">';
-    } else {
-        form.action = "{{ route('funcio.store') }}"; // Criar novo
+        // Modificar a URL do formulário para apontar para update se for edição
+        let form = document.getElementById('formFuncionario');
+        if (valor.id) {
+            form.action = `/funcio/${valor.id}`;  // Ajuste conforme sua rota de atualização
+            form.method = "POST"; // Laravel aceita PUT/PATCH com _method
+            form.innerHTML += '<input type="hidden" name="_method" value="PUT">';
+        } else {
+            form.action = "{{ route('funcio.store') }}"; // Criar novo
+        }
     }
-}
 
     function limpar() {
         document.getElementById('id').value = "";
@@ -208,6 +172,74 @@
         document.getElementById('email').value = "";
         document.getElementById('n_bi').value = "";
         document.getElementById('data_contratacao').value = "";
+    }
+
+    function formatBI(input) {
+        let value = input.value.toUpperCase(); // Converte letras para maiúsculas
+        let formattedValue = "";
+        
+        for (let i = 0; i < value.length; i++) {
+            if (i < 9) { 
+                // Primeiros 9 caracteres devem ser números
+                if (/[0-9]/.test(value[i])) {
+                    formattedValue += value[i];
+                }
+            } else if (i < 11) { 
+                // Os próximos 2 caracteres devem ser letras
+                if (/[A-Z]/.test(value[i])) {
+                    formattedValue += value[i];
+                }
+            } else { 
+                // Os últimos 3 caracteres devem ser números
+                if (/[0-9]/.test(value[i])) {
+                    formattedValue += value[i];
+                }
+            }
+        }
+
+        // Atualiza o valor do input com a formatação correta
+        input.value = formattedValue;
+
+        // Atualiza a contagem de caracteres restantes
+        let maxLength = 14;
+        let currentLength = input.value.length;
+        let remaining = maxLength - currentLength;
+
+        let counterElement = document.getElementById("char_count");
+        counterElement.textContent = remaining > 0 ? `Faltam ${remaining} caracteres` : "Formato completo!";
+    }
+    function formatTelefone(input) {
+        let value = input.value.toUpperCase(); // Converte letras para maiúsculas
+        let formattedValue = "";
+        
+        for (let i = 0; i < value.length; i++) {
+            if (i < 9) { 
+                // Primeiros 9 caracteres devem ser números
+                if (/[0-9]/.test(value[i])) {
+                    formattedValue += value[i];
+                }
+            } else if (i < 11) { 
+                // Os próximos 2 caracteres devem ser letras
+                if (/[A-Z]/.test(value[i])) {
+                    formattedValue += value[i];
+                }
+            } else { 
+                // Os últimos 3 caracteres devem ser números
+                if (/[0-9]/.test(value[i])) {
+                    formattedValue += value[i];
+                }
+            }
+        }
+
+        // Atualiza o valor do input com a formatação correta
+        input.value = formattedValue;
+
+        // Atualiza a contagem de caracteres restantes
+        let maxLength = 9;
+        let currentLength = input.value.length;
+        let remaining = maxLength - currentLength;
+        let counterElement = document.getElementById("char_count_telefone");
+        counterElement.textContent = remaining > 0 ? `Faltam ${remaining} caracteres` : "Formato completo!";
     }
 </script>
 @endsection

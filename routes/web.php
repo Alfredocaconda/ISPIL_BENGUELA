@@ -64,8 +64,7 @@ Route::get('/reconfirmacao', [MatriculaController::class, 'reconfirmacaoView'])-
 Route::post('/reconfirmar', [MatriculaController::class, 'reconfirmar'])->name('matricula.reconfirmar');
 Route::get('/comprovativo', [MatriculaController::class, 'baixarComprovativo'])->name('matricula.comprovativo');
 
-
-Route::get('Dashboard',[HomeController::class,'secretaria'])->name('secretaria.index');
+Route::get('Dashboard',[HomeController::class,'admin'])->name('admin.index');
 
 Route::resource('funcio',FuncionarioController::class);
 Route::get('apagar/{id}/funcio',[FuncionarioController::class,'apagar'])->name('funcio.apagar');

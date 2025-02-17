@@ -18,7 +18,7 @@ class CandidatoController extends Controller
         $usuario = Candidato::all();
         $cursos = Curso::all();
         
-        return view("pages.estudante.index", compact('usuario', 'cursos'));
+        return view("pages.candidato.index", compact('usuario', 'cursos'));
     }
 
     /**

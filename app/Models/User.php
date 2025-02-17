@@ -46,7 +46,7 @@ class User extends Authenticatable
         }else{
             $user->email = $nomes[$tamanho-1].$nomes[0]."@ispil.ao";
         }
-        $user->tipo = "Funcionario";
+        $user->tipo = "secretaria";
         $user->password = bcrypt($nomes[0]."ispil");
         $user->save();
         return $user;

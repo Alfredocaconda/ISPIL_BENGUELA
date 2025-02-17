@@ -17,7 +17,7 @@ class FuncionarioController extends Controller
     public function index()
     {
         $valor = Funcionario::orderBy('name', 'asc')->get();
-        return view("pages.secretaria.funcionario", compact("valor"));
+        return view("pages.admin.funcionario", compact("valor"));
     }
 
     /**
@@ -92,7 +92,7 @@ class FuncionarioController extends Controller
         if (!$valor) {
             return redirect()->back()->with("Error", "Funcionário não encontrado.");
         }
-        return view("pages.secretaria.funcionario", compact("valor"));
+        return view("pages.admin.funcionario", compact("valor"));
     }
 
     /**

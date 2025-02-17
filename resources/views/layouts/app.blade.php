@@ -43,7 +43,7 @@
                             <span class="ml-4">Dashboards</span>
                         </a>
                     </li>
-                   
+                   @if(Auth::user()->tipo == "Admin")
                       <li class=" ">
                           <a href="" class="svg-icon">
                             <i class="fa fa-user"></i>
@@ -56,7 +56,13 @@
                               <span class="ml-4">Funcionario</span>
                           </a>
                       </li>
-                  
+                      <li class=" ">
+                        <a href="{{route('Curso.index')}}" class="svg-icon">
+                            <i class="fa fa-list-alt"></i>
+                              <span class="ml-4">Cursos</span>
+                          </a>
+                      </li>
+                      @endif
                       <!-- INFORMACAO DA SECRETARIA QUE TERAO ACESSO-->
                       <li class=" ">
                         <a href="" class="svg-icon">
@@ -80,18 +86,6 @@
                         <a href="" class="svg-icon">
                             <i class="fa fa-list-alt"></i>
                               <span class="ml-4">Confir. Matrículas</span>
-                          </a>
-                      </li>
-                      <li class=" ">
-                        <a href="{{route('Curso.index')}}" class="svg-icon">
-                            <i class="fa fa-list-alt"></i>
-                              <span class="ml-4">Cursos</span>
-                          </a>
-                      </li>
-                      <li class=" ">
-                        <a href="" class="svg-icon">
-                            <i class="fa fa-file"></i>
-                              <span class="ml-4">Turma</span>
                           </a>
                       </li>
                   </ul>
@@ -121,24 +115,24 @@
                       </button>
                       <div class="collapse navbar-collapse" id="navbarSupportedContent">
                           <ul class="navbar-nav ml-auto navbar-list align-items-center">
-                           
-                            <li class="nav-item nav-icon search-content">
-                                  <a href="#" class="search-toggle rounded" id="dropdownSearch" data-toggle="dropdown"
-                                      aria-haspopup="true" aria-expanded="false">
-                                      <i class="ri-search-line"></i>
-                                  </a>
-                                
-                                  <div class="iq-search-bar iq-sub-dropdown dropdown-menu" aria-labelledby="dropdownSearch">
-                                      <form action="#" class="searchbox p-2">
-                                          <div class="form-group mb-0 position-relative">
-                                              <input type="text" class="text search-input font-size-12"
-                                                  placeholder="type here to search...">
-                                              <a href="#" class="search-link"><i class="las la-search"></i></a>
-                                          </div>
-                                      </form>
-                                  </div>
-                                </li>
-                               
+                                @if(Auth::user()->tipo == "admin")
+                                    <li class="nav-item nav-icon search-content">
+                                        <a href="#" class="search-toggle rounded" id="dropdownSearch" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">
+                                            <i class="ri-search-line"></i>
+                                        </a>
+                                        @else
+                                        <div class="iq-search-bar iq-sub-dropdown dropdown-menu" aria-labelledby="dropdownSearch">
+                                            <form action="#" class="searchbox p-2">
+                                                <div class="form-group mb-0 position-relative">
+                                                    <input type="text" class="text search-input font-size-12"
+                                                        placeholder="type here to search...">
+                                                    <a href="#" class="search-link"><i class="las la-search"></i></a>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </li>
+                                @endif
                               <li class="nav-item nav-icon dropdown caption-content">
                                   <a href="#" class="search-toggle dropdown-toggle" id="dropdownMenuButton4"
                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
