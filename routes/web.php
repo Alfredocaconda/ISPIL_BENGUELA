@@ -7,7 +7,6 @@ use App\Http\Controllers\{
     CandidatoController,
     InscricaoController,
     MatriculaController,
-    ReconfirmacaoController,
     CursoController,
     HomeController,
     FuncionarioController,
@@ -61,8 +60,10 @@ Route::post('inscricao/cadastro',[InscricaoController::class,'store'])->name('in
 Route::resource('matricula',MatriculaController::class);
 Route::post('matricula/cadastro',[MatriculaController::class,'store'])->name('matricula.cadastro');
 
-Route::resource('reconfirmacao',ReconfirmacaoController::class);
-Route::post('reconfirmacao/cadastro',[ReconfirmacaoController::class,'store'])->name('reconfirmacao.cadastro');
+Route::get('/reconfirmacao', [MatriculaController::class, 'reconfirmacaoView'])->name('matricula.reconfirmacao');
+Route::post('/reconfirmar', [MatriculaController::class, 'reconfirmar'])->name('matricula.reconfirmar');
+Route::get('/comprovativo', [MatriculaController::class, 'baixarComprovativo'])->name('matricula.comprovativo');
+
 
 Route::get('Dashboard',[HomeController::class,'secretaria'])->name('secretaria.index');
 
