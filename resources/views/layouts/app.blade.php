@@ -71,7 +71,7 @@
                           </a>
                       </li>
                       <li class=" ">
-                        <a href="" class="svg-icon">
+                        <a href="{{route('candidato.inf_candidato')}}" class="svg-icon">
                             <i class="fa fa-users"></i>
                               <span class="ml-4">Candidatos</span>
                           </a>

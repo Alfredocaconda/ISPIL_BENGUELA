@@ -60,7 +60,7 @@
             </tr>
             <tr>
                 <th>Curso Inscrito:</th>
-                <td>{{ $valor->curso->nome }}</td>
+               <td>{{ $valor->curso->name }}</td> 
             </tr>
             <tr>
                 <th>Data de Inscrição:</th>

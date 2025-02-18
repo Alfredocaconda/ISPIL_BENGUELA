@@ -144,8 +144,6 @@
                         @endif
                     </div>
                 </div>
-                
-
                 <div class="col-md-4">
                     <label for="foto">Foto de Tipo Passe ( jpg, png, jpeg ) <span style="color: red;">*</span></label>
                     <div class="form-input">

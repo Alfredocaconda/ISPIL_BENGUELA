@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Auth;
 use Plank\Mediable\Facades\MediaUploader;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
-
 class InscricaoController extends Controller
 {
     /**
@@ -28,6 +27,13 @@ class InscricaoController extends Controller
     /**
      * Show the form for creating a new resource.
      */
+    public function inf_candidato()
+    {
+        //
+        $valor = inscricao::all();
+        $cursos = Curso::all();
+        return view("pages.admin.inscricao", compact('valor', 'cursos'));
+    }
   
     /**
      * Store a newly created resource in storage.
@@ -111,15 +117,16 @@ class InscricaoController extends Controller
         $valor->date_termino = $request->date_termino;
         $valor->curso_Id = $request->curso_Id;
         $valor->data_inscricao = now(); // Usando o helper now() do Laravel
-        $valor->status = "Enviado";
+        $valor->status="Pendente";
         $valor->user_id = Auth::user()->Candidato->id;
         $valor->save();
 
-           $data=[
+        $data=[
            'valor' => $valor
         ];
          
         $pdf = Pdf::loadView('pages.candidato.comprovativo', $data);
+        dd($pdf);
         return $pdf->download('comprovativo.pdf');
         
     }
@@ -150,10 +157,27 @@ class InscricaoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(inscricao $inscricao)
+    public function alterarStatus($id)
     {
-        //
+        $dados = Inscricao::findOrFail($id);
+    
+        // Lista dos estados possíveis
+        $estados = ['pendente', 'admitido', 'nao_admitido'];
+    
+        // Pega o índice do estado atual
+        $indexAtual = array_search($dados->status, $estados);
+    
+        // Alterna para o próximo estado (cíclico)
+        $novoIndex = ($indexAtual + 1) % count($estados);
+        $dados->status = $estados[$novoIndex];
+    
+        $dados->save();
+    
+        return redirect()->back()->with('success', 'Status atualizado com sucesso!');
     }
+    
+
+    
 
     /**
      * Show the form for editing the specified resource.

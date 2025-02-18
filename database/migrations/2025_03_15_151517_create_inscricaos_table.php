@@ -22,7 +22,7 @@ return new class extends Migration
             $table->date('data_nasc');
             $table->string('n_bilhete')->unique();
             $table->string('afiliacao');
-            $table->string('telefone');
+            $table->string('telefone')->unique();
             $table->string('nome_escola');
             $table->string('curso_medio');
             $table->date('date_inicio');

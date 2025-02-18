@@ -53,9 +53,11 @@ Route::post('auth',[UsuarioController::class,'auth'])->name('user.auth');
 
 Route::resource('candidato',CandidatoController::class);
 Route::post('user/cadastro',[UsuarioController::class,'cadastrar'])->name('user.register');
+Route::get('Inf/Candidato',[InscricaoController::class,'inf_candidato'])->name('candidato.inf_candidato');
 
 Route::get('/inscricao', [InscricaoController::class, 'index'])->name('inscricao.index')->middleware('auth');
 Route::post('inscricao/cadastro',[InscricaoController::class,'store'])->name('inscricao.cadastro');
+Route::patch('/alterar-status/{id}', [InscricaoController::class, 'alterarStatus'])->name('alterarStatus');
 
 Route::resource('matricula',MatriculaController::class);
 Route::post('matricula/cadastro',[MatriculaController::class,'store'])->name('matricula.cadastro');
