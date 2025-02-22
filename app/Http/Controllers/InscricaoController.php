@@ -101,7 +101,7 @@ class InscricaoController extends Controller
         }
        
         // Preenchendo os dados do formulário
-        $valor->name = $request->name;
+        $valor->candidato_id = $request->candidato_id;
         $valor->email = $request->email;
         $valor->genero = $request->genero;
         $valor->provincia = $request->provincia;
@@ -118,16 +118,11 @@ class InscricaoController extends Controller
         $valor->curso_Id = $request->curso_Id;
         $valor->data_inscricao = now(); // Usando o helper now() do Laravel
         $valor->status="Pendente";
-        $valor->user_id = Auth::user()->Candidato->id;
+         // Associando o candidato à inscrição (supondo que o usuário autenticado seja um candidato)
+        $valor->candidato_id = Auth::user()->Candidato->id;
         $valor->save();
 
-        $data=[
-           'valor' => $valor
-        ];
-         
-        $pdf = Pdf::loadView('pages.candidato.comprovativo', $data);
-        dd($pdf);
-        return $pdf->download('comprovativo.pdf');
+        return view("pages.estudante.comprovativo");
         
     }
 

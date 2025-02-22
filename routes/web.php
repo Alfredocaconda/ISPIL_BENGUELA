@@ -10,6 +10,8 @@ use App\Http\Controllers\{
     CursoController,
     HomeController,
     FuncionarioController,
+    NotaController,
+
 };
 use Plank\Mediable\Media;
 
@@ -58,6 +60,13 @@ Route::get('Inf/Candidato',[InscricaoController::class,'inf_candidato'])->name('
 Route::get('/inscricao', [InscricaoController::class, 'index'])->name('inscricao.index')->middleware('auth');
 Route::post('inscricao/cadastro',[InscricaoController::class,'store'])->name('inscricao.cadastro');
 Route::patch('/alterar-status/{id}', [InscricaoController::class, 'alterarStatus'])->name('alterarStatus');
+
+Route::get('/notas', [NotaController::class, 'index'])->name('notas.index'); // Exibe o formulário
+Route::post('/notas', [NotaController::class, 'store'])->name('notas.store'); // Processa o formulário
+
+Route::get('/get-curso/{candidato_id}', [NotaController::class, 'getCurso']); // AJAX para buscar o curso
+
+
 
 Route::resource('matricula',MatriculaController::class);
 Route::post('matricula/cadastro',[MatriculaController::class,'store'])->name('matricula.cadastro');

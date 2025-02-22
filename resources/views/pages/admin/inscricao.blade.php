@@ -45,7 +45,6 @@
                         <tbody>
                             @foreach ($valor as $dados)
                                 <tr>
-                                    
                                     <td>{{$dados->name}}</td>
                                     <td>{{$dados->genero}}</td>
                                     <td>{{$dados->provincia ."/".$dados->municipio}}</td>
@@ -54,26 +53,11 @@
                                     <td>{{$dados->telefone}}</td>
                                     <td>{{$dados->curso->name}}</td>
                                     <td>{{$dados->data_inscricao}}</td>
-                                    <td>
-                                        @if($dados->status == 'pendente')
-                                            <span class="badge bg-warning">Pendente</span>
-                                        @elseif($dados->status == 'admitido')
-                                            <span class="badge bg-success">Admitido</span>
-                                        @else
-                                            <span class="badge bg-danger">Não Admitido</span>
-                                        @endif
-                                    </td>
+                                    <td>{{$dados->status}}</td>
                                     <td><img src="" alt="Aqui vai imagem"></td>
                                     <td><a href="" class="text-danger" title="Clica para descarregar o fichero">  <i style="font-size:50px" class="fa fa-file-pdf"></i> </a></td>
                                     <td><a href="" class="text-danger" title="Clica para descarregar o fichero">  <i style="font-size:50px" class="fa fa-file-pdf"></i> </a></td>
                                     <td>
-                                        <form action="{{ route('alterarStatus', $dados->id) }}" method="POST">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit" class="btn btn-primary">
-                                                Alterar Status
-                                            </button>
-                                        </form>
                                         <a href="" class="text-danger"><i class="fa fa-trash"></i></a>
                                     </td>
                                 </tr>

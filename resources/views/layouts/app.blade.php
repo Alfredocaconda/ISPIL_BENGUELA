@@ -77,6 +77,12 @@
                           </a>
                       </li>
                       <li class=" ">
+                        <a href="{{route('notas.index')}}" class="svg-icon">
+                            <i class="fa fa-users"></i>
+                              <span class="ml-4">Notas</span>
+                          </a>
+                      </li>
+                      <li class=" ">
                         <a href="" class="svg-icon">
                             <i class="fa fa-list-alt"></i>
                               <span class="ml-4">Matrículas</span>

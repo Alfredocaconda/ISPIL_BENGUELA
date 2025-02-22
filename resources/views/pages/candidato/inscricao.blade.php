@@ -15,7 +15,7 @@
       @endif
         <form action="{{route('inscricao.cadastro')}}" method="post" enctype="multipart/form-data">
             @csrf
-            <input type="hidden" name="name" value="{{ Auth::user()->name }}" >
+            <input type="hidden" name="candidato_id" value="{{ Auth::user()->id }}" >
             <input type="hidden" name="email" value="{{ Auth::user()->email }}" >
             <div class="row g-3">
                 <!-- Criando 10 inputs em uma grade responsiva -->
