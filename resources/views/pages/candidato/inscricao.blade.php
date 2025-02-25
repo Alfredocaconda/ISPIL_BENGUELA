@@ -15,7 +15,7 @@
       @endif
         <form action="{{route('inscricao.cadastro')}}" method="post" enctype="multipart/form-data">
             @csrf
-            <input type="hidden" name="candidato_id" value="{{ Auth::user()->id }}" >
+            <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
             <input type="hidden" name="email" value="{{ Auth::user()->email }}" >
             <div class="row g-3">
                 <!-- Criando 10 inputs em uma grade responsiva -->
@@ -115,15 +115,15 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <label for="date_inicio">Data de Inicio <span style="color: red;">*</span></label>
+                    <label for="data_inicio">Data de Inicio <span style="color: red;">*</span></label>
                     <div class="form-input">
-                        <input type="date" name="date_inicio" id="date_inicio" class="form-control" />
+                        <input type="date" name="data_inicio" id="data_inicio" class="form-control" />
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <label for="date_termino">Data de Termino <span style="color: red;">*</span></label>
+                    <label for="data_termino">Data de Termino <span style="color: red;">*</span></label>
                     <div class="form-input">
-                        <input type="date" name="date_termino" id="date_termino" class="form-control" />
+                        <input type="date" name="data_termino" id="data_termino" class="form-control" />
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -137,7 +137,7 @@
                     <label for="curso_Id">Curso Selecionado</label>
                     <div class="form-input">
                         @if(isset($cursos))
-                            <input type="hidden" name="curso_Id" value="{{ $cursos->id }}">
+                            <input type="hidden" name="curso_id" value="{{ $cursos->id }}">
                             <input type="text" class="form-control" value="{{ $cursos->name }}" readonly>
                         @else
                             <p class="text-danger">Nenhum curso selecionado.</p>

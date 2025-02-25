@@ -115,8 +115,9 @@ class User extends Authenticatable
 
     public function Candidato()
     {
-        return $this->hasOne(Candidato::class);
+        return $this->hasOne(Candidato::class, 'user_id');
     }
+
     public function funcionario(){
         return $this->hasOne(Funcionario::class,'user_id');
     }

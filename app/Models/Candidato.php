@@ -22,4 +22,9 @@ class Candidato extends Model
     {
         return $this->hasMany(Inscricao::class);
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
 }

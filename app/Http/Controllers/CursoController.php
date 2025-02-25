@@ -49,7 +49,7 @@ class CursoController extends Controller
             }
             if (request()->hasFile('foto')) {
             $doc = MediaUploader::fromSource(request()->file('foto'))
-            ->toDirectory('docCurso')->onDuplicateIncrement()
+            ->toDirectory('DocCurso')->onDuplicateIncrement()
             ->useHashForFilename()
             ->setAllowedAggregateTypes(['image'])->upload();
             $valor->foto=$doc->basename;
