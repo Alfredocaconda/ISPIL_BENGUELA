@@ -59,7 +59,9 @@ Route::get('Inf/Candidato',[InscricaoController::class,'inf_candidato'])->name('
 
 Route::get('/inscricao', [InscricaoController::class, 'index'])->name('inscricao.index')->middleware('auth');
 Route::post('inscricao/cadastro',[InscricaoController::class,'store'])->name('inscricao.cadastro');
-Route::patch('/alterar-status/{id}', [InscricaoController::class, 'alterarStatus'])->name('alterarStatus');
+Route::get('/inscricao/sucesso/{id}', [InscricaoController::class, 'sucesso'])->name('inscricao.sucesso');
+Route::post('/inscricao/comprovativo', [InscricaoController::class, 'gerarComprovativo'])->name('inscricao.comprovativo');
+
 
 Route::get('/notas', [NotaController::class, 'index'])->name('notas.index'); // Exibe o formulário
 Route::post('/notas', [NotaController::class, 'store'])->name('notas.store'); // Processa o formulário

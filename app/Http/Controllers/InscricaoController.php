@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\inscricao;
 use App\Models\Candidato;
 use App\Models\Curso;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use Plank\Mediable\Facades\MediaUploader;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Mail;
 use Exception;
+use PDF;
+
+
 class InscricaoController extends Controller
 {
     /**
@@ -102,12 +106,74 @@ class InscricaoController extends Controller
     
         // Salvar a inscrição
         $valor->save();
-    
-        return view("pages.candidato.comprovativo");
+        return redirect()->route('inscricao.sucesso', ['id' => $valor->id]);
     }
     
+    /**
+     * Show the form for editing the specified resource.
+     */
 
-    
+     public function sucesso($id)
+     {
+         $candidato = inscricao::with('user')->findOrFail($id);
+     
+         return view('pages.candidato.sucesso', compact('candidato'));
+     }
+     
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+
+     public function gerarComprovativo(Request $request)
+     {
+         // Buscar o candidato pelo ID
+         $candidato = inscricao::findOrFail($request->id);
+     
+         // Gerar o PDF
+         $pdf = PDF::loadView('pages.candidato.comprovativo', compact('candidato'));
+     
+         // Verifica se o candidato tem um e-mail válido
+         if (!$candidato->email) {
+             return back()->with('error', 'O candidato não possui um e-mail cadastrado.');
+         }
+     
+         // Se a opção escolhida for "email"
+         if ($request->metodo == 'email') {
+             try {
+                 Mail::send([], [], function ($message) use ($candidato, $pdf) {
+                     $message->to($candidato->email)
+                         ->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME')) // Define o remetente correto
+                         ->subject('Comprovativo de Inscrição')
+                         ->attachData($pdf->output(), 'comprovativo.pdf')
+                         ->html("<p>Olá {$candidato->nome},</p>
+                                 <p>Segue em anexo o seu comprovativo de inscrição.</p>
+                                 <br>
+                                 <p>Atenciosamente,</p>
+                                 <p>Equipe de Suporte</p>");
+                 });
+     
+                 return back()->with('success', 'Comprovativo enviado para o e-mail ' . $candidato->email);
+             } catch (\Exception $e) {
+                 return back()->with('error', 'Erro ao enviar o e-mail: ' . $e->getMessage());
+             }
+         }
+     
+         // Se a opção escolhida for "pdf"
+         if ($request->metodo == 'pdf') {
+             return $pdf->download('comprovativo.pdf');
+         }
+     
+         return back()->with('error', 'Selecione um método válido.');
+     }
+     
+     
+
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+
     private function processarPagamento($cartao)
     {
         $status = rand(0, 1) ? 'sucesso' : 'falha';
@@ -131,33 +197,11 @@ class InscricaoController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function alterarStatus($id)
-    {
-        $dados = Inscricao::findOrFail($id);
-    
-        // Lista dos estados possíveis
-        $estados = ['pendente', 'admitido', 'nao_admitido'];
-    
-        // Pega o índice do estado atual
-        $indexAtual = array_search($dados->status, $estados);
-    
-        // Alterna para o próximo estado (cíclico)
-        $novoIndex = ($indexAtual + 1) % count($estados);
-        $dados->status = $estados[$novoIndex];
-    
-        $dados->save();
-    
-        return redirect()->back()->with('success', 'Status atualizado com sucesso!');
-    }
-    
-
-    
-
-    /**
      * Show the form for editing the specified resource.
      */
+
+    
+
     public function edit(inscricao $inscricao)
     {
         //
