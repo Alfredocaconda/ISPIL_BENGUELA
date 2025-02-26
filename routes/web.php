@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use App\Models\inscricao;
 use App\Http\Controllers\{
     UsuarioController,
     CandidatoController,
@@ -62,6 +64,21 @@ Route::post('inscricao/cadastro',[InscricaoController::class,'store'])->name('in
 Route::get('/inscricao/sucesso/{id}', [InscricaoController::class, 'sucesso'])->name('inscricao.sucesso');
 Route::post('/inscricao/comprovativo', [InscricaoController::class, 'gerarComprovativo'])->name('inscricao.comprovativo');
 Route::post('/inscricao/adicionarNota', [InscricaoController::class, 'adicionarNota'])->name('inscricao.adicionarNota');
+Route::get('/consulta-inscricao', [InscricaoController::class, 'consulta'])->name('inscricao.consulta');
+
+Route::post('/consulta-resultado', function (Request $request) {
+    $codigo = $request->input('codigo_inscricao');
+    
+    $inscricao = Inscricao::where('codigo_inscricao', $codigo)->first();
+
+    if ($inscricao) {
+        $resultado = $inscricao->nota >= 10 ? 'Admitido' : 'Não Admitido';
+    } else {
+        $resultado = 'Não Admitido';
+    }
+
+    return redirect()->back()->with('resultado', $resultado);
+})->name('consulta.resultado');
 
 
 

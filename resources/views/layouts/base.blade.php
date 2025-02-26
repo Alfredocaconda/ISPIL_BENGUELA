@@ -27,17 +27,22 @@
     <!-- Navbar Start -->
     <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
         <div class="esquerdo">
-            <a href="{{ url('/') }}"><img src="{{ asset('imagem/logotipo.jpeg') }}" alt="">
-            </a>
+            <a href="{{ url('/') }}"><img src="{{ asset('imagem/logotipo.jpeg') }}" alt="Logo"></a>
         </div>
         <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
-                <a href="{{ url('/') }}" class="nav-item nav-link active">Inicio</a>
+                <a href="{{ url('/') }}" class="nav-item nav-link active">Início</a>
                 <a href="{{ url('/cursos') }}" class="nav-item nav-link">Cursos</a>
-                <a href="{{ url('/cursos') }}" class="nav-item nav-link">Vida Academica</a>
+                <a href="{{ url('/vida-academica') }}" class="nav-item nav-link">Vida Acadêmica</a>
+
+                <!-- Novo link para Consulta -->
+                <a href="{{ url('/consulta-inscricao') }}" class="nav-item nav-link text-danger fw-bold">
+                    Consultar Inscrição
+                </a>
+
                 @auth
                     @if(Auth::user()->role === 'estudante')
                         <div class="nav-item dropdown">
@@ -49,38 +54,35 @@
                         </div>
                     @endif
                 @endauth
-                  <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                           
+                
+                <ul class="navbar-nav ms-auto">
+                    @guest
                         <a href="{{ route('login') }}" class="btn py-4 px-lg-5 d-none d-lg-block">Login</a>
                         <a href="{{ route('register') }}" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">
-                            Cadastrar-se<i class="fa fa-arrow-right ms-3"></i>
+                            Cadastrar-se <i class="fa fa-arrow-right ms-3"></i>
                         </a>
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
+                    @else
+                        <li class="nav-item dropdown">
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                {{ Auth::user()->name }}
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a class="dropdown-item" href="{{ route('logout') }}"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    {{ __('Logout') }}
                                 </a>
-
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
+                            </div>
+                        </li>
+                    @endguest
+                </ul>
             </div>
         </div>
     </nav>
     <!-- Navbar End -->
+
 
     @yield('matricula')
     <!-- Carousel Start -->

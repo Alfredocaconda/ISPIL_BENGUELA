@@ -106,8 +106,8 @@ class InscricaoController extends Controller
         $anoIngresso = now()->format('Y'); // Ano atual
         $codigoCurso = str_pad($request->curso_id, 3, '0', STR_PAD_LEFT); // Código do curso com 3 dígitos
         $ultimoId = inscricao::max('id') + 1; // Obtendo o próximo ID da tabela
-        $codigoiscricao = "{$anoIngresso}{$codigoCurso}" . str_pad($ultimoId, 4, '0', STR_PAD_LEFT);
-        $valor->codigo_inscricao = $codigoiscricao; // Salvando no banco
+        $codigo_inscricao = "{$anoIngresso}{$codigoCurso}" . str_pad($ultimoId, 4, '0', STR_PAD_LEFT);
+        $valor->codigo_inscricao = $codigo_inscricao; // Salvando no banco
         // Salvar a inscrição
         $valor->save();
 
@@ -230,25 +230,26 @@ class InscricaoController extends Controller
      * Update the specified resource in storage.
      */
     public function atualizarNota(Request $request, $id)
-{
-    $request->validate([
-        'nota' => 'required|numeric|min:0|max:20',
-    ]);
+    {
+        $request->validate([
+            'nota' => 'required|numeric|min:0|max:20',
+        ]);
 
-    $inscricao = Inscricao::findOrFail($id);
-    $inscricao->nota = $request->nota;
-    $inscricao->estado = ($request->nota >= 10) ? 'Admitido' : 'Não Admitido';
-    $inscricao->save();
+        $inscricao = Inscricao::findOrFail($id);
+        $inscricao->nota = $request->nota;
+        $inscricao->estado = ($request->nota >= 10) ? 'Admitido' : 'Não Admitido';
+        $inscricao->save();
 
-    return redirect()->back()->with('success', 'Nota atualizada com sucesso!');
-}
+        return redirect()->back()->with('success', 'Nota atualizada com sucesso!');
+    }
 
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(inscricao $inscricao)
+    public function consulta()
     {
-        //
+        
+        return view('pages.candidato.consulta');
     }
 }
