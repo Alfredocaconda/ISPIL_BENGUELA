@@ -13,6 +13,7 @@ return new class extends Migration
     {
             Schema::create('inscricaos', function (Blueprint $table) {
             $table->id();
+            $table->decimal('nota', 5, 2)->nullable(); // Adiciona a coluna para a nota
             $table->string('codigo_inscricao');
             $table->string('email');
             $table->string('genero'); 
@@ -32,7 +33,7 @@ return new class extends Migration
             $table->string('bilhete');
             $table->string('recenciamento')->nullable();
             $table->string('foto');
-            $table->string('status')->nullable()->default('Pendente'); // Define um valor padrão
+            $table->string('estado')->nullable()->default('Pendente'); // Define um valor padrão
             $table->foreignId('curso_id')->constrained('cursos')->onDelete('cascade'); // Corrigido nome
             $table->foreignId('user_id')->nullable()->constrained('users');
             $table->timestamps();

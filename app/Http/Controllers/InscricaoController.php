@@ -77,7 +77,7 @@ class InscricaoController extends Controller
         $valor->data_termino = $request->data_termino;
         $valor->curso_id = $request->curso_id;
         $valor->data_inscricao = now();
-        $valor->status = "Pendente";
+        $valor->estado = "Pendente";
         // Definindo o diretório para uploads com o nome ou ID do usuário
         $usuarioNome = $request->name ?? "Usuario_" . $valor->user_id;
     
@@ -207,18 +207,42 @@ class InscricaoController extends Controller
 
     
 
-    public function edit(inscricao $inscricao)
-    {
-        //
-    }
+     public function adicionarNota(Request $request)
+     {
+         // Validação da nota
+         $request->validate([
+             'id' => 'required|exists:inscricaos,id',
+             'nota' => 'required|numeric|min:0|max:20',
+         ]);
+     
+         // Buscar a inscrição pelo ID
+         $inscricao = Inscricao::findOrFail($request->id);
+     
+         // Atualizar a nota
+         $inscricao->nota = $request->nota;
+         $inscricao->save();
+     
+         return redirect()->back()->with('success', 'Nota adicionada com sucesso!');
+     }
+     
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, inscricao $inscricao)
-    {
-        //
-    }
+    public function atualizarNota(Request $request, $id)
+{
+    $request->validate([
+        'nota' => 'required|numeric|min:0|max:20',
+    ]);
+
+    $inscricao = Inscricao::findOrFail($id);
+    $inscricao->nota = $request->nota;
+    $inscricao->estado = ($request->nota >= 10) ? 'Admitido' : 'Não Admitido';
+    $inscricao->save();
+
+    return redirect()->back()->with('success', 'Nota atualizada com sucesso!');
+}
+
 
     /**
      * Remove the specified resource from storage.

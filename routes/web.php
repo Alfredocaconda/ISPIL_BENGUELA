@@ -61,6 +61,8 @@ Route::get('/inscricao', [InscricaoController::class, 'index'])->name('inscricao
 Route::post('inscricao/cadastro',[InscricaoController::class,'store'])->name('inscricao.cadastro');
 Route::get('/inscricao/sucesso/{id}', [InscricaoController::class, 'sucesso'])->name('inscricao.sucesso');
 Route::post('/inscricao/comprovativo', [InscricaoController::class, 'gerarComprovativo'])->name('inscricao.comprovativo');
+Route::post('/inscricao/adicionarNota', [InscricaoController::class, 'adicionarNota'])->name('inscricao.adicionarNota');
+
 
 
 Route::get('/notas', [NotaController::class, 'index'])->name('notas.index'); // Exibe o formulário
@@ -123,3 +125,5 @@ Route::get('entrar',function(){
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/cursos', [App\Http\Controllers\HomeController::class, 'cursos'])->name('cursos');
+

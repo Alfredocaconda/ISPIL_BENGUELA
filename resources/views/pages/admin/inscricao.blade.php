@@ -24,45 +24,76 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="datatable" class="table data-tables table-striped">
-                        <thead>
-                            <tr class="ligth">
-                            
-                                <th>Nome Completo</th>
-                                <th>Genero</th>
-                                <th>Província/Município</th>
-                                <th>Nº BI</th>
-                                <th>Nome do Pai e Mãe</th>
-                                <th>Nº Tel</th>
-                                <th>Curso</th>
-                                <th>Data de Inscrição</th>
-                                <th>Estado</th>
-                                <th>Foto</th>
-                                <th>Certificado</th>
-                                <th>Bilhete</th>
-                                <th>Opções</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($valor as $dados)
-                                <tr>
-                                    <td>{{$dados->name}}</td>
-                                    <td>{{$dados->genero}}</td>
-                                    <td>{{$dados->provincia ."/".$dados->municipio}}</td>
-                                    <td>{{$dados->n_bilhete}}</td>
-                                    <td>{{$dados->afiliacao}}</td>
-                                    <td>{{$dados->telefone}}</td>
-                                    <td>{{$dados->curso->name}}</td>
-                                    <td>{{$dados->data_inscricao}}</td>
-                                    <td>{{$dados->status}}</td>
-                                    <td><img src="" alt="Aqui vai imagem"></td>
-                                    <td><a href="" class="text-danger" title="Clica para descarregar o fichero">  <i style="font-size:50px" class="fa fa-file-pdf"></i> </a></td>
-                                    <td><a href="" class="text-danger" title="Clica para descarregar o fichero">  <i style="font-size:50px" class="fa fa-file-pdf"></i> </a></td>
-                                    <td>
-                                        <a href="" class="text-danger"><i class="fa fa-trash"></i></a>
-                                    </td>
+                            <thead>
+                                <tr class="ligth">
+                                    <th>Nome Completo</th>
+                                    <th>Genero</th>
+                                    <th>Província/Município</th>
+                                    <th>Nº BI</th>
+                                    <th>Nome do Pai e Mãe</th>
+                                    <th>Nº Tel</th>
+                                    <th>Curso</th>
+                                    <th>Data de Inscrição</th>
+                                    <th>Estado</th>
+                                    <th>Foto</th>
+                                    <th>Certificado</th>
+                                    <th>Bilhete</th>
+                                    <th>Nota</th> <!-- Nova coluna para adicionar a nota -->
+                                    <th>Opções</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
+                            </thead>
+                            <tbody>
+                                @foreach ($valor as $dados)
+                                    <tr>
+                                        <td>{{ $dados->user->name }}</td>
+                                        <td>{{ $dados->genero }}</td>
+                                        <td>{{ $dados->provincia ."/". $dados->municipio }}</td>
+                                        <td>{{ $dados->n_bilhete }}</td>
+                                        <td>{{ $dados->afiliacao }}</td>
+                                        <td>{{ $dados->telefone }}</td>
+                                        <td>{{ $dados->curso->name }}</td>
+                                        <td>{{ $dados->data_inscricao }}</td>
+                                        <td>{{ $dados->estado }}</td>
+                                        <td><img src="" alt="Aqui vai imagem"></td>
+                                        <td><a href="" class="text-danger" title="Clica para descarregar o ficheiro"><i style="font-size:50px" class="fa fa-file-pdf"></i></a></td>
+                                        <td><a href="" class="text-danger" title="Clica para descarregar o ficheiro"><i style="font-size:50px" class="fa fa-file-pdf"></i></a></td>
+                                        <td>
+                                            {{ $dados->nota ?? 'Sem nota' }} <!-- Exibir a nota se existir -->
+                                        </td>
+                                        <td>
+                                            <!-- Botão para adicionar nota -->
+                                            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalNota{{$dados->id}}">
+                                                <i class="fa fa-edit"></i> Adicionar Nota
+                                            </button>
+                        
+                                            <!-- Modal para adicionar nota -->
+                                            <div class="modal fade" id="modalNota{{$dados->id}}" tabindex="-1" aria-labelledby="modalNotaLabel{{$dados->id}}" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="modalNotaLabel{{$dados->id}}">Adicionar Nota para {{ $dados->user->name }}</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <form action="{{ route('inscricao.adicionarNota') }}" method="POST">
+                                                            @csrf
+                                                            <div class="modal-body">
+                                                                <input type="hidden" name="id" value="{{ $dados->id }}">
+                                                                <label for="nota">Nota:</label>
+                                                                <input type="number" name="nota" class="form-control" min="0" max="20" step="0.1" required>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                                <button type="submit" class="btn btn-success">Salvar Nota</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                        
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
                         </table>
                     </div>
                 </div>

@@ -36,8 +36,8 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
                 <a href="{{ url('/') }}" class="nav-item nav-link active">Inicio</a>
-                <a href="{{ url('/home') }}" class="nav-item nav-link">Cursos</a>
-                <a href="courses.html" class="nav-item nav-link">Vida Academica</a>
+                <a href="{{ url('/cursos') }}" class="nav-item nav-link">Cursos</a>
+                <a href="{{ url('/cursos') }}" class="nav-item nav-link">Vida Academica</a>
                 @auth
                     @if(Auth::user()->role === 'estudante')
                         <div class="nav-item dropdown">

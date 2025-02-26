@@ -63,7 +63,7 @@ class CursoController extends Controller
             $valor->preco = $request->preco;
             $valor->save();
 
-            return redirect()->back()->with("Sucesso", $request->filled('id') ? "Curso atualizado com sucesso!" : "Funcionário cadastrado com sucesso!");
+            return redirect()->back()->with("Sucesso", $request->filled('id') ? "Curso atualizado com sucesso!" : "Curso cadastrado com sucesso!");
 
         } catch (ValidationException $e) {
             return redirect()->back()->withErrors($e->validator)->withInput();

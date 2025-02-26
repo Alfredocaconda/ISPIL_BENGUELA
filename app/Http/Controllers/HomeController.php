@@ -17,4 +17,9 @@ class HomeController extends Controller
         $cursos = Curso::all();
         return view('pages.admin.index', compact('cursos'));
     }
+    public function cursos()
+    {
+        $cursos = Curso::all();
+        return view('pages.curso', compact('cursos'));
+    }
 }

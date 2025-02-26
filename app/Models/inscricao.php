@@ -9,12 +9,19 @@ class Inscricao extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'email', 'genero', 'provincia', 'municipio', 
-        'naturalidade', 'data_nasc', 'n_bilhete', 'afiliacao', 
-        'telefone', 'nome_escola', 'curso_medio', 'data_inicio', 
-        'data_termino', 'curso_id', 'data_inscricao', 'status'
+        'nota', 'estado', 'codigo_inscricao', 'email', 'genero', 'provincia',
+        'municipio', 'naturalidade', 'data_nasc', 'n_bilhete', 'afiliacao',
+        'telefone', 'nome_escola', 'curso_medio', 'data_inicio', 'data_termino',
+        'data_inscricao', 'certificado', 'bilhete', 'recenciamento', 'foto',
+        'curso_id', 'user_id'
     ];
-    
+
+    // Quando a nota for atualizada, mudar o status automaticamente
+    public function setNotaAttribute($value)
+    {
+        $this->attributes['nota'] = $value;
+        $this->attributes['estado'] = ($value >= 10) ? 'Admitido' : 'Não Admitido';
+    }
     // Relação com o usuário
     public function user()
     {
