@@ -7,7 +7,6 @@
     <style>
         body { font-family: Arial, sans-serif; font-size: 14px; }
         .container { width: 100%; text-align: center; }
-        .logo { width: 100px; height: auto; }
         .titulo { font-size: 18px; font-weight: bold; margin-top: 10px; }
         .dados { margin-top: 20px; text-align: left; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
@@ -19,11 +18,14 @@
 
     <div class="container">
         <!-- Logotipo -->
+        <p class="titulo">ISPIL-POLO BENGUELA</p>
         <p class="titulo">Comprovativo de Inscrição</p>
     </div>
 
     <!-- Dados do Inscrito -->
     <div class="dados">
+        <p class="titulo">Código de Inscrição: {{$candidato->codigo_inscricao}}</p>
+
         <table>
             <tr>
                 <th>Nome Completo:</th>
@@ -71,12 +73,11 @@
             </tr>
         </table>
     </div>
-
     <!-- Assinatura -->
     <div class="assinatura">
         <p>_________________________</p>
         <p>Assinatura do Responsável</p>
     </div>
-
+    <p>Data: {{now()}}</p>
 </body>
 </html>

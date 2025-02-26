@@ -4,8 +4,7 @@
 <div class="container">
     <h2>Inscrição realizada com sucesso!</h2>
     <p>Nome: {{ $candidato->user->name }}</p>
-    <p>Email: {{ $candidato->email }}</p>
-
+    <p>Email: {{ $candidato->email }}</p>    
     <form action="{{ route('inscricao.comprovativo') }}" method="POST">
         @csrf
         <input type="hidden" name="id" value="{{ $candidato->id }}">

@@ -78,7 +78,6 @@ class InscricaoController extends Controller
         $valor->curso_id = $request->curso_id;
         $valor->data_inscricao = now();
         $valor->status = "Pendente";
-    
         // Definindo o diretório para uploads com o nome ou ID do usuário
         $usuarioNome = $request->name ?? "Usuario_" . $valor->user_id;
     
@@ -103,9 +102,15 @@ class InscricaoController extends Controller
                 $valor->$docName = $doc->basename;
             }
         }
-    
+        // Geração do Código de Matrícula
+        $anoIngresso = now()->format('Y'); // Ano atual
+        $codigoCurso = str_pad($request->curso_id, 3, '0', STR_PAD_LEFT); // Código do curso com 3 dígitos
+        $ultimoId = inscricao::max('id') + 1; // Obtendo o próximo ID da tabela
+        $codigoiscricao = "{$anoIngresso}{$codigoCurso}" . str_pad($ultimoId, 4, '0', STR_PAD_LEFT);
+        $valor->codigo_inscricao = $codigoiscricao; // Salvando no banco
         // Salvar a inscrição
         $valor->save();
+
         return redirect()->route('inscricao.sucesso', ['id' => $valor->id]);
     }
     

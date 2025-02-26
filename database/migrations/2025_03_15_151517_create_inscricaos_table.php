@@ -13,6 +13,7 @@ return new class extends Migration
     {
             Schema::create('inscricaos', function (Blueprint $table) {
             $table->id();
+            $table->string('codigo_inscricao');
             $table->string('email');
             $table->string('genero'); 
             $table->string('provincia');
@@ -35,6 +36,7 @@ return new class extends Migration
             $table->foreignId('curso_id')->constrained('cursos')->onDelete('cascade'); // Corrigido nome
             $table->foreignId('user_id')->nullable()->constrained('users');
             $table->timestamps();
+                
         });
     }
 
