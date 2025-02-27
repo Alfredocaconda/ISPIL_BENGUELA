@@ -1,41 +1,68 @@
-@extends('layouts.app')
+<form action="{{ route('matricula.store') }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    
+    <input type="hidden" name="id" value="{{ $matricula->id ?? '' }}">
+    
+    <h3>Informações Pessoais</h3>
+    
+    <label>Nome Completo:</label>
+    <input type="text" name="name" value="{{ old('name', $usuario->name ?? '') }}" required>
+    
+    <label>Email:</label>
+    <input type="email" name="email" value="{{ old('email', $usuario->email ?? '') }}" required>
 
-@section('reconfirmacao')
-<div class="container">
-    <h2 class="text-center">Reconfirmação de Matrícula</h2>
+    <label>Telefone:</label>
+    <input type="text" name="telefone" value="{{ old('telefone', $matricula->telefone ?? '') }}" required>
 
-    <!-- Exibir status atual da matrícula -->
-    <div class="alert 
-        @if($matricula->status == 'Confirmado') alert-success 
-        @elseif($matricula->status == 'Pendente') alert-warning 
-        @else alert-danger @endif">
-        Status da Matrícula: <strong>{{ $matricula->status }}</strong>
-    </div>
+    <label>Curso:</label>
+    <select name="curso_id" required>
+        @foreach ($cursos as $curso)
+            <option value="{{ $curso->id }}" {{ (isset($matricula) && $matricula->curso_id == $curso->id) ? 'selected' : '' }}>
+                {{ $curso->nome }}
+            </option>
+        @endforeach
+    </select>
 
-    <!-- Se matrícula estiver confirmada, exibir botão para baixar comprovativo -->
-    @if($matricula->status == 'Confirmado')
-        <div class="text-center mb-3">
-            <a href="{{ route('matricula.comprovativo') }}" class="btn btn-primary">
-                📄 Baixar Comprovativo
-            </a>
-        </div>
-    @else
-        <!-- Formulário de Reconfirmação -->
-        <form action="{{ route('matricula.reconfirmar') }}" method="POST">
-            @csrf
-            
-            <div class="mb-3">
-                <label for="numero_cartao" class="form-label">Número do Cartão</label>
-                <input type="text" name="numero_cartao" class="form-control" required>
-            </div>
+    <h3>Endereço</h3>
 
-            <div class="mb-3">
-                <label for="valor" class="form-label">Valor da Reconfirmação</label>
-                <input type="text" name="valor" class="form-control" value="50000" readonly>
-            </div>
+    <label>Província:</label>
+    <input type="text" name="provincia" value="{{ old('provincia', $matricula->provincia ?? '') }}" required>
 
-            <button type="submit" class="btn btn-success">✅ Reconfirmar Matrícula</button>
-        </form>
+    <label>Município:</label>
+    <input type="text" name="municipio" value="{{ old('municipio', $matricula->municipio ?? '') }}" required>
+
+    <h3>Documentos</h3>
+    
+    <label>Certificado de Conclusão:</label>
+    <input type="file" name="certificado" {{ isset($matricula) ? '' : 'required' }}>
+    @if(isset($matricula) && $matricula->certificado)
+        <a href="{{ asset('uploads/' . $matricula->certificado) }}" target="_blank">Visualizar Documento</a>
     @endif
-</div>
-@endsection
+    
+    <label>Bilhete de Identidade:</label>
+    <input type="file" name="bilhete" {{ isset($matricula) ? '' : 'required' }}>
+    @if(isset($matricula) && $matricula->bilhete)
+        <a href="{{ asset('uploads/' . $matricula->bilhete) }}" target="_blank">Visualizar Documento</a>
+    @endif
+
+    <label>Atestado Médico:</label>
+    <input type="file" name="atestado" {{ isset($matricula) ? '' : 'required' }}>
+    @if(isset($matricula) && $matricula->atestado)
+        <a href="{{ asset('uploads/' . $matricula->atestado) }}" target="_blank">Visualizar Documento</a>
+    @endif
+
+    <label>Foto:</label>
+    <input type="file" name="foto" {{ isset($matricula) ? '' : 'required' }}>
+    @if(isset($matricula) && $matricula->foto)
+        <a href="{{ asset('uploads/' . $matricula->foto) }}" target="_blank">Visualizar Documento</a>
+    @endif
+
+    <h3>Pagamento</h3>
+    <label>Número do Cartão:</label>
+    <input type="text" name="numero_cartao" required>
+
+    <br><br>
+    <button type="submit">
+        {{ isset($matricula) ? 'Reconfirmar Matrícula' : 'Finalizar Matrícula' }}
+    </button>
+</form>

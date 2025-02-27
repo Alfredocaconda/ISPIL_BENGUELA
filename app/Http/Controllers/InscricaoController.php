@@ -44,6 +44,7 @@ class InscricaoController extends Controller
      */
     public function store(Request $request)
     {
+
         // Verifica se o usuário está autenticado
         $usuario = Auth::user();
         if (!$usuario) {
@@ -121,15 +122,11 @@ class InscricaoController extends Controller
      public function sucesso($id)
      {
          $candidato = inscricao::with('user')->findOrFail($id);
-     
          return view('pages.candidato.sucesso', compact('candidato'));
      }
-     
-
     /**
      * Show the form for editing the specified resource.
      */
-
      public function gerarComprovativo(Request $request)
      {
          // Buscar o candidato pelo ID
@@ -171,14 +168,9 @@ class InscricaoController extends Controller
      
          return back()->with('error', 'Selecione um método válido.');
      }
-     
-     
-
-
     /**
      * Show the form for editing the specified resource.
      */
-
     private function processarPagamento($cartao)
     {
         $status = rand(0, 1) ? 'sucesso' : 'falha';
@@ -186,8 +178,6 @@ class InscricaoController extends Controller
 
         return $status === 'sucesso';
     }
-
-
   /*  private function processarPagamento($cartao)
     {
         // Aqui deve entrar a API da EMIS para pagamento Multicaixa Express
@@ -204,9 +194,6 @@ class InscricaoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-
-    
-
      public function adicionarNota(Request $request)
      {
          // Validação da nota
@@ -214,15 +201,11 @@ class InscricaoController extends Controller
              'id' => 'required|exists:inscricaos,id',
              'nota' => 'required|numeric|min:0|max:20',
          ]);
-     
          // Buscar a inscrição pelo ID
          $inscricao = Inscricao::findOrFail($request->id);
-     
-         // Atualizar a nota
-         $inscricao->nota = $request->nota;
+         $inscricao->nota=$request->nota;
          $inscricao->save();
-     
-         return redirect()->back()->with('success', 'Nota adicionada com sucesso!');
+         return redirect()->back()->with('SUCESSO', 'Nota adicionada com sucesso!');
      }
      
 
@@ -249,7 +232,6 @@ class InscricaoController extends Controller
      */
     public function consulta()
     {
-        
         return view('pages.candidato.consulta');
     }
 }

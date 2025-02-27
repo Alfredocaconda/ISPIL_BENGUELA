@@ -20,40 +20,33 @@ class CandidatoController extends Controller
         
         return view("pages.candidato.index", compact('usuario', 'cursos'));
     }
-        /**
-     * Show the form for creating a new resource.
-     */
-
-   
-
-
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
-        $valor=null;
-        $user = null;
+        $candidato = null;
+        
         if (isset($request->id)) {
-            # code...
-            $valor= Candidato::find($request->id);
+            // Se o ID existir, busca o candidato
+            $candidato = Candidato::find($request->id);
         } else {
-            # code...
-            
-            $user  = User::cadastrarCandidato($request);
-            $valor= new Candidato();
-            $valor->user_id=$user->id;
+            // Cria um novo usuário e associa ao candidato
+            $user = User::cadastrarCandidato($request);
+            $candidato = new Candidato();
+            $candidato->user_id = $user->id;
         }
         
-        $valor->name=$request->name;
-        $valor->email=$request->email;
-        $valor->password=bcryp($request->password);
-        $valor->tipo=$request->name;
-        $valor->save();
-        return redirect()->back()->with("Sucesso","Usuario cadastrado com sucesso");
+        // Atualiza os dados do candidato
+        $candidato->name = $request->name;
+        $candidato->email = $request->email;
+        $candidato->password = bcrypt($request->password);
+        $candidato->tipo = "Candidato";
+        $candidato->save();
     
+        return redirect()->route('login')->with("Sucesso", "Usuário cadastrado com sucesso. Faça login para continuar.");
     }
+    
 
 
     /**

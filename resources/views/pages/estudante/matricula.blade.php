@@ -1,177 +1,97 @@
 @extends('layouts.base')
-@section('matricula')
-<div class="container mt-4">
-    <h2 class="mb-2">Matricula</h2>
-   <form action="{{route('inscricao.cadastro')}}" method="post" enctype="multipart/form-data">
-       @csrf
-       <input type="hidden" name="name" value="{{ Auth::user()->name }}" >
-       <input type="hidden" name="email" value="{{ Auth::user()->email }}" >
-       <div class="row g-3">
-           <!-- Criando 10 inputs em uma grade responsiva -->
-           <div class="col-md-4">
-               <label for="name">Nome Completo <span style="color: red;">*</span></label>
-               <div class="form-input">
-                   <input type="text" name="name" id="name" class="form-control" value="{{ Auth::user()->name }}" readonly/>
-               </div>
-           </div>
-           <div class="col-md-4">
-               <label for="genero">Genero <span style="color: red;">*</span></label>
-               <div class="form-input">
-                   <select name="genero" id="genero" class="form-control">
-                       <option value="">Selecionar o Genero</option>
-                       <option value="Masculino">Masculino</option>
-                       <option value="Femenino">Femenino</option>
-                   </select>
-               </div>
-           </div>
-           <div class="col-md-4">
-               <label for="provincia">Província <span style="color: red;">*</span></label>
-               <div class="form-input">
-                   <input type="text" name="provincia" id="provincia"
-                    class="form-control"  oninput="validarInput(this)" style=" padding: 5px;" />
-               </div>
-           </div>
-           <div class="col-md-4">
-               <label for="municipio">Município <span style="color: red;">*</span></label>
-               <div class="form-input">
-                   <input type="text" name="municipio" id="municipio"
-                    class="form-control" oninput="validarInput(this)" style=" padding: 5px;" />
-               </div>
-           </div>
-           <div class="col-md-4">
-               <label for="naturalidade">Naturalidade <span style="color: red;">*</span></label>
-               <div class="form-input">
-                   <input type="text" name="naturalidade" id="naturalidade"
-                    class="form-control" oninput="validarInput(this)" style=" padding: 5px;" />
-               </div>
-           </div>
-           <div class="col-md-4">
-               <label for="data_nasc">Data de Nascimento <span style="color: red;">*</span></label>
-               <div class="form-input">
-                   <input type="date" name="data_nasc" id="data_nasc" class="form-control" />
-               </div>
-           </div>
-            <div class="col-md-4">
-                <label for="n_bilhete">Nº do Bilhete <span style="color: red;">*</span></label>
-                <div class="form-input">
-                    <input type="text" 
-                        class="form-control" 
-                        name="n_bilhete" 
-                        id="n_bilhete" 
-                        maxlength="14" 
-                        oninput="formatBI(this)" 
-                        placeholder="123456789AB123">
-                    
-                    <!-- Mostra quantos caracteres ainda faltam -->
-                    <small id="char_count" class="form-text text-muted">Faltam 14 caracteres</small>
-                </div>
-            </div>
-           <div class="col-md-4">
-               <label for="afiliacao">Nome do Pai e Mãe <span style="color: red;">*</span></label>
-               <div class="form-input">
-                   <input type="text" name="afiliacao" id="afiliacao"
-                    class="form-control" oninput="validarInput(this)" style=" padding: 5px;" />
-               </div>
-           </div>
-           <div class="col-md-4">
-                <label for="telefone">Nº do Telefone <span style="color: red;">*</span></label>
-                <div class="form-input">
-                    <input type="text" 
-                        class="form-control" 
-                        name="telefone" 
-                        id="telefone" 
-                        maxlength="9" 
-                        oninput="formatTelefone(this)" 
-                        placeholder="9XX-XXX-XXX">
-                    
-                    <!-- Mostra quantos caracteres ainda faltam -->
-                    <small id="char_count_telefone" class="form-text text-muted">Faltam 9 caracteres</small>
-                </div>
-           </div>
-           <div class="col-md-4">
-               <label for="nome_escola">Nome da Escola <span style="color: red;">*</span></label>
-               <div class="form-input">
-                   <input type="text" name="nome_escola" id="nome_escola"
-                    class="form-control" oninput="validarInput(this)" style=" padding: 5px;" />
-               </div>
-           </div>
-           <div class="col-md-4">
-               <label for="curso_medio">Curso do Médio <span style="color: red;">*</span></label>
-               <div class="form-input">
-                   <input type="text" name="curso_medio" id="curso_medio"
-                    class="form-control" oninput="validarInput(this)" style=" padding: 5px;" />
-               </div>
-           </div>
-           <div class="col-md-4">
-               <label for="date_inicio">Data de Inicio <span style="color: red;">*</span></label>
-               <div class="form-input">
-                   <input type="date" name="date_inicio" id="date_inicio" class="form-control" />
-               </div>
-           </div>
-           <div class="col-md-4">
-               <label for="date_termino">Data de Termino <span style="color: red;">*</span></label>
-               <div class="form-input">
-                   <input type="date" name="date_termino" id="date_termino" class="form-control" />
-               </div>
-           </div>
-           <div class="col-md-4">
-               <label for="email">E-mail <span style="color: red;">*</span></label>
-               <div class="form-input">
-                   <input type="text" name="email" id="email" class="form-control"
-                    value="{{ Auth::user()->email }}" readonly/>
-               </div>
-           </div>
-           <div class="col-md-4">
-                <label for="curso_Id">Curso Selecionado</label>
-                <div class="form-input">
-                    @if(isset($cursos))
-                        <input type="hidden" name="curso_Id" value="{{ $cursos->id }}">
-                        <input type="text" class="form-control" value="{{ $cursos->name }}" readonly>
-                    @else
-                        <p class="text-danger">Nenhum curso selecionado.</p>
-                    @endif
-                </div>
-           </div>
-           <div class="col-md-4">
-               <label for="foto">Foto de Tipo Passe ( jpg, png, jpeg ) <span style="color: red;">*</span></label>
-               <div class="form-input">
-                   <input type="file" accept="image/*" name="foto" id="foto" class="form-control" />
-               </div>
-           </div>
-           <div class="col-md-4">
-               <label for="certificado">Certificado ( pdf, jpg, png, jpeg ) <span style="color: red;">*</span></label>
-               <div class="form-input">
-                   <input type="file" accept=".txt,.pdf,.docx" name="certificado" id="certificado" class="form-control" />
-               </div>
-           </div>
-           <div class="col-md-4">
-               <label for="bilhete">Bilhete ( pdf, jpg, png, jpeg ) <span style="color: red;">*</span></label>
-               <div class="form-input">
-                   <input type="file" accept=".txt,.pdf,.docx" name="bilhete" id="bilhete" class="form-control" />
-               </div>
-           </div>
-           <div class="col-md-4">
-               <label for="atestado">Atestado Médico ( pdf, jpg, png, jpeg ) <span style="color: red;">*</span></label>
-               <div class="form-input">
-                   <input type="file" accept=".txt,.pdf,.docx" name="atestado" id="atestado" class="form-control" />
-               </div>
-           </div>
-           <div class="col-md-4">
-            <label for="recenciamento">Recenciamento Militar ( pdf, jpg, png, jpeg ) <span style="color: red;">*</span></label>
-            <div class="form-input">
-                <input type="file" accept=".txt,.pdf,.docx" name="recenciamento" id="recenciamento" 
-                class="form-control"/>
-            </div>
-        </div>
-       </div>
-       <div class="mt-3">
-           <button type="submit" class="btn btn-primary">Enviar Inscrição</button>
-       </div>
-   </form>
-</div>
-<script>
-   
-   document.addEventListener("DOMContentLoaded", function () {
+
+@section('inscricao')
+    <div class="container mt-4">
+         <h2 class="mb-2">Matrícula</h2>
+          <!-- EXIBIR ERROS DE VALIDAÇÃO AQUI -->
+          @if ($errors->any())
+          <div class="alert alert-danger">
+              <ul>
+                  @foreach ($errors->all() as $error)
+                      <li>{{ $error }}</li>
+                  @endforeach
+              </ul>
+          </div>
+      @endif
+      <form action="{{ route('matricula.store') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        
+        <input type="hidden" name="id" value="{{ $matricula->id ?? '' }}">
+        <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+        <input type="hidden" name="email" value="{{ Auth::user()->email }}" >
+        <h3>Informações Pessoais</h3>
+        <label>Nome Completo:</label>
+        <input type="text" name="name" value="{{ old('name', $usuario->name ?? '') }}" >
+        
+        <label>Email:</label>
+        <input type="email" name="email" value="{{ old('email', $usuario->email ?? '') }}" >
+        
+        <label>Telefone:</label>
+        <input type="text" name="telefone" value="{{ old('telefone', $matricula->telefone ?? '') }}" required>
+        
+        <label>Curso:</label>
+        <select name="curso_id" required>
+            @if ($cursoSelecionado) <!-- Verifica se um curso foi selecionado -->
+                <option value="{{ $cursoSelecionado->id }}" selected>
+                    {{ $cursoSelecionado->name }}
+                </option>
+            @else
+                <option value="">Nenhum curso selecionado</option> <!-- Caso não haja curso selecionado -->
+            @endif
+        </select>
+
+        
+        <h3>Endereço</h3>
+        
+        <label>Província:</label>
+        <input type="text" name="provincia" value="{{ old('provincia', $matricula->provincia ?? '') }}" required>
+        
+        <label>Município:</label>
+        <input type="text" name="municipio" value="{{ old('municipio', $matricula->municipio ?? '') }}" required>
+        
+        <h3>Documentos</h3>
+        
+        <label>Certificado de Conclusão:</label>
+        <input type="file" name="certificado" {{ isset($matricula) && $matricula->certificado ? '' : 'required' }}>
+        @if(isset($matricula) && $matricula->certificado)
+            <a href="{{ asset('uploads/' . $matricula->certificado) }}" target="_blank">Visualizar Documento</a>
+        @else
+            <p>O documento ainda não foi carregado.</p>
+        @endif
+        
+        <label>Bilhete de Identidade:</label>
+        <input type="file" name="bilhete" {{ isset($matricula) ? '' : 'required' }}>
+        @if(isset($matricula) && $matricula->bilhete)
+            <a href="{{ asset('uploads/' . $matricula->bilhete) }}" target="_blank">Visualizar Documento</a>
+        @endif
+        
+        <label>Atestado Médico:</label>
+        <input type="file" name="atestado" {{ isset($matricula) ? '' : 'required' }}>
+        @if(isset($matricula) && $matricula->atestado)
+            <a href="{{ asset('uploads/' . $matricula->atestado) }}" target="_blank">Visualizar Documento</a>
+        @endif
+        
+        <label>Foto:</label>
+        <input type="file" name="foto" {{ isset($matricula) ? '' : 'required' }}>
+        @if(isset($matricula) && $matricula->foto)
+            <a href="{{ asset('uploads/' . $matricula->foto) }}" target="_blank">Visualizar Documento</a>
+        @endif
+        
+        <h3>Pagamento</h3>
+        <label>Número do Cartão:</label>
+        <input type="text" name="numero_cartao" required>
+        
+        <br><br>
+        <button type="submit">
+            {{ isset($matricula) ? 'Reconfirmar Matrícula' : 'Finalizar Matrícula' }}
+        </button>
+    </form>
+    
+    
+    
+    </div>
+ <script>
+        document.addEventListener("DOMContentLoaded", function () {
             var generoSelect = document.getElementById("genero");
             var recenciamentoDiv = document.getElementById("recenciamento").closest(".col-md-4");
 
@@ -276,5 +196,5 @@
                 let counterElement = document.getElementById("char_count_telefone");
                 counterElement.textContent = remaining > 0 ? `Faltam ${remaining} caracteres` : "Formato completo!";
             }
-</script>  
+    </script>
 @endsection

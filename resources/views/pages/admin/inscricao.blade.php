@@ -38,7 +38,7 @@
                                     <th>Foto</th>
                                     <th>Certificado</th>
                                     <th>Bilhete</th>
-                                    <th>Nota</th> <!-- Nova coluna para adicionar a nota -->
+                                    <th>Nota</th>
                                     <th>Opções</th>
                                 </tr>
                             </thead>
@@ -58,7 +58,7 @@
                                         <td><a href="" class="text-danger" title="Clica para descarregar o ficheiro"><i style="font-size:50px" class="fa fa-file-pdf"></i></a></td>
                                         <td><a href="" class="text-danger" title="Clica para descarregar o ficheiro"><i style="font-size:50px" class="fa fa-file-pdf"></i></a></td>
                                         <td>
-                                            {{ $dados->nota ?? 'Sem nota' }} <!-- Exibir a nota se existir -->
+                                            {{ $dados->nota ?? 'Sem nota'}} <!-- Exibir a nota se existir -->
                                         </td>
                                         <td>
                                             <!-- Botão para adicionar nota -->
@@ -193,12 +193,12 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
                     </div>
-                </div>
-                <div class="modal-footer">
+                    <div class="modal-footer">
                     <x-botao-form />
-                </form>
-                </div>
+                 </form>
+                     </div>
             </div>
         </div>
     </div>

@@ -7,7 +7,6 @@
     <style>
         body { font-family: Arial, sans-serif; font-size: 14px; }
         .container { width: 100%; text-align: center; }
-        .logo { width: 100px; height: auto; }
         .titulo { font-size: 18px; font-weight: bold; margin-top: 10px; }
         .dados { margin-top: 20px; text-align: left; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
@@ -16,7 +15,69 @@
     </style>
 </head>
 <body>
-angola
 
+    <div class="container">
+        <!-- Logotipo -->
+        <p class="titulo">ISPIL-POLO BENGUELA</p>
+        <p class="titulo">Comprovativo de Inscrição</p>
+    </div>
+
+    <!-- Dados do Inscrito -->
+    <div class="dados">
+        <p class="titulo">Código de Inscrição: {{$candidato->codigo_inscricao}}</p>
+
+        <table>
+            <tr>
+                <th>Nome Completo:</th>
+                <td>{{ $candidato->user->name }}</td>
+            </tr>
+            <tr>
+                <th>Email:</th>
+                <td>{{ $candidato->email }}</td>
+            </tr>
+            <tr>
+                <th>Gênero:</th>
+                <td>{{ $candidato->genero }}</td>
+            </tr>
+            <tr>
+                <th>Data de Nascimento:</th>
+                <td>{{ date('d/m/Y', strtotime($candidato->data_nasc)) }}</td>
+            </tr>
+            <tr>
+                <th>Naturalidade:</th>
+                <td>{{ $candidato->naturalidade }}</td>
+            </tr>
+            <tr>
+                <th>Província:</th>
+                <td>{{ $candidato->provincia }}</td>
+            </tr>
+            <tr>
+                <th>Município:</th>
+                <td>{{ $candidato->municipio }}</td>
+            </tr>
+            <tr>
+                <th>Telefone:</th>
+                <td>{{ $candidato->telefone }}</td>
+            </tr>
+            <tr>
+                <th>Curso Inscrito:</th>
+               <td>{{ $candidato->curso->name }}</td> 
+            </tr>
+            <tr>
+                <th>Data de Inscrição:</th>
+                <td>{{ date('d/m/Y H:i', strtotime($candidato->data_inscricao)) }}</td>
+            </tr>
+            <tr>
+                <th>Status:</th>
+                <td>{{ $candidato->status ?? 'Pendente' }}</td>
+            </tr>
+        </table>
+    </div>
+    <!-- Assinatura -->
+    <div class="assinatura">
+        <p>_________________________</p>
+        <p>Assinatura do Responsável</p>
+    </div>
+    <p>Data: {{now()}}</p>
 </body>
 </html>

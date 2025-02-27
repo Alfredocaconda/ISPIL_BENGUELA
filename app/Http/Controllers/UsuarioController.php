@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Candidato;
+use App\Models\inscricao;
+use App\Models\matricula;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -18,7 +20,6 @@ class UsuarioController extends Controller
     public function auth(Request $request)
     {
         $user = User::where('email', $request->email)->first();
-    
         if (!$user) {
             throw ValidationException::withMessages([
                 'email' => ['Este e-mail não está cadastrado.'],
@@ -33,22 +34,39 @@ class UsuarioController extends Controller
     
         Auth::login($user, true);
     
-        return $this->redirectUserByType($user->tipo);
+        return $this->redirectUserByType($user);
     }
     
     /**
      * Redireciona o usuário com base no tipo.
      */
-    private function redirectUserByType(string $tipo)
+    private function redirectUserByType(User $user)
     {
-        return match ($tipo) {
-            'Candidato' => redirect()->route('candidato.index'),
+        // Verificar a última matrícula do candidato
+        $matricula = Matricula::where('user_id', $user->id)->latest()->first();
+
+        return match ($user->tipo) {
+            'Candidato' => $matricula
+                ? ($matricula->reconfirmacao_pendente
+                    ? redirect()->route('reconfirmacao.index')  // Redireciona para reconfirmação de matrícula
+                    : redirect()->route('candidato.index'))   // Caso contrário, vai para a página inicial do candidato
+                : redirect()->route('matricula.index'),     // Se não matriculado, vai para a página de matrícula
+
+            'Estudante' => $matricula && $matricula->reconfirmacao_pendente
+                ? redirect()->route('reconfirmacao.index')
+                : redirect()->route('estudante.index'),
+
             'Admin' => redirect()->route('admin.index'),
             'secretaria' => redirect()->route('admin.index'),
             default => redirect('login'),
         };
     }
+
     
+
+    /**
+     * Redireciona o usuário com base no tipo.
+     */
 
     public function index()
     {

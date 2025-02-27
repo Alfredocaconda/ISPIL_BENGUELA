@@ -19,7 +19,8 @@ class User extends Authenticatable
         'name',
         'email',
         'tipo',
-        'password'        
+        'password',
+        'matriculado'       
     ];
 
     protected $hidden = [
@@ -32,6 +33,8 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'matriculado' => 'boolean', // Garantindo que 'matriculado' seja tratado como booleano
+
         ];
     }
 
@@ -63,14 +66,13 @@ class User extends Authenticatable
             $user->email = $nomes[$tamanho-1].$nomes[0]."@ispil.ao";
         }
         $user->tipo = "estudante";
-        $user->password = bcrypt($nomes[0]."ispil");
+        $user->password = bcrypt($nomes[0]."@ispil");
         $user->save();
         return $user;
     }
 
     public static function cadastrarCandidato(Request $request)
     {
-        
         $request->validate([
             'name' => ['required', 'string', 'min:10', 'max:255', 'regex:/^[a-zA-ZÀ-ÿ\s]+$/'],
             'email' => 'required|email|unique:users,email',
@@ -85,15 +87,18 @@ class User extends Authenticatable
             'password.min' => 'A senha deve ter pelo menos 6 caracteres.',
             'password.confirmed' => 'As senhas não coincidem.',
         ]);
-
+    
         $user = new User();
-        $user->name=$request->name;
+        $user->name = $request->name;
         $user->email = $request->email;
         $user->tipo = "Candidato";
         $user->password = bcrypt($request->password);
+        $user->matriculado = false; // Garante que ele seja redirecionado para matrícula
         $user->save();
+    
         return $user;
     }
+    
 
     public static function entrar(Request $request): bool
     {

@@ -39,27 +39,27 @@
                     <label for="provincia">Província <span style="color: red;">*</span></label>
                     <div class="form-input">
                         <input type="text" name="provincia" id="provincia"
-                         class="form-control"  oninput="validarInput(this)" style=" padding: 5px;" />
+                         class="form-control"  oninput="validarInput(this)" style=" padding: 5px;" required />
                     </div>
                 </div>
                 <div class="col-md-4">
                     <label for="municipio">Município <span style="color: red;">*</span></label>
                     <div class="form-input">
                         <input type="text" name="municipio" id="municipio"
-                         class="form-control" oninput="validarInput(this)" style=" padding: 5px;" />
+                         class="form-control" oninput="validarInput(this)" style=" padding: 5px;" required />
                     </div>
                 </div>
                 <div class="col-md-4">
                     <label for="naturalidade">Naturalidade <span style="color: red;">*</span></label>
                     <div class="form-input">
                         <input type="text" name="naturalidade" id="naturalidade"
-                         class="form-control" oninput="validarInput(this)" style=" padding: 5px;" />
+                         class="form-control" oninput="validarInput(this)" style=" padding: 5px;" required/>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <label for="data_nasc">Data de Nascimento <span style="color: red;">*</span></label>
                     <div class="form-input">
-                        <input type="date" name="data_nasc" id="data_nasc" class="form-control" />
+                        <input type="date" name="data_nasc" id="data_nasc" class="form-control" required/>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -71,7 +71,7 @@
                                    id="n_bilhete" 
                                    maxlength="14" 
                                    oninput="formatBI(this)" 
-                                   placeholder="123456789AB123">
+                                   placeholder="123456789AB123" required>
                             
                             <!-- Mostra quantos caracteres ainda faltam -->
                             <small id="char_count" class="form-text text-muted">Faltam 14 caracteres</small>
@@ -82,7 +82,7 @@
                     <label for="afiliacao">Nome do Pai e Mãe <span style="color: red;">*</span></label>
                     <div class="form-input">
                         <input type="text" name="afiliacao" id="afiliacao"
-                         class="form-control" oninput="validarInput(this)" style=" padding: 5px;" />
+                         class="form-control" oninput="validarInput(this)" style=" padding: 5px;" required />
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -94,36 +94,36 @@
                                id="telefone" 
                                maxlength="9" 
                                oninput="formatTelefone(this)" 
-                               placeholder="9XX-XXX-XXX">
+                               placeholder="9XX-XXX-XXX" required>
                         
                         <!-- Mostra quantos caracteres ainda faltam -->
                         <small id="char_count_telefone" class="form-text text-muted">Faltam 9 caracteres</small>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <label for="nome_escola">Nome da Escola <span style="color: red;">*</span></label>
+                    <label for="nome_escola">Nome da Escola do Ensino Médio <span style="color: red;">*</span></label>
                     <div class="form-input">
                         <input type="text" name="nome_escola" id="nome_escola"
-                         class="form-control" oninput="validarInput(this)" style=" padding: 5px;" />
+                         class="form-control" oninput="validarInput(this)" style=" padding: 5px;" required />
                     </div>
                 </div>
                 <div class="col-md-4">
                     <label for="curso_medio">Curso do Médio <span style="color: red;">*</span></label>
                     <div class="form-input">
                         <input type="text" name="curso_medio" id="curso_medio"
-                         class="form-control" oninput="validarInput(this)" style=" padding: 5px;" />
+                         class="form-control" oninput="validarInput(this)" style=" padding: 5px;" required/>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <label for="data_inicio">Data de Inicio <span style="color: red;">*</span></label>
+                    <label for="data_inicio">Ano de Inicio <span style="color: red;">*</span></label>
                     <div class="form-input">
-                        <input type="date" name="data_inicio" id="data_inicio" class="form-control" />
+                        <input type="date" name="data_inicio" id="data_inicio" class="form-control" required />
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <label for="data_termino">Data de Termino <span style="color: red;">*</span></label>
+                    <label for="data_termino">Ano de Termino <span style="color: red;">*</span></label>
                     <div class="form-input">
-                        <input type="date" name="data_termino" id="data_termino" class="form-control" />
+                        <input type="date" name="data_termino" id="data_termino" class="form-control" required/>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -149,19 +149,19 @@
                 <div class="col-md-4">
                     <label for="foto">Foto de Tipo Passe ( jpg, png, jpeg ) <span style="color: red;">*</span></label>
                     <div class="form-input">
-                        <input type="file" accept="image/*" name="foto" id="foto" class="form-control" />
+                        <input type="file" accept="image/*" name="foto" id="foto" class="form-control" required />
                     </div>
                 </div>
                 <div class="col-md-4">
                     <label for="certificado">Certificado ( pdf, jpg, png, jpeg ) <span style="color: red;">*</span></label>
                     <div class="form-input">
-                        <input type="file" accept=".txt,.pdf,.docx" name="certificado" id="certificado" class="form-control" />
+                        <input type="file" accept=".txt,.pdf,.docx" name="certificado" id="certificado" class="form-control" required />
                     </div>
                 </div>
                 <div class="col-md-4">
                     <label for="bilhete">Bilhete ( pdf, jpg, png, jpeg ) <span style="color: red;">*</span></label>
                     <div class="form-input">
-                        <input type="file" accept=".txt,.pdf,.docx" name="bilhete" id="bilhete" class="form-control" />
+                        <input type="file" accept=".txt,.pdf,.docx" name="bilhete" id="bilhete" class="form-control" required/>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -182,8 +182,7 @@
             </div>
         </form>
     </div>
-    <script>
-
+ <script>
         document.addEventListener("DOMContentLoaded", function () {
             var generoSelect = document.getElementById("genero");
             var recenciamentoDiv = document.getElementById("recenciamento").closest(".col-md-4");

@@ -54,31 +54,60 @@ Route::get('cadastrar',function(){
 Route::get('perfil',[UsuarioController::class,'perfil'])->name('perfil');
 
 Route::post('auth',[UsuarioController::class,'auth'])->name('user.auth');
-
+/*
+  INCIO DAS ROTAS DE CANDIDATOS
+*/
 Route::resource('candidato',CandidatoController::class);
 Route::post('user/cadastro',[UsuarioController::class,'cadastrar'])->name('user.register');
 Route::get('Inf/Candidato',[InscricaoController::class,'inf_candidato'])->name('candidato.inf_candidato');
-
+/*
+  INCIO DAS ROTAS DE INSCRICAO
+*/
 Route::get('/inscricao', [InscricaoController::class, 'index'])->name('inscricao.index')->middleware('auth');
 Route::post('inscricao/cadastro',[InscricaoController::class,'store'])->name('inscricao.cadastro');
 Route::get('/inscricao/sucesso/{id}', [InscricaoController::class, 'sucesso'])->name('inscricao.sucesso');
 Route::post('/inscricao/comprovativo', [InscricaoController::class, 'gerarComprovativo'])->name('inscricao.comprovativo');
 Route::post('/inscricao/adicionarNota', [InscricaoController::class, 'adicionarNota'])->name('inscricao.adicionarNota');
 Route::get('/consulta-inscricao', [InscricaoController::class, 'consulta'])->name('inscricao.consulta');
-
+/*
+  INCIO DAS ROTAS DE MATRICULA
+*/
+Route::resource('matricula',MatriculaController::class);
+Route::post('matricula/cadastro',[MatriculaController::class,'store'])->name('matricula.cadastro');
+Route::get('/matricula/sucesso/{id}', [MatriculaController::class, 'sucesso'])->name('matricula.sucesso');
+Route::post('/matricula/comprovativo', [MatriculaController::class, 'gerarComprovativo'])->name('matricula.comprovativo');
+Route::get('/consulta-matricula', [MatriculaController::class, 'consulta'])->name('matricula.consulta');
+/*
+  INCIO DAS ROTAS DE CONSULTAS
+*/
 Route::post('/consulta-resultado', function (Request $request) {
     $codigo = $request->input('codigo_inscricao');
-    
-    $inscricao = Inscricao::where('codigo_inscricao', $codigo)->first();
+    $bi = $request->input('codigo_inscricao');
+
+    // Buscar a inscrição pelo código ou pelo BI
+    $inscricao = Inscricao::where('codigo_inscricao', $codigo)
+                          ->orWhere('n_bilhete', $bi)
+                          ->first();
 
     if ($inscricao) {
+        // Se a nota ainda não estiver lançada
+        if (is_null($inscricao->nota)) {
+            return redirect()->back()->with('resultado', 'Os resultados ainda não estão disponíveis e serão divulgados no dia 20/08/2025.');
+        }
+
+        // Determinar se foi admitido ou não
         $resultado = $inscricao->nota >= 10 ? 'Admitido' : 'Não Admitido';
-    } else {
-        $resultado = 'Não Admitido';
+
+        // Retornar uma view com os dados do candidato
+        return view('pages.candidato.resultado', [
+            'inscricao' => $inscricao,
+            'resultado' => $resultado
+        ]);
     }
 
-    return redirect()->back()->with('resultado', $resultado);
+    return redirect()->back()->with('resultado', 'Candidato não encontrado.');
 })->name('consulta.resultado');
+
 
 
 
@@ -141,6 +170,6 @@ Route::get('entrar',function(){
 });
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/cursos', [App\Http\Controllers\HomeController::class, 'cursos'])->name('cursos');
 

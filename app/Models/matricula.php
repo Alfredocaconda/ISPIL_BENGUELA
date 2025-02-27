@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class matricula extends Model
 {
     use HasFactory;
+        // No modelo Matricula
+    public function curso()
+    {
+        return $this->belongsTo(Curso::class); // Relacionamento com a tabela de cursos
+    }
+
 }

@@ -1,6 +1,6 @@
 @extends('layouts.base')
 
-@section('cursos')
+@section('content')
 
 <!-- Courses Start -->
 <div class="container-xxl py-5">
