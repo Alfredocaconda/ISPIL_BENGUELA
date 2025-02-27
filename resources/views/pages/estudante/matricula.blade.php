@@ -40,7 +40,20 @@
             @endif
         </select>
 
+        <select name="periodo_letivo" required>
+            <option value="2025-1">2025 - 1º Semestre</option>
+            <option value="2025-2">2025 - 2º Semestre</option>
+        </select>
         
+        <select name="turno" required>
+            <option value="manha">Manhã</option>
+            <option value="tarde">Tarde</option>
+            <option value="noite">Noite</option>
+        </select>
+
+        <input type="text" name="contato_emergencia_nome" required placeholder="Nome do Contato de Emergência">
+        <input type="text" name="contato_emergencia_telefone" required placeholder="Telefone de Emergência">
+
         <h3>Endereço</h3>
         
         <label>Província:</label>
@@ -80,7 +93,8 @@
         <h3>Pagamento</h3>
         <label>Número do Cartão:</label>
         <input type="text" name="numero_cartao" required>
-        
+        <input type="checkbox" name="termos_aceite" required> Eu aceito os termos de matrícula
+
         <br><br>
         <button type="submit">
             {{ isset($matricula) ? 'Reconfirmar Matrícula' : 'Finalizar Matrícula' }}
