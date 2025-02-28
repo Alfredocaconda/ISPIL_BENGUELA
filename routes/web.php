@@ -75,7 +75,7 @@ Route::get('/consulta-inscricao', [InscricaoController::class, 'consulta'])->nam
 Route::resource('matricula',MatriculaController::class);
 Route::post('matricula/cadastro',[MatriculaController::class,'store'])->name('matricula.cadastro');
 Route::get('/matricula/sucesso/{id}', [MatriculaController::class, 'sucesso'])->name('matricula.sucesso');
-Route::post('/matricula/comprovativo', [MatriculaController::class, 'gerarComprovativo'])->name('matricula.comprovativo');
+Route::post('/inscricao1/comprovativo', [MatriculaController::class, 'gerarComprovativo'])->name('inscricao1.comprovativo');
 Route::get('/consulta-matricula', [MatriculaController::class, 'consulta'])->name('matricula.consulta');
 /*
   INCIO DAS ROTAS DE CONSULTAS

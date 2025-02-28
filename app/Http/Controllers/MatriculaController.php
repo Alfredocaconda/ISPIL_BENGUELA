@@ -84,7 +84,7 @@ class MatriculaController extends Controller
         if (!$this->processarPagamento($request->numero_cartao)) {
             return redirect()->back()->with('error', 'Erro no pagamento. Tente novamente.');
         }
-    
+        $valor->user_id = $usuario->id;
         // Preenchendo os dados do formulário
         $valor->email = $request->email;
         $valor->genero = $request->genero;
@@ -99,6 +99,7 @@ class MatriculaController extends Controller
         $valor->curso_medio = $request->curso_medio;
         $valor->data_inicio = $request->data_inicio;
         $valor->data_termino = $request->data_termino;
+        $valor->turno = $request->turno;
         $valor->curso_id = $request->curso_id;
         $valor->data_matricula = now();
         $valor->estado = 'matriculado';
@@ -169,7 +170,7 @@ class MatriculaController extends Controller
      
          // Verifica se o candidato tem um e-mail válido
          if (!$candidato->email) {
-             return back()->with('error', 'O candidato não possui um e-mail cadastrado.');
+             return back()->with('error', 'O Estudante não possui um e-mail cadastrado.');
          }
      
          // Se a opção escolhida for "email"

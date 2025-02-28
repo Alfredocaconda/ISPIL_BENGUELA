@@ -24,12 +24,12 @@ return new class extends Migration
             $table->string('telefone');
             $table->string('nome_escola');
             $table->string('curso_medio');
-            $table->date('date_inicio');
-            $table->date('date_termino');
-            $table->dateTime('data_inscricao');
+            $table->date('data_inicio');
+            $table->date('data_termino');
             $table->string('codigo_matricula');
-            $table->timestamp('data_confirmacao')->nullable();
+            $table->timestamp('data_matricula')->nullable();
             $table->string('certificado');
+            $table->string('turno');
             $table->string('atestado');
             $table->string('bilhete');
             $table->string('recenciamento')->nullable();;

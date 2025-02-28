@@ -13,5 +13,10 @@ class matricula extends Model
     {
         return $this->belongsTo(Curso::class); // Relacionamento com a tabela de cursos
     }
+     // Relação com o usuário
+     public function user()
+     {
+         return $this->belongsTo(User::class, 'user_id'); // Certifique-se de que a chave estrangeira está correta
+     }
 
 }

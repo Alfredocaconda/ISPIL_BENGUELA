@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comprovativo de Inscrição</title>
+    <title>Comprovativo de Matrícula</title>
     <style>
         body { font-family: Arial, sans-serif; font-size: 14px; }
         .container { width: 100%; text-align: center; }
@@ -19,12 +19,12 @@
     <div class="container">
         <!-- Logotipo -->
         <p class="titulo">ISPIL-POLO BENGUELA</p>
-        <p class="titulo">Comprovativo de Inscrição</p>
+        <p class="titulo">Comprovativo de Matrícula</p>
     </div>
 
     <!-- Dados do Inscrito -->
     <div class="dados">
-        <p class="titulo">Código de Inscrição: {{$candidato->codigo_inscricao}}</p>
+        <p class="titulo">Código de Matrícula: {{$candidato->codigo_matricula}}</p>
 
         <table>
             <tr>
@@ -64,12 +64,12 @@
                <td>{{ $candidato->curso->name }}</td> 
             </tr>
             <tr>
-                <th>Data de Inscrição:</th>
-                <td>{{ date('d/m/Y H:i', strtotime($candidato->data_inscricao)) }}</td>
+                <th>Data de Matrícula:</th>
+                <td>{{ date('d/m/Y H:i', strtotime($candidato->data_matricula)) }}</td>
             </tr>
             <tr>
                 <th>Status:</th>
-                <td>{{ $candidato->status ?? 'Pendente' }}</td>
+                <td>{{ $candidato->estado}}</td>
             </tr>
         </table>
     </div>

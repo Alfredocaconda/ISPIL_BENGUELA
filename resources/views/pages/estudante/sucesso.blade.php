@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscrição Concluída</title>
+    <title>Matrícula Concluída</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
@@ -63,12 +63,12 @@
     <!-- Navbar End -->
     <div class="container mt-5">
         <div class="card shadow-lg p-4 rounded">
-            <h2 class="text-success text-center">✅ Inscrição realizada com sucesso!</h2>
+            <h2 class="text-success text-center">✅ Matrícula realizada com sucesso!</h2>
             <hr>
             <p><strong>Nome:</strong> {{ $candidato->user->name }}</p>
             <p><strong>Email:</strong> {{ $candidato->email }}</p>
            
-            <form action="{{ route('inscricao.comprovativo') }}" method="POST">
+            <form action="{{ route('inscricao1.comprovativo') }}" method="POST">
                 @csrf
                 <input type="hidden" name="id" value="{{ $candidato->id }}">
 

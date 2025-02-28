@@ -288,5 +288,5 @@
                 let counterElement = document.getElementById("char_count_telefone");
                 counterElement.textContent = remaining > 0 ? `Faltam ${remaining} caracteres` : "Formato completo!";
             }
-    </script>
+ </script>
 @endsection
