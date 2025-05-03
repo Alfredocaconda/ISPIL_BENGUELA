@@ -7,7 +7,7 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between">
                 <div class="header-title" style="display: flex; justify-content: space-between; width: 100%">
-                    <h4 class="card-title">Documentos da Escola </h4>
+                    <h4 class="card-title">Cadastrar Matrícula</h4>
                     <a href="#Cadastrar" data-toggle="modal" style="font-size: 20pt"><i class="fa fa-plus-circle"></i></a>
                 </div>
             </div>
@@ -36,17 +36,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($Matricula as $dados)
+                        @foreach ($inscricao as $dados)
                             <tr>
-                                <td>{{$dados->estudante_Id}}</td>
-                                <td>{{$dados->classe_id}}</td>
-                                <td>{{$dados->turma_Id}}</td>
-                                <td>{{$dados->ano_lectivo}}</td>
-                                <td>{{$dados->data_matricula}}</td>
-                                <td>{{$dados->funcionario->nome}}</td>
+                                <td>{{ $dados->user->name }}</td>
+                                <td>{{ $dados->genero }}</td>
+                                <td>{{ $dados->n_bilhete }}</td>
+                                <td>{{ $dados->telefone }}</td>
+                                <td>{{ $dados->curso->name }}</td>
+                                <td>{{ $dados->estado }}</td>
+                                <td>{{$dados->user->nome}}</td>
                                 <td>
                                     <a href="#Cadastrar" data-toggle="modal" class="text-primary" onclick="editar({{$dados}})" ><i class="fa fa-edit"></i></a>
-                                    <a href="{{route('Matri.apagar',$dados->id)}}" class="text-danger"><i class="fa fa-trash"></i></a>
+                                    <a href="" class="text-danger"><i class="fa fa-trash"></i></a>
                                 </td>
                             </tr>
                         @endforeach
@@ -64,63 +65,46 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
                 <div class="modal-header">
-                        <h5 class="modal-title">Cadastrar Documentos</h5>
+                        <h5 class="modal-title">Cadastrar Matrícula</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                     </div>
             <div class="modal-body">
                 <div class="container-fluid">
-                   <form action="{{route('Matri.store')}}" method="post" enctype="multipart/form-data">
+                <form action="" method="POST" enctype="multipart/form-data">
                     @csrf
-                        <input type="hidden" name="id" id="id">
-                        <input type="hidden" name="funcionario_id" value="{{ Auth::user()->id }}">
-                        <div class="form-group">
-                            <label for="estudante_Id">Estudante</label>
-                            <div class="form-input">
-                                <select class="form-control" name="estudante_Id" id="estudante_Id">
-                                    @foreach (App\Models\estudante::orderBy('nome','ASC')->get() as $estudante_id)
-                                        <option value="{{$estudante_id->id}}">{{$estudante_id->nome}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="classe_id">Classe</label>
-                            <div class="form-input">
-                                <select class="form-control" name="classe_id" id="classe_id">
-                                    @foreach (App\Models\Classe::orderBy('nome','ASC')->get() as $classe_id)
-                                        <option value="{{$classe_id->id}}">{{$classe_id->nome}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="turma_Id">Turma</label>
-                            <div class="form-input">
-                                <select class="form-control" name="turma_Id" id="turma_Id">
-                                    @foreach (App\Models\Turma::orderBy('nome','ASC')->get() as $turma_Id)
-                                        <option value="{{$turma_Id->id}}">{{$turma_Id->nome}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="form-input">
-                                <label for="ano_lectivo">Ano Letivo</label>
-                            </div>
-                            <input type="date" min="{{date('Y-m-d')}}" class="form-control" name="ano_lectivo" id="ano_lectivo">
-                        </div>
-                        <div class="form-group">
-                            <label for="professor_id">Professor</label>
-                            <div class="form-input">
-                                <select class="form-control" name="professor_id" id="professor_id">
-                                    @foreach (App\Models\Funcionario::orderBy('nome','ASC')->get() as $professor_id)
-                                        <option value="{{$professor_id->id}}">{{$professor_id->nome}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
+                    <input type="hidden" name="inscricao_id" value="{{ $inscricao->id }}">
+
+                    <div class="mb-3">
+                        <label>Nome Completo:</label>
+                        <input type="text" class="form-control" value="{{ $inscricao->user->name }}" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Nº BI:</label>
+                        <input type="text" class="form-control" value="{{ $inscricao->n_bilhete }}" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Curso:</label>
+                        <input type="text" class="form-control" value="{{ $inscricao->curso->name }}" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="turno">Turno:</label>
+                        <select name="turno" id="turno" class="form-control" required>
+                            <option value="">Selecionar turno</option>
+                            <option value="Manhã">Manhã</option>
+                            <option value="Tarde">Tarde</option>
+                            <option value="Noite">Noite</option>
+                        </select>
+                    </div>
+
+                    <!-- Pode incluir outros campos aqui se quiser -->
+                    
+                    <button type="submit" class="btn btn-success">Finalizar Matrícula</button>
+                </form>
                 </div>
             </div>
             <div class="modal-footer">

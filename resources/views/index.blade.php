@@ -1,6 +1,12 @@
 @extends('layouts.base')
-@section('title', 'ISPIL-BENGUELA')
+@section('title', 'ISPIL-POLO BENGUELA')
 @section('cursos')
+
+@if (session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
 
  <!-- Carousel Start -->
  <div class="container-fluid p-0 mb-5">
@@ -12,13 +18,12 @@
                 <div class="container">
                     <div class="row justify-content-start">
                         <div class="col-sm-10 col-lg-8">
-                            <h5 class="text-primary text-uppercase mb-3 animated slideInDown">LEMA: INOVAR, CONSOLIDAR O ENSINO</h5>
-                            <h1 class="display-3 text-white animated slideInDown">ISPIL-BENGUELA</h1>
-                            <p class="fs-5 text-white mb-4 pb-2">CHEGOU A HORA DE FAZER PARTE DA FAMÍLIA ISPIL-BENGUELA. MATRICULAS E INSCRIÇÕES ABERTAS PARA
+                            <h1 class="display-3 text-white animated slideInDown">ISPIL-POLO BENGUELA</h1>
+                            <p class="fs-5 text-white mb-4 pb-2">CHEGOU A HORA DE FAZER PARTE DA FAMÍLIA ISPIL-POLO BENGUELA. INSCRIÇÕES E MATRICULAS ABERTAS PARA
                                 EXAMES DE ACESSO E CURSO PREPARATÓRIO.</p>
                                 <p class="fs-5 text-white mb-4 pb-2">24 DE JULHO DE 2025</p>
-                            <a href="{{url('/inscricao')}}" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">CANDIDATAR-SE</a>
-                            <a href="" class="btn btn-light py-md-3 px-md-5 animated slideInRight">MATRICULAR-SE</a>
+                            <a href="{{url('/inscricao')}}" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">INSCRIÇÃO</a>
+                            <a href="{{url('/matricula')}}" class="btn btn-light py-md-3 px-md-5 animated slideInRight">MATRICULA</a>
                         </div>
                     </div>
                 </div>
@@ -104,10 +109,10 @@
             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                 <div class="course-item bg-light">
                     <div class="position-relative overflow-hidden">
-                        <img class="img-fluid curso-img" src="{{ asset('storage/DocCurso/' . $curso->foto) }}" alt="{{ $curso->name }}">
-                        <div class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
+                       <!-- <img class="img-fluid curso-img" position-absolute bottom-0 start-0 mb-4 src="{{ asset('storage/DocCurso/' . $curso->foto) }}" alt="{{ $curso->name }}">-->
+                        <div class="w-100 d-flex justify-content-center ">
                             <a href="#" class="flex-shrink-0 btn btn-sm btn-primary px-3 border-end" style="border-radius: 30px 0 0 30px;">Saiba Mais</a>
-                            <a href="{{ auth()->check() ? route('inscricao.index') : route('login') }}" 
+                            <a href="{{ auth()->check() ? route('inscricao.index', ['curso_id' => $curso->id]) : route('login') }}" 
                                 class="flex-shrink-0 btn btn-sm btn-primary px-3" 
                                 style="border-radius: 0 30px 30px 0;">
                                  Candidatar-se
@@ -131,8 +136,6 @@
     </div>
 </div>
 <!-- Courses End -->
-
-
 
 <!-- Team Start -->
 <div class="container-xxl py-5">

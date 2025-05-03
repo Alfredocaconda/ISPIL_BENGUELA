@@ -65,7 +65,7 @@
                       @endif
                       <!-- INFORMACAO DA SECRETARIA QUE TERAO ACESSO-->
                       <li class=" ">
-                        <a href="" class="svg-icon">
+                        <a href="{{route('matricula.inf_estudante')}}" class="svg-icon">
                             <i class="fa fa-users"></i>
                               <span class="ml-4">Estudantes</span>
                           </a>

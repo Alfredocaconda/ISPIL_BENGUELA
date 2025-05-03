@@ -30,10 +30,10 @@ class CursoController extends Controller
             ];
 
             // Se for edição, desconsidera unique para o próprio funcionário
-            if (!$request->filled('id')) { // Se for um novo cadastro
+           /* if (!$request->filled('id')) { // Se for um novo cadastro
                 $rules['foto'] = ['required', 'image', 'mimes:jpg,jpeg,png', 'max:2048'];
             }
-            
+            */
 
             // Validação dos campos
             $request->validate($rules, [
@@ -47,7 +47,7 @@ class CursoController extends Controller
             } else {
                 $valor = new Curso();
             }
-            if (request()->hasFile('foto')) {
+         /*   if (request()->hasFile('foto')) {
             $doc = MediaUploader::fromSource(request()->file('foto'))
             ->toDirectory('DocCurso')->onDuplicateIncrement()
             ->useHashForFilename()
@@ -56,6 +56,7 @@ class CursoController extends Controller
         } else {
                 return redirect()->back()->with("Error", "O upload da foto é obrigatório!");
             }
+                */
             
             // Preenche os campos
             $valor->name = $request->name;

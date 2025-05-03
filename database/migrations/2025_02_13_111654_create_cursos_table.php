@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->string('vagas');
             $table->string('preco');
-            $table->string('foto');
+            //$table->string('foto');
             $table->timestamps();
         });
     }

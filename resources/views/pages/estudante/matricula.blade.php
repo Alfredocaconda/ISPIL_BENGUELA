@@ -2,7 +2,7 @@
 
 @section('inscricao')
     <div class="container mt-4">
-         <h2 class="mb-2">Matrícula</h2>
+         <h2 class="mb-2">FORMULÁRIO DE MATRÍCULA</h2>
           <!-- EXIBIR ERROS DE VALIDAÇÃO AQUI -->
           @if ($errors->any())
           <div class="alert alert-danger">
@@ -42,7 +42,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-md-4">
+           <div class="col-md-4">
                 <label for="data_nasc">Data de Nascimento <span style="color: red;">*</span></label>
                 <div class="form-input">
                     <input type="date" name="data_nasc" id="data_nasc" class="form-control" required/>
@@ -62,13 +62,13 @@
                     <small id="char_count" class="form-text text-muted">Faltam 14 caracteres</small>
                 </div>
             </div>
-            <div class="col-md-4">
+          <!--  <div class="col-md-4">
                 <label for="afiliacao">Nome do Pai e Mãe <span style="color: red;">*</span></label>
                 <div class="form-input">
                     <input type="text" name="afiliacao" id="afiliacao"
                      class="form-control" oninput="validarInput(this)" style=" padding: 5px;" required />
                 </div>
-            </div>
+            </div>-->
             <div class="col-md-4">
                 <label for="telefone">Nº do Telefone <span style="color: red;">*</span></label>
                 <div class="form-input">
@@ -83,7 +83,7 @@
                     <small id="char_count_telefone" class="form-text text-muted">Faltam 9 caracteres</small>
                 </div>
             </div>
-            <div class="col-md-4">
+          <!--  <div class="col-md-4">
                 <label for="provincia">Província <span style="color: red;">*</span></label>
                 <div class="form-input">
                     <input type="text" id="provincia"
@@ -130,7 +130,7 @@
                 <div class="form-input">
                     <input type="date" name="data_termino" id="data_termino" class="form-control" required/>
                 </div>
-            </div>
+            </div>-->
             
             <div class="col-md-4">
                 <label for="curso_Id">Curso Selecionado</label>
@@ -156,7 +156,6 @@
                     </select>
                 </div>
             </div>
-        <h3>Documentos</h3>
             <div class="col-md-4">
                 <label for="foto">Foto de Tipo Passe ( jpg, png, jpeg ) <span style="color: red;">*</span></label>
                 <div class="form-input">
@@ -190,7 +189,7 @@
                     @endif
                 </div>
             </div>
-            <div class="col-md-4">
+           <!-- <div class="col-md-4">
                 <label for="atestado">Atestado Médico ( pdf, jpg, png, jpeg ) <span style="color: red;">*</span></label>
                 <div class="form-input">
                     <input type="file" class="form-control" id="atestado" accept=".txt,.pdf,.docx" name="atestado" {{ isset($matricula) ? '' : 'required' }}>
@@ -211,17 +210,17 @@
                         <p>O documento ainda não foi carregado.</p>
                     @endif
                 </div>
-            </div>
-            <h3>Pagamento via Multicaixa Express</h3>
+            </div>-->
             <div class="col-md-4">
-                <label for="numero_cartao" class="form-label">Número do Cartão Multicaixa Express</label>
-                <input type="text" class="form-control" id="numero_cartao" name="numero_cartao" required>
-                <input type="checkbox" name="termos_aceite" required> Eu aceito os termos de matrícula<br><br>
-            </div>
+                    <label for="comprovativo">Comprovativ de Pagamento ( pdf, jpg, png, jpeg ) <span style="color: red;">*</span></label>
+                    <div class="form-input">
+                        <input type="file" accept=".txt,.pdf,.docx" name="comprovativo" id="comprovativo" class="form-control" required/>
+                    </div>
+                </div>
         </div>
         <div class="mt-3">
             <button type="submit" class="btn btn-primary" >
-                {{ isset($matricula) ? 'Reconfirmar Matrícula' : 'Finalizar Matrícula' }}
+                {{ isset($matricula) ? 'Reconfirmar Matrícula' : 'Enviar Matrícula' }}
             </button>
         </div>
     </form>

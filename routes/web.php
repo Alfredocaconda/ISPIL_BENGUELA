@@ -37,6 +37,7 @@ Route::get('/', function () {
     return view('index', compact('cursos', 'professores', 'alunos', 'disciplinas'));
 });
 */
+use App\Models\Matricula;
 
 use App\Models\Curso;
 
@@ -72,11 +73,22 @@ Route::get('/consulta-inscricao', [InscricaoController::class, 'consulta'])->nam
 /*
   INCIO DAS ROTAS DE MATRICULA
 */
+Route::middleware(['auth'])->group(function () {
+    Route::get('/matricula', [MatriculaController::class, 'index'])->name('matricula.index');
+});
+Route::get('/matricula/{id}', [MatriculaController::class, 'criar'])->name('matricula.iniciar');
+
+//Route::get('/matricula', [MatriculaController::class, 'index'])->name('matricula.index')->middleware('auth');
 Route::resource('matricula',MatriculaController::class);
 Route::post('matricula/cadastro',[MatriculaController::class,'store'])->name('matricula.cadastro');
 Route::get('/matricula/sucesso/{id}', [MatriculaController::class, 'sucesso'])->name('matricula.sucesso');
 Route::post('/inscricao1/comprovativo', [MatriculaController::class, 'gerarComprovativo'])->name('inscricao1.comprovativo');
-Route::get('/consulta-matricula', [MatriculaController::class, 'consulta'])->name('matricula.consulta');
+Route::get('/consultas-matricula', [MatriculaController::class, 'consultas'])->name('matricula.consulta');
+
+Route::post('/consulta-matricula', [MatriculaController::class, 'consultar'])->name('consulta-matricula');
+
+Route::get('/matricula/inf_estudante', [MatriculaController::class, 'inf_estudante'])->name('matricula.inf_estudante');
+
 /*
   INCIO DAS ROTAS DE CONSULTAS
 */
@@ -108,6 +120,25 @@ Route::post('/consulta-resultado', function (Request $request) {
     return redirect()->back()->with('resultado', 'Candidato não encontrado.');
 })->name('consulta.resultado');
 
+Route::post('/consulta-matricula', function (Request $request) {
+    $codigo = $request->input('codigo_matricula');
+
+    // Verificar se o código corresponde ao código de matrícula OU ao número do bilhete
+    $matricula = Matricula::where('codigo_matricula', $codigo)
+                    ->orWhere('n_bilhete', $codigo)
+                    ->first();
+
+    if (!$matricula) {
+        return redirect()->back()->with('matricula', 'Candidato não encontrado.');
+    }
+
+    if ($matricula->estado === 'Matriculado') {
+        return redirect()->back()->with('matricula', 'Estudante já está matriculado.');
+    }
+
+    return redirect()->back()->with('matricula', 'Estudante ainda não está matriculado.');
+})->name('consulta-matricula');
+
 
 
 
@@ -132,8 +163,6 @@ Route::get('apagar/{id}/funcio',[FuncionarioController::class,'apagar'])->name('
 
 Route::resource('Curso',CursoController::class);
 Route::get('apagar/{id}/Curso', [CursoController::class, 'apagar'])->name('Curso.apagar');
-
-
 
 Route::group(['middleware'=>'auth'],function(){
 
@@ -170,6 +199,6 @@ Route::get('entrar',function(){
 });
 Auth::routes();
 
-//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/principal', [App\Http\Controllers\HomeController::class, 'index2'])->name('principal');
 Route::get('/cursos', [App\Http\Controllers\HomeController::class, 'cursos'])->name('cursos');
 

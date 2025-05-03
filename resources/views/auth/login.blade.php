@@ -7,7 +7,7 @@
              <div class="col-12">
                 <div class="row align-items-center">
                    <div class="col-lg-6">
-                      <h2 class="mb-2">Acesso ao Sistema</h2>
+                      <h2 class="mb-2">LOGIN</h2>
                       <p></p>
                       <form action="{{route('user.auth')}}" method="POST">
                          @csrf
@@ -46,7 +46,7 @@
                             </div>
                          </div>
                          <button type="submit" class="btn btn-primary btn-lg mb-2" >Entrar</button>
-                         <p>Ainda não possui conta ?<a href="{{ route('register') }}"> Cadastrar</a></p>
+                         <p>Ainda não possui conta ?<a href="{{ route('register') }}"> Registar</a></p>
                       </form>
                    </div>
                    <div class="col-lg-6 mb-lg-0 mb-4 mt-lg-0 mt-4">

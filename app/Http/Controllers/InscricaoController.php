@@ -22,12 +22,12 @@ class InscricaoController extends Controller
      */
     public function index(Request $request)
     {
-        //
-        $cursos = Curso::find($request->curso_id); // Pega o curso da URL
-        $valor=inscricao::all();
-        return view('pages.candidato.inscricao',compact('valor','cursos'));
+        $cursos = Curso::all(); // pega todos
+        $cursoSelecionado = $request->curso_id ? Curso::find($request->curso_id) : null;
+        $valor = inscricao::all();
+    
+        return view('pages.candidato.inscricao', compact('valor', 'cursos', 'cursoSelecionado'));
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -38,44 +38,141 @@ class InscricaoController extends Controller
         $cursos = Curso::all();
         return view("pages.admin.inscricao", compact('valor', 'cursos'));
     }
+    public function store(Request $request)
+    {
+        $request->validate([
+            'foto' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'certificado' => 'required|mimes:pdf,jpg,png,jpeg|max:5120',
+            'bilhete' => 'required|mimes:pdf,jpg,png,jpeg|max:5120',
+            'comprovativo' => 'required|mimes:pdf,jpg,png,jpeg|max:5120',
+            'curso_id' => 'required|integer',
+            'periodo' => 'required|string|max:10',
+        ]);
+
+        $usuario = Auth::user();
+        if (!$usuario) {
+            return response()->json(['error' => 'Usuário não autenticado.'], 400);
+        }
+
+        // VERIFICAÇÃO DE INSCRIÇÃO EXISTENTE
+        $existeInscricao = inscricao::where('user_id', $usuario->id)
+            ->where('curso_id', $request->curso_id)
+            ->where('periodo', $request->periodo)
+            ->exists();
+
+        if ($existeInscricao) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Você já se inscreveu neste curso para o período selecionado.');
+        }
+
+        // Só cria e preenche a inscrição depois de passar na verificação
+        $valor = new inscricao();
+        $valor->user_id = $usuario->id;
+        $valor->email = $request->email;
+        $valor->genero = $request->genero;
+        $valor->data_nasc = $request->data_nasc;
+        $valor->n_bilhete = $request->n_bilhete;
+        $valor->telefone = $request->telefone;
+        $valor->periodo = $request->periodo;
+        $valor->nome_escola = $request->nome_escola;
+        $valor->curso_medio = $request->curso_medio;
+        $valor->curso_id = $request->curso_id;
+        $valor->data_inscricao = now();
+        $valor->estado = "Pendente";
+        $valor->codigo_inscricao = 'TEMPORARIO';
+
+        $usuarioNome = $request->name ?? "Usuario_" . $valor->user_id;
+
+        $uploadFile = function ($file) use ($usuarioNome) {
+            $directory = 'DocInscricao/' . $usuarioNome;
+            return MediaUploader::fromSource($file)
+                ->toDirectory($directory)
+                ->onDuplicateIncrement()
+                ->useFilename(md5($file->getClientOriginalName() . time()))
+                ->setAllowedExtensions(['pdf', 'jpg', 'png', 'jpeg'])
+                ->upload();
+        };
+
+        foreach (['certificado', 'bilhete', 'foto','comprovativo'] as $docName) {
+            if ($request->hasFile($docName)) {
+                $file = $request->file($docName);
+                $doc = $uploadFile($file);
+                $valor->$docName = $doc->basename;
+            }
+        }
+
+        $valor->save();
+
+        // Código de inscrição gerado depois do ID ser definido
+        $anoIngresso = now()->format('Y');
+        $codigoCurso = str_pad($request->curso_id, 3, '0', STR_PAD_LEFT);
+        $codigo_inscricao = "{$anoIngresso}{$codigoCurso}" . str_pad($valor->id, 4, '0', STR_PAD_LEFT);
+        $valor->codigo_inscricao = $codigo_inscricao;
+        $valor->save();
+
+        return redirect()->route('inscricao.sucesso', ['id' => $valor->id]);
+    }
+
   
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    /**public function store(Request $request)
     {
 
+        $request->validate([
+            'foto' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'certificado' => 'required|mimes:pdf,jpg,png,jpeg|max:5120',
+            'bilhete' => 'required|mimes:pdf,jpg,png,jpeg|max:5120',
+            'comprovativo' => 'required|mimes:pdf,jpg,png,jpeg|max:5120',
+            'curso_id' => 'required|integer',
+        'periodo' => 'required|string|max:10',
+        ]);
+    
+
+        
         // Verifica se o usuário está autenticado
         $usuario = Auth::user();
         if (!$usuario) {
             return response()->json(['error' => 'Usuário não autenticado.'], 400);
         }
-    
+        //  VERIFICAÇÃO DE INSCRIÇÃO EXISTENTE
+            $existeInscricao = inscricao::where('user_id', $usuario->id)
+            ->where('curso_id', $request->curso_id)
+            ->where('periodo', $request->periodo)
+            ->exists();
+
+        if ($existeInscricao) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Você já se inscreveu neste curso para o período selecionado.');
+        }
         // Buscar ou criar nova inscrição
         $valor = $request->id ? inscricao::find($request->id) : new inscricao();
-        
+      
         // Simulação de pagamento via API Multicaixa Express (antes do upload)
-        if (!$this->processarPagamento($request->numero_cartao)) {
+       /* if (!$this->processarPagamento($request->numero_cartao)) {
             return redirect()->back()->with('error', 'Erro no pagamento. Tente novamente.');
-        }
-    
+        }*/
         // Atribuindo o ID do usuário logado
-        $valor->user_id = $usuario->id; // Aqui pegamos o ID do usuário logado diretamente
+        /*$valor->user_id = $usuario->id; // Aqui pegamos o ID do usuário logado diretamente
     
         // Preenchendo os dados do formulário
         $valor->email = $request->email;
         $valor->genero = $request->genero;
-        $valor->provincia = $request->provincia;
-        $valor->municipio = $request->municipio;
-        $valor->naturalidade = $request->naturalidade;
+       // $valor->provincia = $request->provincia;
+       // $valor->municipio = $request->municipio;
+      //  $valor->naturalidade = $request->naturalidade;
         $valor->data_nasc = $request->data_nasc;
         $valor->n_bilhete = $request->n_bilhete;
-        $valor->afiliacao = $request->afiliacao;
+      //  $valor->afiliacao = $request->afiliacao;
         $valor->telefone = $request->telefone;
+        $valor->periodo = $request->periodo;
         $valor->nome_escola = $request->nome_escola;
         $valor->curso_medio = $request->curso_medio;
-        $valor->data_inicio = $request->data_inicio;
-        $valor->data_termino = $request->data_termino;
+        //$valor->data_inicio = $request->data_inicio;
+       // $valor->data_termino = $request->data_termino;
         $valor->curso_id = $request->curso_id;
         $valor->data_inscricao = now();
         $valor->estado = "Pendente";
@@ -94,7 +191,7 @@ class InscricaoController extends Controller
         };
     
         // Documentos para upload
-        $documentos = ['certificado', 'recenciamento', 'atestado', 'bilhete', 'foto'];
+        $documentos = ['certificado', 'bilhete', 'foto','comprovativo'];
     
         foreach ($documentos as $docName) {
             if ($request->hasFile($docName)) {
@@ -103,6 +200,21 @@ class InscricaoController extends Controller
                 $valor->$docName = $doc->basename;
             }
         }
+        // Definindo um valor temporário para o campo codigo_inscricao
+        $valor->codigo_inscricao = 'TEMPORARIO'; // Defina um valor temporário
+        $existeInscricao = inscricao::where('user_id', $usuario->id)
+            ->where('curso_id', $request->curso_id)
+            ->where('periodo', $request->periodo)
+            ->exists();
+
+        if ($existeInscricao) {
+            return redirect()->back()
+                ->withInput() // Mantém os dados preenchidos no formulário
+                ->with('error', 'Você já se inscreveu neste curso para o período selecionado.');
+        }
+
+        $valor->save();
+       
         // Geração do Código de Matrícula
         $anoIngresso = now()->format('Y'); // Ano atual
         $codigoCurso = str_pad($request->curso_id, 3, '0', STR_PAD_LEFT); // Código do curso com 3 dígitos
@@ -113,8 +225,7 @@ class InscricaoController extends Controller
         $valor->save();
 
         return redirect()->route('inscricao.sucesso', ['id' => $valor->id]);
-    }
-    
+    }*/
     /**
      * Show the form for editing the specified resource.
      */

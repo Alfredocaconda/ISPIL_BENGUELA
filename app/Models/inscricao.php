@@ -12,7 +12,7 @@ class Inscricao extends Model
         'nota', 'estado', 'codigo_inscricao', 'email', 'genero', 'provincia',
         'municipio', 'naturalidade', 'data_nasc', 'n_bilhete', 'afiliacao',
         'telefone', 'nome_escola', 'curso_medio', 'data_inicio', 'data_termino',
-        'data_inscricao', 'certificado', 'bilhete', 'recenciamento', 'foto',
+        'data_inscricao', 'certificado', 'bilhete', 'foto', 'comprovativo',
         'curso_id', 'user_id'
     ];
 

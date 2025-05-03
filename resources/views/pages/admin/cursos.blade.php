@@ -39,15 +39,12 @@
                                 <td>{{$Curso->name}}</td>
                                 <td>{{$Curso->vagas}}</td>
                                 <td>{{$Curso->preco}}</td>
-                                <td>
+                               <!-- <td>
                                     <img src="{{ asset('storage/DocCurso/' . $Curso->foto) }}" alt="Foto do Curso" width="100" height="100">
-                                </td>
-                                
+                                </td>--> 
                                 <td>
                                     <a href="#Cadastrar" data-toggle="modal" class="text-primary" onclick="editar({{ json_encode($Curso)}})"><i class="fa fa-edit"></i></a>
-                                    <a href="{{ url('funcio.apagar',$Curso->id) }}" class="text-danger">
-                                        <i class="fa fa-trash"></i>
-                                    </a>
+                                    <a href="{{route('Curso.apagar',$Curso->id)}}" class="text-danger"><i class="fa fa-trash"></i></a>
                                 </td>
                             </tr>
                         @endforeach
@@ -85,7 +82,7 @@
                         </div>
                     @endif
 
-                    <form enctype="multipart/form-data" action="{{ route('Curso.store') }}" method="post">
+                    <form action="{{ route('Curso.store') }}" method="post">
                         @csrf
                         <input type="hidden" name="id" id="id">
                         <div class="row">
@@ -93,12 +90,13 @@
                             <x-input-normal id="vagas" name="vagas" type="number" titulo="Quantidade de Vaga" alert="" />
                             <x-input-normal id="preco" name="preco" type="number" titulo="Preço" alert="" />
 
-                            <div class="col-md-4">
+                           <!-- <div class="col-md-4">
                                 <label for="foto">Imagem( jpg, png, jpeg ) <span style="color: red;">*</span></label>
                                 <div class="form-input">
                                     <input type="file" accept="image/*" name="foto" id="foto" class="form-control" />
                                 </div>
                             </div>
+-->
                         </div>
 
                         <div class="modal-footer">

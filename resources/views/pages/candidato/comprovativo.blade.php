@@ -19,13 +19,13 @@
     <div class="container">
         <!-- Logotipo -->
         <p class="titulo">ISPIL-POLO BENGUELA</p>
-        <p class="titulo">Comprovativo de Inscrição</p>
+        <p class="titulo">CRIADO PELO DECRETO PRESIDENCIAL Nº 173/17</p>
+        <p class="titulo">COMPROVATIVO DE INSCRIÇÃO</p>
     </div>
 
     <!-- Dados do Inscrito -->
     <div class="dados">
         <p class="titulo">Código de Inscrição: {{$candidato->codigo_inscricao}}</p>
-
         <table>
             <tr>
                 <th>Nome Completo:</th>
@@ -43,7 +43,7 @@
                 <th>Data de Nascimento:</th>
                 <td>{{ date('d/m/Y', strtotime($candidato->data_nasc)) }}</td>
             </tr>
-            <tr>
+           <!-- <tr>
                 <th>Naturalidade:</th>
                 <td>{{ $candidato->naturalidade }}</td>
             </tr>
@@ -54,7 +54,7 @@
             <tr>
                 <th>Município:</th>
                 <td>{{ $candidato->municipio }}</td>
-            </tr>
+            </tr>-->
             <tr>
                 <th>Telefone:</th>
                 <td>{{ $candidato->telefone }}</td>

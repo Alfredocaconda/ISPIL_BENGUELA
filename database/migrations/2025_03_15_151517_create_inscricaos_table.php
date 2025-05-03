@@ -17,24 +17,24 @@ return new class extends Migration
             $table->string('codigo_inscricao');
             $table->string('email');
             $table->string('genero'); 
-            $table->string('provincia');
-            $table->string('municipio');
-            $table->string('naturalidade');
+//            $table->string('municipio');
+           // $table->string('naturalidade');
             $table->date('data_nasc');
-            $table->string('n_bilhete')->unique();
-            $table->string('afiliacao');
-            $table->string('telefone')->unique();
+            $table->string('n_bilhete');
+            //$table->string('afiliacao');
+            $table->string('telefone');
             $table->string('nome_escola');
             $table->string('curso_medio');
-            $table->date('data_inicio'); // Corrigido nome
-            $table->date('data_termino'); // Corrigido nome
+            //$table->date('data_inicio'); // Corrigido nome
+            //$table->date('data_termino'); // Corrigido nome
             $table->dateTime('data_inscricao')->default(now()); // Padrão para a data de inscrição
             $table->string('certificado');
             $table->string('bilhete');
-            $table->string('recenciamento')->nullable();
+            $table->string('comprovativo');
+            $table->string('periodo');
             $table->string('foto');
             $table->string('estado')->nullable()->default('Pendente'); // Define um valor padrão
-            $table->foreignId('curso_id')->constrained('cursos')->onDelete('cascade'); // Corrigido nome
+            $table->foreignId('curso_id')->unique()->constrained('cursos')->onDelete('cascade'); // Corrigido nome
             $table->foreignId('user_id')->nullable()->constrained('users');
             $table->timestamps();
                 

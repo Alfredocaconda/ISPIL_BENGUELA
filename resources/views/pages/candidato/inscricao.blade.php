@@ -1,8 +1,13 @@
 @extends('layouts.base')
 
 @section('inscricao')
+@if (session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
     <div class="container mt-4">
-         <h2 class="mb-2">Candidato</h2>
+         <h2 class="mb-2">FORMULÁRIO DE INSCRIÇÃO</h2>
           <!-- EXIBIR ERROS DE VALIDAÇÃO AQUI -->
           @if ($errors->any())
           <div class="alert alert-danger">
@@ -49,13 +54,13 @@
                          class="form-control" oninput="validarInput(this)" style=" padding: 5px;" required />
                     </div>
                 </div>
-                <div class="col-md-4">
+               <!-- <div class="col-md-4">
                     <label for="naturalidade">Naturalidade <span style="color: red;">*</span></label>
                     <div class="form-input">
                         <input type="text" name="naturalidade" id="naturalidade"
                          class="form-control" oninput="validarInput(this)" style=" padding: 5px;" required/>
                     </div>
-                </div>
+                </div>-->
                 <div class="col-md-4">
                     <label for="data_nasc">Data de Nascimento <span style="color: red;">*</span></label>
                     <div class="form-input">
@@ -77,14 +82,13 @@
                             <small id="char_count" class="form-text text-muted">Faltam 14 caracteres</small>
                         </div>
                 </div>
-               
-                <div class="col-md-4">
+               <!-- <div class="col-md-4">
                     <label for="afiliacao">Nome do Pai e Mãe <span style="color: red;">*</span></label>
                     <div class="form-input">
                         <input type="text" name="afiliacao" id="afiliacao"
                          class="form-control" oninput="validarInput(this)" style=" padding: 5px;" required />
                     </div>
-                </div>
+                </div>-->
                 <div class="col-md-4">
                     <label for="telefone">Nº do Telefone <span style="color: red;">*</span></label>
                     <div class="form-input">
@@ -114,7 +118,7 @@
                          class="form-control" oninput="validarInput(this)" style=" padding: 5px;" required/>
                     </div>
                 </div>
-                <div class="col-md-4">
+               <!-- <div class="col-md-4">
                     <label for="data_inicio">Ano de Inicio <span style="color: red;">*</span></label>
                     <div class="form-input">
                         <input type="date" name="data_inicio" id="data_inicio" class="form-control" required />
@@ -126,6 +130,7 @@
                         <input type="date" name="data_termino" id="data_termino" class="form-control" required/>
                     </div>
                 </div>
+-->
                 <div class="col-md-4">
                     <label for="email">E-mail </label>
                     <div class="form-input">
@@ -134,18 +139,26 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <label for="curso_Id">Curso Selecionado</label>
+                    <label for="curso_id">Curso Selecionado</label>
                     <div class="form-input">
-                        @if(isset($cursos))
-                            <input type="hidden" name="curso_id" value="{{ $cursos->id }}">
-                            <input type="text" class="form-control" value="{{ $cursos->name }}" readonly>
+                        @if(isset($cursoSelecionado))
+                            <input type="hidden" name="curso_id" value="{{ $cursoSelecionado->id }}">
+                            <input type="text" class="form-control" value="{{ $cursoSelecionado->name }}" readonly>
                         @else
                             <p class="text-danger">Nenhum curso selecionado.</p>
                         @endif
                     </div>
                 </div>
-                
-
+                <div class="col-md-4">
+                    <label for="periodo">Seleciona o Período</label>
+                    <div class="form-input">
+                        <select name="periodo" class="form-control" required>
+                            <option value="Manhã">Manhã</option>
+                            <option value="Tarde">Tarde</option>
+                            <option value="Noite">Noite</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="col-md-4">
                     <label for="foto">Foto de Tipo Passe ( jpg, png, jpeg ) <span style="color: red;">*</span></label>
                     <div class="form-input">
@@ -164,17 +177,18 @@
                         <input type="file" accept=".txt,.pdf,.docx" name="bilhete" id="bilhete" class="form-control" required/>
                     </div>
                 </div>
-                <div class="col-md-4">
+               <!-- <div class="col-md-4">
                     <label for="recenciamento">Recenciamento Militar ( pdf, jpg, png, jpeg ) <span style="color: red;">*</span></label>
                     <div class="form-input">
                         <input type="file" accept=".txt,.pdf,.docx" name="recenciamento" id="recenciamento" 
                         class="form-control"/>
                     </div>
-                </div>
-                <h3>Pagamento via Multicaixa Express</h3>
+                </div>-->
                 <div class="col-md-4">
-                    <label for="numero_cartao" class="form-label">Número do Cartão Multicaixa Express</label>
-                    <input type="text" class="form-control" id="numero_cartao" name="numero_cartao" required>
+                    <label for="comprovativo">Comprovativ de Pagamento ( pdf, jpg, png, jpeg ) <span style="color: red;">*</span></label>
+                    <div class="form-input">
+                        <input type="file" accept=".txt,.pdf,.docx" name="comprovativo" id="comprovativo" class="form-control" required/>
+                    </div>
                 </div>
             </div>
             <div class="mt-3">
@@ -202,7 +216,7 @@
             verificarGenero();
         });
       
-        document.getElementById("curso_Id")?.addEventListener("change", function() {
+        document.getElementById("curso_id")?.addEventListener("change", function() {
             var nomeCurso = this.options[this.selectedIndex].getAttribute("data-nome");
             if (nomeCurso) {
                 document.getElementById("nome_curso").value = nomeCurso;

@@ -36,17 +36,21 @@
             <div class="navbar-nav ms-auto p-4 p-lg-0">
                 <a href="{{ url('/') }}" class="nav-item nav-link active">Início</a>
                 <a href="{{ url('/cursos') }}" class="nav-item nav-link">Cursos</a>
-                <a href="{{ url('/vida-academica') }}" class="nav-item nav-link">Vida Acadêmica</a>
-
+               <!-- <a href="{{ url('/vida-academica') }}" class="nav-item nav-link">Vida Acadêmica</a>
+    -->
                 <!-- Novo link para Consulta -->
                 <a href="{{ url('/consulta-inscricao') }}" class="nav-item nav-link text-danger fw-bold">
                     Consultar Inscrição
                 </a>
+                <!-- Novo link para Consulta -->
+               <!-- <a href="{{ url('/consultas-matricula') }}" class="nav-item nav-link text-danger fw-bold">
+                    Consultar Matricula
+                </a>-->
 
                 @auth
                     @if(Auth::user()->role === 'estudante')
                         <div class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Matricular-se</a>
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Matricula</a>
                             <div class="dropdown-menu fade-down m-0">
                                 <a href="{{ url('matricula') }}" class="dropdown-item">Matrícula</a>
                                 <a href="{{ url('reconfirmacao') }}" class="dropdown-item">Reconfirmação de Matrícula</a>
@@ -59,7 +63,7 @@
                     @guest
                         <a href="{{ route('login') }}" class="btn py-4 px-lg-5 d-none d-lg-block">Login</a>
                         <a href="{{ route('register') }}" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">
-                            Cadastrar-se <i class="fa fa-arrow-right ms-3"></i>
+                            REGISTAR <i class="fa fa-arrow-right ms-3"></i>
                         </a>
                     @else
                         <li class="nav-item dropdown">

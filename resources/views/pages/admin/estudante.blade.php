@@ -1,4 +1,4 @@
-@extends('layouts.base')
+@extends('layouts.app')
 @section('title', 'ISPIL-BENGUELA')
 @section('secretaria')
 <div class="container-fluid">
@@ -26,38 +26,39 @@
                     <table id="datatable" class="table data-tables table-striped">
                     <thead>
                         <tr class="ligth">
-                            <th>Foto</th>
-                            <th>Certificado</th>
-                            <th>Bilhete</th>
                             <th>Nome Completo</th>
                             <th>Genero</th>
-                            <th>Província</th>
-                            <th>Naturalidade</th>
                             <th>Nº BI</th>
-                            <th>Nome do Pai e Mãe</th>
                             <th>Nº Tel</th>
                             <th>Data</th>
-                            <th>Responsável</th>
+                            <th>Curso</th>
+                            <th>Estado</th>
+                            <th>Certificado</th>
+                            <th>Bilhete</th>
+                            <th>Opções</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($student as $dados)
+                        @foreach ($valor as $dados)
                             <tr>
-                                <td><img src="{{url('getfile/'.$dados->foto)}}" alt="Aqui vai imagem"></td>
+                            <td>{{ $dados->user->name }}</td>
+                            <td>{{ $dados->genero }}</td>
+                            <!--<td>{{ $dados->provincia ."/". $dados->municipio }}</td>-->
+                            <td>{{ $dados->n_bilhete }}</td>
+                            <!--<td>{{ $dados->afiliacao }}</td>-->
+                            <td>{{ $dados->telefone }}</td>
+                            <td>{{ $dados->data_matricula }}</td>
+
+                            <td>{{ $dados->curso->name }}</td>
+                            <td>{{ $dados->estado }}</td>
+                               <!-- <td><img src="{{url('getfile/'.$dados->foto)}}" alt="Aqui vai imagem"></td>-->
                                 <td><a href="{{route('baixar',$dados->bilhete)}}" class="text-danger" title="Clica para descarregar o fichero">  <i style="font-size:50px" class="fa fa-file-pdf"></i> </a></td>
                                 <td><a href="{{route('baixar',$dados->certificado)}}" class="text-danger" title="Clica para descarregar o fichero">  <i style="font-size:50px" class="fa fa-file-pdf"></i> </a></td>
-                                <td>{{$dados->nome}}</td>
-                                <td>{{$dados->genero}}</td>
-                                <td>{{$dados->provincia}}</td>
-                                <td>{{$dados->naturalidade}}</td>
-                                <td>{{$dados->n_bilhete}}</td>
-                                <td>{{$dados->afiliacao}}</td>
-                                <td>{{$dados->telefone}}</td>
-                                <td>{{$dados->data}}</td>
-                                <td>{{$dados->funcionario->nome ?? ""}}</td>
+                                
+                               <!-- <td>{{$dados->funcionario->nome ?? ""}}</td>-->
                                 <td>
                                     <a href="#Cadastrar" data-toggle="modal" class="text-primary" onclick="editar({{$dados}})" ><i class="fa fa-edit"></i></a>
-                                    <a href="{{route('student.apagar',$dados->id)}}" class="text-danger"><i class="fa fa-trash"></i></a>
+                                    <a href="" class="text-danger"><i class="fa fa-trash"></i></a>
                                 </td>
                             </tr>
                         @endforeach
@@ -82,7 +83,7 @@
                     </div>
             <div class="modal-body">
                 <div class="container-fluid">
-                   <form action="{{route('student.store')}}" method="post" enctype="multipart/form-data">
+                   <form action="{{route('matricula.store')}}" method="post" enctype="multipart/form-data">
                     @csrf
                          <input type="hidden" name="id" id="id">
                          {{-- <input type="hidden" name="funcionario_id" value="{{ Auth::user()->id }}"> --}}

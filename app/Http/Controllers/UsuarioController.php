@@ -42,28 +42,33 @@ class UsuarioController extends Controller
      */
     private function redirectUserByType(User $user)
     {
-        // Verificar a última matrícula do candidato
+        // Verificar a última inscrição do usuário
+        $inscricao = inscricao::where('user_id', $user->id)->latest()->first();
+        
+        // Verificar a última matrícula (se já tem)
         $matricula = Matricula::where('user_id', $user->id)->latest()->first();
-
+    
         return match ($user->tipo) {
-            'Candidato' => $matricula
-                ? ($matricula->reconfirmacao_pendente
-                    ? redirect()->route('reconfirmacao.index')  // Redireciona para reconfirmação de matrícula
-                    : redirect()->route('candidato.index'))   // Caso contrário, vai para a página inicial do candidato
-                : redirect()->route('matricula.index'),     // Se não matriculado, vai para a página de matrícula
-
+            'Candidato' => match (true) {
+                $matricula !== null && $matricula->reconfirmacao_pendente => redirect()->route('reconfirmacao.index'),
+                $matricula !== null => redirect()->route('candidato.index'),
+    
+                // Se ainda não tem matrícula, mas foi admitido
+                $inscricao !== null && $inscricao->estado === 'Admitido' => redirect()->route('matricula.index'),
+    
+                // Se não foi admitido ou inscrição ausente
+                default => redirect()->route('principal')
+            },
+    
             'Estudante' => $matricula && $matricula->reconfirmacao_pendente
                 ? redirect()->route('reconfirmacao.index')
                 : redirect()->route('estudante.index'),
 
-            'Admin' => redirect()->route('admin.index'),
-            'secretaria' => redirect()->route('admin.index'),
+            'Admin', 'secretaria' => redirect()->route('admin.index'),
             default => redirect('login'),
         };
     }
-
     
-
     /**
      * Redireciona o usuário com base no tipo.
      */

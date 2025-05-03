@@ -1,6 +1,11 @@
 @extends('layouts.app')
 @section('title', 'ISPIL-BENGUELA')
 @section('secretaria')
+@if (session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12">
@@ -28,14 +33,15 @@
                                 <tr class="ligth">
                                     <th>Nome Completo</th>
                                     <th>Genero</th>
-                                    <th>Província/Município</th>
+                                    <!--<th>Província/Município</th>
+                                    <th>Nome do Pai e Mãe</th>-->
                                     <th>Nº BI</th>
-                                    <th>Nome do Pai e Mãe</th>
                                     <th>Nº Tel</th>
                                     <th>Curso</th>
+                                    <th>Periodo</th>
                                     <th>Data de Inscrição</th>
                                     <th>Estado</th>
-                                    <th>Foto</th>
+                                    <!--<th>Foto</th>-->
                                     <th>Certificado</th>
                                     <th>Bilhete</th>
                                     <th>Nota</th>
@@ -47,17 +53,18 @@
                                     <tr>
                                         <td>{{ $dados->user->name }}</td>
                                         <td>{{ $dados->genero }}</td>
-                                        <td>{{ $dados->provincia ."/". $dados->municipio }}</td>
+                                        <!--<td>{{ $dados->provincia ."/". $dados->municipio }}</td>-->
                                         <td>{{ $dados->n_bilhete }}</td>
-                                        <td>{{ $dados->afiliacao }}</td>
+                                        <!--<td>{{ $dados->afiliacao }}</td>-->
                                         <td>{{ $dados->telefone }}</td>
                                         <td>{{ $dados->curso->name }}</td>
+                                        <td>{{ $dados->periodo }}</td>
                                         <td>{{ $dados->data_inscricao }}</td>
                                         <td>{{ $dados->estado }}</td>
-                                        <td><img src="" alt="Aqui vai imagem"></td>
                                         <td><a href="" class="text-danger" title="Clica para descarregar o ficheiro"><i style="font-size:50px" class="fa fa-file-pdf"></i></a></td>
                                         <td><a href="" class="text-danger" title="Clica para descarregar o ficheiro"><i style="font-size:50px" class="fa fa-file-pdf"></i></a></td>
                                         <td>
+
                                             {{ $dados->nota ?? 'Sem nota'}} <!-- Exibir a nota se existir -->
                                         </td>
                                         <td>
@@ -65,7 +72,12 @@
                                             <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalNota{{$dados->id}}">
                                                 <i class="fa fa-edit"></i> Adicionar Nota
                                             </button>
-                        
+                                               <!-- Mostrar botão de matrícula se a nota for suficiente -->
+                                            @if ($dados->nota !== null && $dados->nota >= 10)
+                                                <a href="{{ route('matricula.iniciar', ['id' => $dados->id]) }}" class="btn btn-success btn-sm mt-2">
+                                                    <i class="fa fa-check"></i> Matricular
+                                                </a>
+                                            @endif
                                             <!-- Modal para adicionar nota -->
                                             <div class="modal fade" id="modalNota{{$dados->id}}" tabindex="-1" aria-labelledby="modalNotaLabel{{$dados->id}}" aria-hidden="true">
                                                 <div class="modal-dialog">
@@ -89,7 +101,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-                        
                                         </td>
                                     </tr>
                                 @endforeach

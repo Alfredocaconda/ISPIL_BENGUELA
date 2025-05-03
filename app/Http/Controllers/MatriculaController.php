@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\matricula;
 use App\Models\Candidato;
-use App\Models\Inscricao;
-use App\Models\Curso;
+use App\Models\inscricao;
+use App\Models\curso;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -21,27 +21,45 @@ class MatriculaController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function criar($id)
+    {
+        // Correto: retorna um único modelo
+        $inscricao = Inscricao::with(['user', 'curso'])->find($id);
+
+        if (!$inscricao) {
+            return redirect()->back()->with('error', 'Inscrição não encontrada.');
+        }
+        
+        // agora é seguro acessar $inscricao->user
+        
+    }
     public function index(Request $request)
     {
         // Verifica se o usuário está autenticado
         $usuario = Auth::user();
         if (!$usuario) {
-            return response()->json(['error' => 'Usuário não autenticado.'], 400);
+            return redirect()->back()->with('error', 'Você precisa estar logado para acessar a matrícula.');
         }
     
-        // Buscar a inscrição do usuário logado com o curso associado
-        $inscricao = Inscricao::with('curso') // Carrega o curso associado à inscrição
-            ->where('user_id', $usuario->id)   // Filtra pela inscrição do usuário logado
-            ->first(); // Aqui pegamos a primeira inscrição do usuário (caso o usuário tenha mais de uma)
+        // Busca a inscrição do usuário com o curso
+        $inscricao = Inscricao::with('curso')
+            ->where('user_id', $usuario->id)
+            ->first();
     
-        // Verifica se a inscrição existe e se o curso associado também existe
-        if ($inscricao && $inscricao->curso) {
-            $cursoSelecionado = $inscricao->curso; // Pega o curso que o usuário selecionou na inscrição
-        } else {
-            $cursoSelecionado = null; // Caso não haja inscrição ou o curso não exista
+        // Verifica se existe inscrição
+        if (!$inscricao) {
+            return redirect()->back()->with('error', 'Você ainda não possui uma inscrição registrada.');
         }
     
-        // Retorna a view com a variável cursoSelecionado
+        // Verifica se o usuário foi admitido
+        if (strtolower(trim($inscricao->estado)) !== 'admitido') {
+            return redirect()->back()->with('error', 'Você ainda não foi admitido para realizar a matrícula.');
+        }
+    
+        // Verifica se o curso existe
+        $cursoSelecionado = $inscricao->curso ?? null;
+    
+        // Retorna a view com o curso
         return view('pages.estudante.matricula', compact('cursoSelecionado'));
     }
     
@@ -50,12 +68,11 @@ class MatriculaController extends Controller
      */
     public function inf_estudante()
     {
-        //
-        $valor = matricula::all();
-        $cursos = Curso::all();
-        return view("pages.admin.matricula", compact('valor', 'cursos'));
+        $valor = Matricula::all();
+        return view("pages.admin.estudante", compact('valor'));
     }
-  
+
+
     /**
      * Store a newly created resource in storage.
      */
@@ -88,17 +105,19 @@ class MatriculaController extends Controller
         // Preenchendo os dados do formulário
         $valor->email = $request->email;
         $valor->genero = $request->genero;
-        $valor->provincia = $request->provincia;
+        /*$valor->provincia = $request->provincia;
         $valor->municipio = $request->municipio;
         $valor->naturalidade = $request->naturalidade;
+        */
         $valor->data_nasc = $request->data_nasc;
         $valor->n_bilhete = $request->n_bilhete;
-        $valor->afiliacao = $request->afiliacao;
+        //$valor->afiliacao = $request->afiliacao;
         $valor->telefone = $request->telefone;
-        $valor->nome_escola = $request->nome_escola;
+        /*$valor->nome_escola = $request->nome_escola;
         $valor->curso_medio = $request->curso_medio;
         $valor->data_inicio = $request->data_inicio;
         $valor->data_termino = $request->data_termino;
+        */
         $valor->turno = $request->turno;
         $valor->curso_id = $request->curso_id;
         $valor->data_matricula = now();
@@ -119,7 +138,7 @@ class MatriculaController extends Controller
         };
     
         // Documentos para upload
-        $documentos = ['certificado', 'recenciamento', 'atestado', 'bilhete', 'foto'];
+        $documentos = ['certificado', 'bilhete', 'foto','comprovativo'];
     
         foreach ($documentos as $docName) {
             if ($request->hasFile($docName)) {
@@ -128,7 +147,7 @@ class MatriculaController extends Controller
                 $valor->$docName = $doc->basename;
             }
         }
-    
+       
         // Geração do Código de Matrícula (caso seja nova matrícula)
         if (!$valor->codigo_matricula) {
             $anoIngresso = now()->format('Y'); // Ano atual
@@ -201,14 +220,9 @@ class MatriculaController extends Controller
      
          return back()->with('error', 'Selecione um método válido.');
      }
-     
-     
-
-
     /**
      * Show the form for editing the specified resource.
      */
-
     private function processarPagamento($cartao)
     {
         $status = rand(0, 1) ? 'sucesso' : 'falha';
@@ -216,8 +230,6 @@ class MatriculaController extends Controller
 
         return $status === 'sucesso';
     }
-
-
   /*  private function processarPagamento($cartao)
     {
         // Aqui deve entrar a API da EMIS para pagamento Multicaixa Express
@@ -235,10 +247,34 @@ class MatriculaController extends Controller
      * Show the form for editing the specified resource.
      */
 
+    public function show()
+    {
+        $valor = matricula::all();
+        return view('pages.admin.estudante', compact('valor'));
+    }
+
+
     /**
      * Remove the specified resource from storage.
      */
-    public function consulta()
+    public function consultar(Request $request)
+    {
+        $codigo = $request->input('codigo_matricula');
+
+        // Procurar por código de matrícula ou número do BI
+        $matricula = Matricula::where('codigo_matricula', $codigo)
+            ->orWhere('n_bilhete', $codigo)
+            ->first();
+
+        if ($matricula) {
+            // Se encontrada, enviar os dados para a view
+            return view('page.estudante.resultado', ['matricula' => $matricula]);
+        } else {
+            // Se não encontrada, voltar com mensagem de erro
+            return back()->with('erro', 'Matrícula não encontrada. Verifique os dados e tente novamente.');
+        }
+    }
+    public function consultas()
     {
         return view('pages.estudante.consulta');
     }

@@ -22,4 +22,9 @@ class HomeController extends Controller
         $cursos = Curso::all();
         return view('pages.curso', compact('cursos'));
     }
+    public function index2()
+    {
+        $cursos = Curso::all();
+        return view('index', compact('cursos'));
+    }
 }
