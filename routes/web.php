@@ -79,10 +79,10 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/matricula/{id}', [MatriculaController::class, 'criar'])->name('matricula.iniciar');
 
 //Route::get('/matricula', [MatriculaController::class, 'index'])->name('matricula.index')->middleware('auth');
-Route::resource('matricula',MatriculaController::class);
-Route::post('matricula/cadastro',[MatriculaController::class,'store'])->name('matricula.cadastro');
+Route::resource('/matricula',MatriculaController::class);
+Route::post('/matricula/store',[MatriculaController::class,'store'])->name('matricula.store');
 Route::get('/matricula/sucesso/{id}', [MatriculaController::class, 'sucesso'])->name('matricula.sucesso');
-Route::post('/inscricao1/comprovativo', [MatriculaController::class, 'gerarComprovativo'])->name('inscricao1.comprovativo');
+Route::get('/matricula/pdf/{id}', [MatriculaController::class, 'gerarPdf'])->name('matricula.pdf');
 Route::get('/consultas-matricula', [MatriculaController::class, 'consultas'])->name('matricula.consulta');
 
 Route::post('/consulta-matricula', [MatriculaController::class, 'consultar'])->name('consulta-matricula');

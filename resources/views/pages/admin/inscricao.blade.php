@@ -33,15 +33,12 @@
                                 <tr class="ligth">
                                     <th>Nome Completo</th>
                                     <th>Genero</th>
-                                    <!--<th>Província/Município</th>
-                                    <th>Nome do Pai e Mãe</th>-->
                                     <th>Nº BI</th>
                                     <th>Nº Tel</th>
                                     <th>Curso</th>
                                     <th>Periodo</th>
                                     <th>Data de Inscrição</th>
                                     <th>Estado</th>
-                                    <!--<th>Foto</th>-->
                                     <th>Certificado</th>
                                     <th>Bilhete</th>
                                     <th>Nota</th>
@@ -53,9 +50,7 @@
                                     <tr>
                                         <td>{{ $dados->user->name }}</td>
                                         <td>{{ $dados->genero }}</td>
-                                        <!--<td>{{ $dados->provincia ."/". $dados->municipio }}</td>-->
                                         <td>{{ $dados->n_bilhete }}</td>
-                                        <!--<td>{{ $dados->afiliacao }}</td>-->
                                         <td>{{ $dados->telefone }}</td>
                                         <td>{{ $dados->curso->name }}</td>
                                         <td>{{ $dados->periodo }}</td>

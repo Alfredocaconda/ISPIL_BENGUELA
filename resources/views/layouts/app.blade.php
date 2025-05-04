@@ -83,7 +83,7 @@
                           </a>
                       </li>
                       <li class=" ">
-                        <a href="" class="svg-icon">
+                        <a href="{{route('matricula.index')}}" class="svg-icon">
                             <i class="fa fa-list-alt"></i>
                               <span class="ml-4">Matrículas</span>
                           </a>
@@ -209,6 +209,7 @@
         @yield('secretaria')
         @yield('perfil')
         @yield('cursos')
+        @yield('content')
     </div>
     
 

@@ -21,19 +21,23 @@ class MatriculaController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function index(Request $request)
+    {
+        // Verifica se já existe matrícula para esta inscrição
+        $inscricao = Inscricao::all();
+        $matriculas = Matricula::all();
+        $matriculaExistente = Matricula::all();
+        return view('pages.admin.matricula_formulario', compact('inscricao','matriculas','matriculaExistente'));
+    }
     public function criar($id)
     {
-        // Correto: retorna um único modelo
-        $inscricao = Inscricao::with(['user', 'curso'])->find($id);
-
-        if (!$inscricao) {
-            return redirect()->back()->with('error', 'Inscrição não encontrada.');
-        }
-        
-        // agora é seguro acessar $inscricao->user
-        
+        $inscricao = Inscricao::with('user', 'curso')->findOrFail($id);
+        // Verifica se já existe matrícula para esta inscrição
+        $matriculaExistente = Matricula::where('n_bilhete', $inscricao->n_bilhete)->first();
+        $matriculas = Matricula::with(['user', 'curso'])->get();
+        return view('pages.admin.matricula_formulario', compact('inscricao','matriculas','matriculaExistente'));
     }
-    public function index(Request $request)
+    public function index11(Request $request)
     {
         // Verifica se o usuário está autenticado
         $usuario = Auth::user();
@@ -78,54 +82,39 @@ class MatriculaController extends Controller
      */
     public function store(Request $request)
     {
-        // Verifica se o usuário está autenticado
         $usuario = Auth::user();
         if (!$usuario) {
             return response()->json(['error' => 'Usuário não autenticado.'], 400);
         }
-        // Buscar matrícula existente ou criar uma nova
+        
+        // Buscar matrícula existente ou criar nova
         $valor = matricula::where('user_id', $usuario->id)->latest()->first();
         
         if (!$valor) {
             $valor = new matricula();
             $valor->user_id = $usuario->id;
-            $valor->reconfirmacao_pendente = false; // Se é nova, não precisa de reconfirmação
+            $valor->reconfirmacao_pendente = false;
         } elseif ($valor->reconfirmacao_pendente) {
-            // Se a reconfirmação for necessária, permitir a atualização
-            $valor->reconfirmacao_pendente = false; // Após a atualização, remove a necessidade de reconfirmação
+            $valor->reconfirmacao_pendente = false;
         } else {
             return redirect()->back()->with('info', 'Você já possui uma matrícula ativa.');
-        }
-    
-        // Simulação de pagamento via API Multicaixa Express (antes do upload)
+        }  
+        /* Processar pagamento (se estiver implementado)
         if (!$this->processarPagamento($request->numero_cartao)) {
-            return redirect()->back()->with('error', 'Erro no pagamento. Tente novamente.');
-        }
-        $valor->user_id = $usuario->id;
-        // Preenchendo os dados do formulário
+            return redirect()->back()->with('error', 'Erro no pagamento.');
+        }*/ 
+        // Preenchimento de dados
+        $valor->user_id = $request->user_id;
+        $valor->curso_id = $request->curso_id;
         $valor->email = $request->email;
         $valor->genero = $request->genero;
-        /*$valor->provincia = $request->provincia;
-        $valor->municipio = $request->municipio;
-        $valor->naturalidade = $request->naturalidade;
-        */
-        $valor->data_nasc = $request->data_nasc;
         $valor->n_bilhete = $request->n_bilhete;
-        //$valor->afiliacao = $request->afiliacao;
         $valor->telefone = $request->telefone;
-        /*$valor->nome_escola = $request->nome_escola;
-        $valor->curso_medio = $request->curso_medio;
-        $valor->data_inicio = $request->data_inicio;
-        $valor->data_termino = $request->data_termino;
-        */
         $valor->turno = $request->turno;
-        $valor->curso_id = $request->curso_id;
         $valor->data_matricula = now();
         $valor->estado = 'matriculado';
-
         // Definindo o diretório para uploads com o nome ou ID do usuário
         $usuarioNome = $request->name ?? "Usuario_" . $valor->user_id;
-    
         // Função para realizar o upload de arquivos
         $uploadFile = function ($file) use ($usuarioNome) {
             $directory = 'DocMatricula/' . $usuarioNome;
@@ -136,9 +125,8 @@ class MatriculaController extends Controller
                 ->setAllowedExtensions(['pdf', 'jpg', 'png', 'jpeg'])
                 ->upload();
         };
-    
         // Documentos para upload
-        $documentos = ['certificado', 'bilhete', 'foto','comprovativo'];
+        $documentos = ['certificado', 'bilhete'];
     
         foreach ($documentos as $docName) {
             if ($request->hasFile($docName)) {
@@ -147,7 +135,6 @@ class MatriculaController extends Controller
                 $valor->$docName = $doc->basename;
             }
         }
-       
         // Geração do Código de Matrícula (caso seja nova matrícula)
         if (!$valor->codigo_matricula) {
             $anoIngresso = now()->format('Y'); // Ano atual
@@ -160,32 +147,34 @@ class MatriculaController extends Controller
         // Salvar a matrícula
         $valor->save();
     
-        return redirect()->route('matricula.sucesso', ['id' => $valor->id]);
+        return redirect()->back()->with('Sucesso', 'MATRÍCULA FEITA COM SUCESSO.');
     }
-    
-    
     /**
      * Show the form for editing the specified resource.
      */
-
-     public function sucesso($id)
-     {
-         $candidato = matricula::with('user')->findOrFail($id);
-         return view('pages.estudante.sucesso', compact('candidato'));
-     }
-     
-
+    public function sucesso($id)
+    {
+        $candidato = matricula::with('user')->findOrFail($id);
+        return view('pages.estudante.sucesso', compact('candidato'));
+    }
     /**
      * Show the form for editing the specified resource.
      */
+        public function gerarPdf($id)
+    {
+        $matricula = Matricula::with('user', 'curso')->findOrFail($id);
 
+        $pdf = Pdf::loadView('pages.admin.comprovativo', compact('matricula'));
+
+        return $pdf->stream("matricula_{$matricula->user->name}.pdf");
+    }
      public function gerarComprovativo(Request $request)
      {
          // Buscar o candidato pelo ID
          $candidato = matricula::findOrFail($request->id);
      
          // Gerar o PDF
-         $pdf = PDF::loadView('pages.estudante.comprovativo', compact('candidato'));
+         $pdf = PDF::loadView('pages.admin.comprovativo', compact('candidato'));
      
          // Verifica se o candidato tem um e-mail válido
          if (!$candidato->email) {
@@ -198,10 +187,10 @@ class MatriculaController extends Controller
                  Mail::send([], [], function ($message) use ($candidato, $pdf) {
                      $message->to($candidato->email)
                          ->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME')) // Define o remetente correto
-                         ->subject('Comprovativo de Inscrição')
+                         ->subject('Comprovativo de Matricula')
                          ->attachData($pdf->output(), 'comprovativo.pdf')
                          ->html("<p>Olá {$candidato->nome},</p>
-                                 <p>Segue em anexo o seu comprovativo de inscrição.</p>
+                                 <p>Segue em anexo o seu comprovativo de Matricula.</p>
                                  <br>
                                  <p>Atenciosamente,</p>
                                  <p>Equipe de Suporte</p>");
@@ -215,7 +204,7 @@ class MatriculaController extends Controller
      
          // Se a opção escolhida for "pdf"
          if ($request->metodo == 'pdf') {
-             return $pdf->download('comprovativo.pdf');
+             return $pdf->download('Comprovativo de Matricula.pdf');
          }
      
          return back()->with('error', 'Selecione um método válido.');

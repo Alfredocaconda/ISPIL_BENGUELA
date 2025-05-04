@@ -11,7 +11,7 @@ class matricula extends Model
         // No modelo Matricula
     public function curso()
     {
-        return $this->belongsTo(Curso::class); // Relacionamento com a tabela de cursos
+        return $this->belongsTo(Curso::class, 'curso_id'); // Relacionamento com a tabela de cursos
     }
      // Relação com o usuário
      public function user()
