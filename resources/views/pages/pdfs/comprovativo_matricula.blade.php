@@ -64,7 +64,7 @@
     <div class="conteudo">
         <h2>Ficha de Matrícula</h2>
 
-        <div class="info"><strong>Nome do Estudante:</strong> {{ $matricula->user->name }}</div>
+        <div class="info"><strong>Nome do Estudante:</strong> {{ $inscricao->user->name }}</div>
         <div class="info"><strong>Email:</strong> {{ $matricula->email }}</div>
         <div class="info"><strong>Gênero:</strong> {{ $matricula->genero }}</div>
         <div class="info"><strong>Telefone:</strong> {{ $matricula->telefone }}</div>
@@ -73,6 +73,7 @@
         <div class="info"><strong>Nº do Bilhete:</strong> {{ $matricula->n_bilhete }}</div>
         <div class="info"><strong>Código de Matrícula:</strong> {{ $matricula->codigo_matricula }}</div>
         <div class="info"><strong>Data de Matrícula:</strong> {{ \Carbon\Carbon::parse($matricula->data_matricula)->format('d/m/Y') }}
+        <div class="info"><strong>Estado:</strong> {{ $matricula->estado }}
         </div>
 
         <h4>Documentos Entregues</h4>

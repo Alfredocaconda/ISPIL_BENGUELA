@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('telefone');
             $table->string('codigo_matricula');
             $table->timestamp('data_matricula');
-            $table->string('certificado');
+            $table->string('certificado')->nullable();
             $table->string('turno');
             $table->string('ano_academico');
             $table->string('bilhete');

@@ -45,8 +45,9 @@ class MatriculaController extends Controller
             'reconfirmar'
         ));
     }
-    
-
+     /**
+     * Show the form for creating a new resource.
+     */
     public function criar($id)
     {
         $inscricao = Inscricao::with('user', 'curso')->findOrFail($id);
@@ -57,6 +58,9 @@ class MatriculaController extends Controller
 
         return view('pages.admin.matricula_formulario', compact('reconfirmar','inscricao','matriculas','matriculaExistente'));
     }
+     /**
+     * Show the form for creating a new resource.
+     */
     public function index11(Request $request)
     {
         // Verifica se o usuário está autenticado
@@ -86,18 +90,8 @@ class MatriculaController extends Controller
         // Retorna a view com o curso
         return view('pages.estudante.matricula', compact('cursoSelecionado'));
     }
-    
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function inf_estudante()
-    {
-        $valor = Matricula::all();
-        return view("pages.admin.estudante", compact('valor'));
-    }
-
-
-    /**
+   
+       /**
      * Store a newly created resource in storage.
      */
     public function historico($user_id)
@@ -111,6 +105,23 @@ class MatriculaController extends Controller
 
         return view('pages.admin.historico_academico', compact('inscricao','usuario', 'matriculas'));
     }
+    //CODIGO PARA RECONFIRMAAR MATRICULA
+    public function reconfirmar($id)
+    {
+        $inscricao = Inscricao::with('user', 'curso')->findOrFail($id);
+        $matricula = Matricula::findOrFail($id);
+        $matriculas = Matricula::all(); // ou como você quiser listar os matriculados
+
+        return view('pages.admin.matricula_formulario', [
+            'reconfirmar' => true,
+            'matriculaExistente' => true, // ou false, conforme seu caso
+            'matricula' => $matricula,
+            'matriculas' => $matriculas,
+            'inscricao' => $inscricao,
+        ]);
+    }
+
+    //GERAR O HISTORICO
     public function gerarHistoricoPdf($user_id)
     {
         $usuario = User::findOrFail($user_id);
@@ -123,8 +134,9 @@ class MatriculaController extends Controller
         $pdf = Pdf::loadView('pages.pdfs.historico_academico_pdf', compact('inscricao','usuario', 'matriculas'));
         return $pdf->stream('historico_academico.pdf');
     }
-
-   //
+     /**
+     * Show the form for creating a new resource.
+     */
     public function store(Request $request)
     {
         $usuario = Auth::user();
@@ -253,59 +265,61 @@ class MatriculaController extends Controller
         return redirect()->route('matricula.index', ['id' => $valor->id])
                         ->with('Sucesso', $reconfirmacao ? 'Matrícula reconfirmada com sucesso!' : 'Matrícula efetuada com sucesso!');
     }
-
     /**
      * Show the form for editing the specified resource.
      */
         public function gerarPdf($id)
     {
         $matricula = Matricula::with('user', 'curso')->findOrFail($id);
-
-        $pdf = Pdf::loadView('pages.pdfs.comprovativo_matricula', compact('matricula'));
+        $inscricao = Inscricao::with(['user', 'curso'])->first();
+        $pdf = Pdf::loadView('pages.pdfs.comprovativo_matricula', compact('inscricao','matricula'));
 
         return $pdf->stream("matricula_{$matricula->user->name}.pdf");
     }
-     public function gerarComprovativo(Request $request)
-     {
-         // Buscar o candidato pelo ID
-         $candidato = matricula::findOrFail($request->id);
-     
-         // Gerar o PDF
-         $pdf = PDF::loadView('pages.admin.comprovativo', compact('candidato'));
-     
-         // Verifica se o candidato tem um e-mail válido
-         if (!$candidato->email) {
-             return back()->with('error', 'O Estudante não possui um e-mail cadastrado.');
-         }
-     
-         // Se a opção escolhida for "email"
-         if ($request->metodo == 'email') {
-             try {
-                 Mail::send([], [], function ($message) use ($candidato, $pdf) {
-                     $message->to($candidato->email)
-                         ->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME')) // Define o remetente correto
-                         ->subject('Comprovativo de Matricula')
-                         ->attachData($pdf->output(), 'comprovativo.pdf')
-                         ->html("<p>Olá {$candidato->nome},</p>
-                                 <p>Segue em anexo o seu comprovativo de Matricula.</p>
-                                 <br>
-                                 <p>Atenciosamente,</p>
-                                 <p>Equipe de Suporte</p>");
-                 });
-     
-                 return back()->with('success', 'Comprovativo enviado para o e-mail ' . $candidato->email);
-             } catch (\Exception $e) {
-                 return back()->with('error', 'Erro ao enviar o e-mail: ' . $e->getMessage());
-             }
-         }
-     
-         // Se a opção escolhida for "pdf"
-         if ($request->metodo == 'pdf') {
-             return $pdf->download('Comprovativo de Matricula.pdf');
-         }
-     
-         return back()->with('error', 'Selecione um método válido.');
-     }
+     /**
+     * Show the form for creating a new resource.
+     */
+    public function gerarComprovativo(Request $request)
+    {
+        // Buscar o candidato pelo ID
+        $candidato = matricula::findOrFail($request->id);
+    
+        // Gerar o PDF
+        $pdf = PDF::loadView('pages.admin.comprovativo', compact('candidato'));
+    
+        // Verifica se o candidato tem um e-mail válido
+        if (!$candidato->email) {
+            return back()->with('error', 'O Estudante não possui um e-mail cadastrado.');
+        }
+    
+        // Se a opção escolhida for "email"
+        if ($request->metodo == 'email') {
+            try {
+                Mail::send([], [], function ($message) use ($candidato, $pdf) {
+                    $message->to($candidato->email)
+                        ->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME')) // Define o remetente correto
+                        ->subject('Comprovativo de Matricula')
+                        ->attachData($pdf->output(), 'comprovativo.pdf')
+                        ->html("<p>Olá {$candidato->nome},</p>
+                                <p>Segue em anexo o seu comprovativo de Matricula.</p>
+                                <br>
+                                <p>Atenciosamente,</p>
+                                <p>Equipe de Suporte</p>");
+                });
+    
+                return back()->with('success', 'Comprovativo enviado para o e-mail ' . $candidato->email);
+            } catch (\Exception $e) {
+                return back()->with('error', 'Erro ao enviar o e-mail: ' . $e->getMessage());
+            }
+        }
+    
+        // Se a opção escolhida for "pdf"
+        if ($request->metodo == 'pdf') {
+            return $pdf->download('Comprovativo de Matricula.pdf');
+        }
+    
+        return back()->with('error', 'Selecione um método válido.');
+    }
     /**
      * Show the form for editing the specified resource.
      */
@@ -338,8 +352,6 @@ class MatriculaController extends Controller
         $valor = matricula::all();
         return view('pages.admin.estudante', compact('valor'));
     }
-
-
     /**
      * Remove the specified resource from storage.
      */

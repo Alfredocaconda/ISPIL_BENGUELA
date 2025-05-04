@@ -86,6 +86,9 @@ Route::post('/matricula/store',[MatriculaController::class,'store'])->name('matr
 Route::get('/matricula/sucesso/{id}', [MatriculaController::class, 'sucesso'])->name('matricula.sucesso');
 Route::get('/matricula/pdf/{id}', [MatriculaController::class, 'gerarPdf'])->name('matricula.pdf');
 Route::get('/consultas-matricula', [MatriculaController::class, 'consultas'])->name('matricula.consulta');
+// Correto
+Route::get('/matricula/reconfirmar/{id}', [MatriculaController::class, 'reconfirmar'])->name('matricula.reconfirmar');
+
 
 Route::post('/consulta-matricula', [MatriculaController::class, 'consultar'])->name('consulta-matricula');
 
@@ -155,7 +158,6 @@ Route::resource('matricula',MatriculaController::class);
 Route::post('matricula/cadastro',[MatriculaController::class,'store'])->name('matricula.cadastro');
 
 Route::get('/reconfirmacao', [MatriculaController::class, 'reconfirmacaoView'])->name('matricula.reconfirmacao');
-Route::post('/reconfirmar', [MatriculaController::class, 'reconfirmar'])->name('matricula.reconfirmar');
 Route::get('/comprovativo', [MatriculaController::class, 'baixarComprovativo'])->name('matricula.comprovativo');
 
 Route::get('Dashboard',[HomeController::class,'admin'])->name('admin.index');
