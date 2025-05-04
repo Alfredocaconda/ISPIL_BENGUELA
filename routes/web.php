@@ -77,6 +77,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/matricula', [MatriculaController::class, 'index'])->name('matricula.index');
 });
 Route::get('/matricula/{id}', [MatriculaController::class, 'criar'])->name('matricula.iniciar');
+Route::get('/historico-academico/{user_id}', [MatriculaController::class, 'historico'])->name('matricula.historico');
+Route::get('/historico-academico/{user_id}/pdf', [MatriculaController::class, 'gerarHistoricoPdf'])->name('matricula.historico.pdf');
 
 //Route::get('/matricula', [MatriculaController::class, 'index'])->name('matricula.index')->middleware('auth');
 Route::resource('/matricula',MatriculaController::class);

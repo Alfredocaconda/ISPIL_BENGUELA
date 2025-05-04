@@ -21,21 +21,41 @@ class MatriculaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        // Verifica se já existe matrícula para esta inscrição
-        $inscricao = Inscricao::all();
-        $matriculas = Matricula::all();
-        $matriculaExistente = Matricula::all();
-        return view('pages.admin.matricula_formulario', compact('inscricao','matriculas','matriculaExistente'));
+        // Carregar a primeira inscrição para exibir no formulário
+        $inscricao = Inscricao::with(['user', 'curso'])->first();
+    
+        // Todas as matrículas com os dados dos usuários e cursos
+        $matriculas = Matricula::with(['user', 'curso'])->get();
+    
+        // Verificar se o aluno já tem uma matrícula e se precisa reconfirmar
+        $matriculaExistente = null;
+        $reconfirmar = false;
+    
+        if ($inscricao) {
+            $matriculaExistente = Matricula::where('n_bilhete', $inscricao->n_bilhete)->first();
+            $reconfirmar = $matriculaExistente && $matriculaExistente->reconfirmacao_pendente;
+        }
+    
+        return view('pages.admin.matricula_formulario', compact(
+            'inscricao',
+            'matriculas',
+            'matriculaExistente',
+            'reconfirmar'
+        ));
     }
+    
+
     public function criar($id)
     {
         $inscricao = Inscricao::with('user', 'curso')->findOrFail($id);
         // Verifica se já existe matrícula para esta inscrição
         $matriculaExistente = Matricula::where('n_bilhete', $inscricao->n_bilhete)->first();
         $matriculas = Matricula::with(['user', 'curso'])->get();
-        return view('pages.admin.matricula_formulario', compact('inscricao','matriculas','matriculaExistente'));
+        $reconfirmar = $matriculaExistente && $matriculaExistente->reconfirmacao_pendente;
+
+        return view('pages.admin.matricula_formulario', compact('reconfirmar','inscricao','matriculas','matriculaExistente'));
     }
     public function index11(Request $request)
     {
@@ -80,83 +100,160 @@ class MatriculaController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    public function historico($user_id)
+    {
+        $usuario = User::findOrFail($user_id);
+        // Carregar a primeira inscrição para exibir no formulário
+        $inscricao = Inscricao::with(['user', 'curso'])->first();
+        $matriculas = Matricula::where('user_id', $user_id)
+            ->orderBy('ano_academico')
+            ->get();
+
+        return view('pages.admin.historico_academico', compact('inscricao','usuario', 'matriculas'));
+    }
+    public function gerarHistoricoPdf($user_id)
+    {
+        $usuario = User::findOrFail($user_id);
+         // Carregar a primeira inscrição para exibir no formulário
+        $inscricao = Inscricao::with(['user', 'curso'])->first();
+        $matriculas = Matricula::where('user_id', $user_id)
+            ->orderBy('ano_academico')
+            ->get();
+
+        $pdf = Pdf::loadView('pages.pdfs.historico_academico_pdf', compact('inscricao','usuario', 'matriculas'));
+        return $pdf->stream('historico_academico.pdf');
+    }
+
+   //
     public function store(Request $request)
     {
         $usuario = Auth::user();
         if (!$usuario) {
-            return response()->json(['error' => 'Usuário não autenticado.'], 400);
+            return redirect()->back()->with('Error', 'Usuário não autenticado.');
         }
-        
-        // Buscar matrícula existente ou criar nova
-        $valor = matricula::where('user_id', $usuario->id)->latest()->first();
-        
-        if (!$valor) {
-            $valor = new matricula();
-            $valor->user_id = $usuario->id;
+
+        // Verifica se é reconfirmação
+        $reconfirmacao = $request->has('reconfirmacao');
+
+        // Validação do formulário
+        $request->validate([
+            'email' => 'required|email',
+            'telefone' => 'required',
+            'n_bilhete' => 'required',
+            'turno' => 'required',
+            'certificado' => 'nullable|mimes:pdf,jpg,png,jpeg',
+            'bilhete' => 'nullable|mimes:pdf,jpg,png,jpeg',
+        ]);
+
+        if ($reconfirmacao) {
+            // Buscar matrícula existente
+            $valor = Matricula::where('user_id', $usuario->id)
+                            ->where('reconfirmacao_pendente', true)
+                            ->latest()
+                            ->first();
+
+            if (!$valor) {
+                return redirect()->back()->with('Error', 'Nenhuma matrícula pendente para reconfirmação.');
+            }
+
+            // Atualiza os dados da matrícula (não altera o número de matrícula)
             $valor->reconfirmacao_pendente = false;
-        } elseif ($valor->reconfirmacao_pendente) {
-            $valor->reconfirmacao_pendente = false;
+            $valor->data_matricula = now();
+            $valor->estado = 'reconfirmado';
+            $valor->ano_academico = $request->ano_academico;  // Atualiza o ano acadêmico
+
+            // Atualiza os dados dos campos
+            $valor->email = $request->email;
+            $valor->telefone = $request->telefone;
+            $valor->n_bilhete = $request->n_bilhete;
+            $valor->turno = $request->turno;
+
+            // Processa documentos (se enviados)
+            $usuarioNome = $request->name ?? "Usuario_" . $valor->user_id;
+
+            // Upload de documentos
+            $uploadFile = function ($file) use ($usuarioNome) {
+                $directory = 'DocMatricula/' . $usuarioNome;
+                return MediaUploader::fromSource($file)
+                    ->toDirectory($directory)
+                    ->onDuplicateIncrement()
+                    ->useFilename(md5($file->getClientOriginalName() . time()))
+                    ->setAllowedExtensions(['pdf', 'jpg', 'png', 'jpeg'])
+                    ->upload();
+            };
+
+            foreach (['certificado', 'bilhete'] as $docName) {
+                if ($request->hasFile($docName)) {
+                    $file = $request->file($docName);
+                    $doc = $uploadFile($file);
+                    $valor->$docName = $doc->basename;
+                }
+            }
+
         } else {
-            return redirect()->back()->with('info', 'Você já possui uma matrícula ativa.');
-        }  
-        /* Processar pagamento (se estiver implementado)
-        if (!$this->processarPagamento($request->numero_cartao)) {
-            return redirect()->back()->with('error', 'Erro no pagamento.');
-        }*/ 
-        // Preenchimento de dados
-        $valor->user_id = $request->user_id;
-        $valor->curso_id = $request->curso_id;
-        $valor->email = $request->email;
-        $valor->genero = $request->genero;
-        $valor->n_bilhete = $request->n_bilhete;
-        $valor->telefone = $request->telefone;
-        $valor->turno = $request->turno;
-        $valor->data_matricula = now();
-        $valor->estado = 'matriculado';
-        // Definindo o diretório para uploads com o nome ou ID do usuário
-        $usuarioNome = $request->name ?? "Usuario_" . $valor->user_id;
-        // Função para realizar o upload de arquivos
-        $uploadFile = function ($file) use ($usuarioNome) {
-            $directory = 'DocMatricula/' . $usuarioNome;
-            return MediaUploader::fromSource($file)
-                ->toDirectory($directory)
-                ->onDuplicateIncrement()
-                ->useFilename(md5($file->getClientOriginalName() . time()))
-                ->setAllowedExtensions(['pdf', 'jpg', 'png', 'jpeg'])
-                ->upload();
-        };
-        // Documentos para upload
-        $documentos = ['certificado', 'bilhete'];
-    
-        foreach ($documentos as $docName) {
-            if ($request->hasFile($docName)) {
-                $file = $request->file($docName);
-                $doc = $uploadFile($file);
-                $valor->$docName = $doc->basename;
+            // Nova matrícula
+            $valor = Matricula::where('user_id', $usuario->id)->latest()->first();
+
+            if ($valor && !$valor->reconfirmacao_pendente) {
+                return redirect()->back()->with('info', 'Você já possui uma matrícula ativa.');
+            }
+
+            if (!$valor) {
+                $valor = new Matricula();
+                $valor->user_id = $usuario->id;
+            }
+
+            $valor->reconfirmacao_pendente = false;
+
+            // Geração do Código de Matrícula (apenas se não existir ainda)
+            if (!$valor->codigo_matricula) {
+                $anoIngresso = now()->format('Y');
+                $codigoCurso = str_pad($request->curso_id, 3, '0', STR_PAD_LEFT);
+                $ultimoId = Matricula::max('id') + 1;
+                $valor->codigo_matricula = "{$anoIngresso}{$codigoCurso}" . str_pad($ultimoId, 4, '0', STR_PAD_LEFT);
+            }
+
+            // Dados comuns para ambos os casos
+            $valor->curso_id = $request->curso_id;
+            $valor->email = $request->email;
+            $valor->genero = $request->genero;
+            $valor->n_bilhete = $request->n_bilhete;
+            $valor->telefone = $request->telefone;
+            $valor->turno = $request->turno;
+            $valor->ano_academico = $request->ano_academico;
+
+            // Data de matrícula deve ser sempre a data atual
+            $valor->data_matricula = now();
+            $valor->estado = $reconfirmacao ? 'reconfirmado' : 'matriculado';
+            // Upload de documentos
+            $usuarioNome = $request->name ?? "Usuario_" . $valor->user_id;
+
+            $uploadFile = function ($file) use ($usuarioNome) {
+                $directory = 'DocMatricula/' . $usuarioNome;
+                return MediaUploader::fromSource($file)
+                    ->toDirectory($directory)
+                    ->onDuplicateIncrement()
+                    ->useFilename(md5($file->getClientOriginalName() . time()))
+                    ->setAllowedExtensions(['pdf', 'jpg', 'png', 'jpeg'])
+                    ->upload();
+            };
+
+            foreach (['certificado', 'bilhete'] as $docName) {
+                if ($request->hasFile($docName)) {
+                    $file = $request->file($docName);
+                    $doc = $uploadFile($file);
+                    $valor->$docName = $doc->basename;
+                }
             }
         }
-        // Geração do Código de Matrícula (caso seja nova matrícula)
-        if (!$valor->codigo_matricula) {
-            $anoIngresso = now()->format('Y'); // Ano atual
-            $codigoCurso = str_pad($request->curso_id, 3, '0', STR_PAD_LEFT); // Código do curso com 3 dígitos
-            $ultimoId = matricula::max('id') + 1; // Obtendo o próximo ID da tabela
-            $codigo_matricula = "{$anoIngresso}{$codigoCurso}" . str_pad($ultimoId, 4, '0', STR_PAD_LEFT);
-            $valor->codigo_matricula = $codigo_matricula; // Salvando no banco
-        }
-    
+
         // Salvar a matrícula
         $valor->save();
-    
-        return redirect()->back()->with('Sucesso', 'MATRÍCULA FEITA COM SUCESSO.');
+
+        return redirect()->route('matricula.index', ['id' => $valor->id])
+                        ->with('Sucesso', $reconfirmacao ? 'Matrícula reconfirmada com sucesso!' : 'Matrícula efetuada com sucesso!');
     }
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function sucesso($id)
-    {
-        $candidato = matricula::with('user')->findOrFail($id);
-        return view('pages.estudante.sucesso', compact('candidato'));
-    }
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -164,7 +261,7 @@ class MatriculaController extends Controller
     {
         $matricula = Matricula::with('user', 'curso')->findOrFail($id);
 
-        $pdf = Pdf::loadView('pages.admin.comprovativo', compact('matricula'));
+        $pdf = Pdf::loadView('pages.pdfs.comprovativo_matricula', compact('matricula'));
 
         return $pdf->stream("matricula_{$matricula->user->name}.pdf");
     }

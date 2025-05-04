@@ -15,6 +15,7 @@
     <h2>Estudantes Matriculados</h2>
     <table class="table table-striped">
         <thead>
+        
             <tr>
                 <th>Nome</th>
                 <th>Gênero</th>
@@ -27,17 +28,33 @@
         </thead>
         <tbody>
             @foreach($matriculas as $matricula)
-                <tr>
-                    <td>{{ $matricula->user->name }}</td>
+                    <tr>
+                    <td>{{ $inscricao->user->name }}</td>
                     <td>{{ $matricula->genero }}</td>
                     <td>{{ $matricula->telefone }}</td>
                     <td>{{ $matricula->curso->name }}</td>
                     <td>{{ $matricula->turno }}</td>
                     <td>{{ $matricula->data_matricula }}</td>
+                    @if($matricula->estado !== 'reconfirmado' || $matricula->ano_academico !== now()->year)
                     <td>
-                        <a href="{{ route('matricula.pdf', $matricula->id) }}" class="btn btn-sm btn-secondary" target="_blank">
-                            Imprimir Matrícula
+                        <a href="" class="btn btn-warning btn-sm">
+                            Reconfirmar Matrícula
                         </a>
+                    </td>
+                    @else
+                    <td>
+                        <span class="badge bg-success">Reconfirmada ({{ $matricula->ano_academico }})</span>
+                    </td>
+                    @endif
+                    <td>
+                    <a href="{{ route('matricula.historico', $matricula->user_id) }}" class="btn btn-sm btn-info">
+                        Ver Histórico
+                    </a>
+                    </td>
+                    <td>
+                    <a href="{{ route('matricula.pdf', $matricula->id) }}" class="btn btn-sm btn-secondary" target="_blank">
+                        Imprimir Matrícula
+                    </a>
                     </td>
                 </tr>
             @endforeach
@@ -45,13 +62,18 @@
     </table>
 </div>
 
-@if(!$matriculaExistente)
+@if(!$matriculaExistente || $reconfirmar)
+
 <div class="container mt-4">
-    <h2>Formulário de Matrícula</h2>
+<h2>{{ $reconfirmar ? 'Reconfirmação de Matrícula' : 'Formulário de Matrícula' }}</h2>
     <form action="{{ route('matricula.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="user_id" value="{{ $inscricao->user->id }}">
         <input type="hidden" name="curso_id" value="{{ $inscricao->curso->id }}">
+        @if($reconfirmar)
+            <input type="hidden" name="reconfirmacao" value="1">
+        @endif
+
 
         <div class="form-group">
             <label>Nome</label>
@@ -91,7 +113,17 @@
                 <option value="Noite">Noite</option>
             </select>
         </div>
-
+        <div class="form-group">
+            <label>Ano Acadêmico</label>
+            <select name="ano_academico" class="form-control" required>
+                <option value="">Selecione</option>
+                <option value="1º Ano">1º Ano</option>
+                <option value="2º Ano">2º Ano</option>
+                <option value="3º Ano">3º Ano</option>
+                <option value="4º Ano">4º Ano</option>
+                <option value="5º Ano">5º Ano</option>
+            </select>
+        </div>
         <div class="form-group">
             <label>Certificado Original</label>
             <input type="file" name="certificado" class="form-control" accept=".pdf,.docx">
@@ -101,8 +133,9 @@
             <label>Cópia do Bilhete</label>
             <input type="file" name="bilhete" class="form-control" accept=".pdf,.docx">
         </div>
-
-        <button type="submit" class="btn btn-primary">Finalizar Matrícula</button>
+        <button type="submit" class="btn btn-{{ $reconfirmar ? 'warning' : 'primary' }}">
+            {{ $reconfirmar ? 'Reconfirmar Matrícula' : 'Finalizar Matrícula' }}
+        </button>
     </form>
 </div>
 @endif

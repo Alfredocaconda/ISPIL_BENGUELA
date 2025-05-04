@@ -21,6 +21,7 @@ return new class extends Migration
             $table->timestamp('data_matricula');
             $table->string('certificado');
             $table->string('turno');
+            $table->string('ano_academico');
             $table->string('bilhete');
             $table->string('estado')->nullable();
             $table->boolean('reconfirmacao_pendente')->default(false);
