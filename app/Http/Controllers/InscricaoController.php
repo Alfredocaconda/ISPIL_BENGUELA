@@ -38,6 +38,9 @@ class InscricaoController extends Controller
         $cursos = Curso::all();
         return view("pages.admin.inscricao", compact('valor', 'cursos'));
     }
+    /**
+     * Show the form for creating a new resource.
+     */
     public function store(Request $request)
     {
         $request->validate([
@@ -114,118 +117,6 @@ class InscricaoController extends Controller
         return redirect()->route('inscricao.sucesso', ['id' => $valor->id]);
     }
 
-  
-    /**
-     * Store a newly created resource in storage.
-     */
-    /**public function store(Request $request)
-    {
-
-        $request->validate([
-            'foto' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'certificado' => 'required|mimes:pdf,jpg,png,jpeg|max:5120',
-            'bilhete' => 'required|mimes:pdf,jpg,png,jpeg|max:5120',
-            'comprovativo' => 'required|mimes:pdf,jpg,png,jpeg|max:5120',
-            'curso_id' => 'required|integer',
-        'periodo' => 'required|string|max:10',
-        ]);
-    
-
-        
-        // Verifica se o usuário está autenticado
-        $usuario = Auth::user();
-        if (!$usuario) {
-            return response()->json(['error' => 'Usuário não autenticado.'], 400);
-        }
-        //  VERIFICAÇÃO DE INSCRIÇÃO EXISTENTE
-            $existeInscricao = inscricao::where('user_id', $usuario->id)
-            ->where('curso_id', $request->curso_id)
-            ->where('periodo', $request->periodo)
-            ->exists();
-
-        if ($existeInscricao) {
-            return redirect()->back()
-                ->withInput()
-                ->with('error', 'Você já se inscreveu neste curso para o período selecionado.');
-        }
-        // Buscar ou criar nova inscrição
-        $valor = $request->id ? inscricao::find($request->id) : new inscricao();
-      
-        // Simulação de pagamento via API Multicaixa Express (antes do upload)
-       /* if (!$this->processarPagamento($request->numero_cartao)) {
-            return redirect()->back()->with('error', 'Erro no pagamento. Tente novamente.');
-        }*/
-        // Atribuindo o ID do usuário logado
-        /*$valor->user_id = $usuario->id; // Aqui pegamos o ID do usuário logado diretamente
-    
-        // Preenchendo os dados do formulário
-        $valor->email = $request->email;
-        $valor->genero = $request->genero;
-       // $valor->provincia = $request->provincia;
-       // $valor->municipio = $request->municipio;
-      //  $valor->naturalidade = $request->naturalidade;
-        $valor->data_nasc = $request->data_nasc;
-        $valor->n_bilhete = $request->n_bilhete;
-      //  $valor->afiliacao = $request->afiliacao;
-        $valor->telefone = $request->telefone;
-        $valor->periodo = $request->periodo;
-        $valor->nome_escola = $request->nome_escola;
-        $valor->curso_medio = $request->curso_medio;
-        //$valor->data_inicio = $request->data_inicio;
-       // $valor->data_termino = $request->data_termino;
-        $valor->curso_id = $request->curso_id;
-        $valor->data_inscricao = now();
-        $valor->estado = "Pendente";
-        // Definindo o diretório para uploads com o nome ou ID do usuário
-        $usuarioNome = $request->name ?? "Usuario_" . $valor->user_id;
-    
-        // Função para realizar o upload de arquivos
-        $uploadFile = function ($file) use ($usuarioNome) {
-            $directory = 'DocInscricao/' . $usuarioNome;
-            return MediaUploader::fromSource($file)
-                ->toDirectory($directory)
-                ->onDuplicateIncrement()
-                ->useFilename(md5($file->getClientOriginalName() . time()))
-                ->setAllowedExtensions(['pdf', 'jpg', 'png', 'jpeg'])
-                ->upload();
-        };
-    
-        // Documentos para upload
-        $documentos = ['certificado', 'bilhete', 'foto','comprovativo'];
-    
-        foreach ($documentos as $docName) {
-            if ($request->hasFile($docName)) {
-                $file = $request->file($docName);
-                $doc = $uploadFile($file);
-                $valor->$docName = $doc->basename;
-            }
-        }
-        // Definindo um valor temporário para o campo codigo_inscricao
-        $valor->codigo_inscricao = 'TEMPORARIO'; // Defina um valor temporário
-        $existeInscricao = inscricao::where('user_id', $usuario->id)
-            ->where('curso_id', $request->curso_id)
-            ->where('periodo', $request->periodo)
-            ->exists();
-
-        if ($existeInscricao) {
-            return redirect()->back()
-                ->withInput() // Mantém os dados preenchidos no formulário
-                ->with('error', 'Você já se inscreveu neste curso para o período selecionado.');
-        }
-
-        $valor->save();
-       
-        // Geração do Código de Matrícula
-        $anoIngresso = now()->format('Y'); // Ano atual
-        $codigoCurso = str_pad($request->curso_id, 3, '0', STR_PAD_LEFT); // Código do curso com 3 dígitos
-        $ultimoId = inscricao::max('id') + 1; // Obtendo o próximo ID da tabela
-        $codigo_inscricao = "{$anoIngresso}{$codigoCurso}" . str_pad($ultimoId, 4, '0', STR_PAD_LEFT);
-        $valor->codigo_inscricao = $codigo_inscricao; // Salvando no banco
-        // Salvar a inscrição
-        $valor->save();
-
-        return redirect()->route('inscricao.sucesso', ['id' => $valor->id]);
-    }*/
     /**
      * Show the form for editing the specified resource.
      */
@@ -244,7 +135,7 @@ class InscricaoController extends Controller
          $candidato = inscricao::findOrFail($request->id);
      
          // Gerar o PDF
-         $pdf = PDF::loadView('pages.candidato.comprovativo', compact('candidato'));
+         $pdf = PDF::loadView('pages.pdfs.comprovativo_inscricao', compact('candidato'));
      
          // Verifica se o candidato tem um e-mail válido
          if (!$candidato->email) {
@@ -289,20 +180,7 @@ class InscricaoController extends Controller
 
         return $status === 'sucesso';
     }
-  /*  private function processarPagamento($cartao)
-    {
-        // Aqui deve entrar a API da EMIS para pagamento Multicaixa Express
-        // Por enquanto, simulamos um pagamento bem-sucedido
-        $response = Http::post('https://api.emis.ao/pagar', [
-            'cartao' => $cartao,
-            'valor' => 5000,
-            'referencia' => '123456789',
-        ]);
-
-        return $response->successful();
-    }
-
-    /**
+     /**
      * Show the form for editing the specified resource.
      */
      public function adicionarNota(Request $request)

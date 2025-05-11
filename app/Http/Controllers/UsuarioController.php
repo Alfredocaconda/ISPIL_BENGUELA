@@ -61,8 +61,8 @@ class UsuarioController extends Controller
             },
     
             'Estudante' => $matricula && $matricula->reconfirmacao_pendente
-                ? redirect()->route('reconfirmacao.index')
-                : redirect()->route('estudante.index'),
+                ? redirect()->route('admin.index','matricula')
+                : redirect()->route('admin.index','matricula'),
 
             'Admin', 'secretaria' => redirect()->route('admin.index'),
             default => redirect('login'),

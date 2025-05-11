@@ -168,6 +168,8 @@ class MatriculaController extends Controller
                 return redirect()->back()->with('Error', 'Nenhuma matrícula pendente para reconfirmação.');
             }
 
+           // Cria um novo usuário e associa ao valor
+        
             // Atualiza os dados da matrícula (não altera o número de matrícula)
             $valor->reconfirmacao_pendente = false;
             $valor->data_matricula = now();
@@ -212,6 +214,7 @@ class MatriculaController extends Controller
 
             if (!$valor) {
                 $valor = new Matricula();
+                
                 $valor->user_id = $usuario->id;
             }
 
@@ -224,7 +227,7 @@ class MatriculaController extends Controller
                 $ultimoId = Matricula::max('id') + 1;
                 $valor->codigo_matricula = "{$anoIngresso}{$codigoCurso}" . str_pad($ultimoId, 4, '0', STR_PAD_LEFT);
             }
-
+          
             // Dados comuns para ambos os casos
             $valor->curso_id = $request->curso_id;
             $valor->email = $request->email;
@@ -233,7 +236,7 @@ class MatriculaController extends Controller
             $valor->telefone = $request->telefone;
             $valor->turno = $request->turno;
             $valor->ano_academico = $request->ano_academico;
-
+            //$valor = null;
             // Data de matrícula deve ser sempre a data atual
             $valor->data_matricula = now();
             $valor->estado = $reconfirmacao ? 'reconfirmado' : 'matriculado';
@@ -258,7 +261,6 @@ class MatriculaController extends Controller
                 }
             }
         }
-
         // Salvar a matrícula
         $valor->save();
 

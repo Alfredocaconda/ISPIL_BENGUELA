@@ -67,6 +67,7 @@ class User extends Authenticatable
         }
         $user->tipo = "estudante";
         $user->password = bcrypt($nomes[0]."@ispil");
+        $user->matriculado = true;
         $user->save();
         return $user;
     }
