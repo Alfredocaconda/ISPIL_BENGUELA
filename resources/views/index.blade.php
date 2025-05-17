@@ -23,7 +23,6 @@
                                 EXAMES DE ACESSO E CURSO PREPARATÓRIO.</p>
                                 <p class="fs-5 text-white mb-4 pb-2">24 DE JULHO DE 2025</p>
                             <a href="{{url('/inscricao')}}" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">INSCRIÇÃO</a>
-                            <a href="{{url('/matricula')}}" class="btn btn-light py-md-3 px-md-5 animated slideInRight">MATRICULA</a>
                         </div>
                     </div>
                 </div>
@@ -81,14 +80,17 @@
                 <h6 class="section-title bg-white text-start text-primary pe-3">About Us</h6>
                 <h1 class="mb-4">Mensagem</h1>
                 <p class="mb-4">Não estaremos, certamente, equivocados ao 
-                    afirmar que a sociedade angolana espera muito desta Universidade, sobretudo da sua responsabilidade social que inclui o impulso no desenvolvimento humano, sustentável e inclusivo, por via de uma formação multidisciplinar e integral que estimula atitudes éticas, humanas e cristãs que impregnem o ser e o agir das novas gerações comprometidas com o bem, o belo, o certo e o justo que não fragme
-                    nta nem vilipendia, mas une, engrandece e dignifica qualquer um (…).</p>
+                    afirmar que a sociedade angolana espera muito desta Universidade, 
+                    sobretudo da sua responsabilidade social que inclui o impulso no 
+                    desenvolvimento humano, sustentável e inclusivo, por via de uma
+                     formação multidisciplinar e integral que estimula atitudes éticas,
+                      humanas e cristãs que impregnem o ser e o agir das novas gerações 
+                      comprometidas com o bem, o belo, o certo e o justo que não fragmenta nem vilipendia, mas une, engrandece e dignifica qualquer um (…).</p>
                 <div class="row gy-2 gx-4 mb-4">
                     <div class="col-sm-6">
-                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>DIACUTUMENE MBALA</p>
-                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Mestre em Cyber segurança</p>
-                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Chefe do Departamento de eng.</p>
-
+                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Antonio Njinja</p>
+                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>phd em pedagogia</p>
+                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Presidente do ISPIL-POLO BENGUELA</p>
                     </div>
                 </div>
                 <a class="btn btn-primary py-3 px-5 mt-2" href="">Ler mais</a>

@@ -40,7 +40,7 @@
     -->
                 <!-- Novo link para Consulta -->
                 <a href="{{ url('/consulta-inscricao') }}" class="nav-item nav-link text-danger fw-bold">
-                    Consultar Inscrição
+                    Consultar
                 </a>
                 <!-- Novo link para Consulta -->
                <!-- <a href="{{ url('/consultas-matricula') }}" class="nav-item nav-link text-danger fw-bold">

@@ -60,13 +60,12 @@ class InscricaoController extends Controller
         // VERIFICAÇÃO DE INSCRIÇÃO EXISTENTE
         $existeInscricao = inscricao::where('user_id', $usuario->id)
             ->where('curso_id', $request->curso_id)
-            ->where('periodo', $request->periodo)
             ->exists();
 
         if ($existeInscricao) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Você já se inscreveu neste curso para o período selecionado.');
+                ->with('error', 'VOCÊ JÁ SE INSCREVEU NESTE CURSO! POR FAVOR ESCOLHER OUTRO CURSO.');
         }
 
         // Só cria e preenche a inscrição depois de passar na verificação

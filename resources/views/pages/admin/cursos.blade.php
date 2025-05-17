@@ -29,8 +29,7 @@
                             <th>Nome</th>
                             <th>Quantidade de Vagas</th>
                             <th>Preço</th>
-                            <th>Imagem</th>
-                            <th></th>
+                            <!--th>Imagem</th-->
                         </tr>
                     </thead>
                     <tbody>

@@ -8,6 +8,23 @@ use Illuminate\Database\Eloquent\Model;
 class matricula extends Model
 {
     use HasFactory;
+    protected $fillable = [
+    'user_id',
+    'estudante_id',
+    'curso_id',
+    'email',
+    'genero',
+    'n_bilhete',
+    'telefone',
+    'turno',
+    'ano_academico',
+    'data_matricula',
+    'estado',
+    'certificado',
+    'bilhete',
+    'codigo_matricula',
+    'reconfirmacao_pendente',
+];
         // No modelo Matricula
     public function curso()
     {
@@ -18,5 +35,10 @@ class matricula extends Model
      {
          return $this->belongsTo(User::class, 'user_id'); // Certifique-se de que a chave estrangeira está correta
      }
+     // O estudante que está sendo matriculado
+    public function estudante()
+    {
+        return $this->belongsTo(User::class, 'estudante_id');
+    }
 
 }

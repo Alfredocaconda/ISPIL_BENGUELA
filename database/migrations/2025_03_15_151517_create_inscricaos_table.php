@@ -29,11 +29,12 @@ return new class extends Migration
             $table->string('periodo');
             $table->string('foto');
             $table->string('estado')->nullable()->default('Pendente'); // Define um valor padrão
-            $table->foreignId('curso_id')->unique()->constrained('cursos')->onDelete('cascade'); // Corrigido nome
+            $table->foreignId('curso_id')->constrained('cursos')->onDelete('cascade'); // Corrigido nome
             $table->foreignId('user_id')->nullable()->constrained('users');
             $table->timestamps();
                 
         });
+        
     }
 
 
